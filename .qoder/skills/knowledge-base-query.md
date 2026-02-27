@@ -27,7 +27,7 @@ tools: Read, Grep, Glob
 ## 输入
 
 - 查询关键词：`{keyword}` 或 `{feature-name}` 或 `{doc-topic}`
-- 查询类型（可选）：`feature` | `spec` | `api` | `framework` | `guide` | `all`
+- 查询类型（可选）：`feature` | `spec` | `api` | `schema` | `pitfall` | `all`
 - 目标路径（可选）：`.qoder/repowiki/` 下的子目录
 
 ---
@@ -59,17 +59,27 @@ tools: Read, Grep, Glob
 │   │   └── service-layer-violation.md
 │   └── maven/            # Maven 依赖坑点
 │       └── dependency-conflict.md
+├── schemas/              # 数据库表结构档案
+│   ├── index.md          # 表索引
+│   ├── mall-user/        # 按服务组织
+│   │   ├── tb_user.md
+│   │   └── _service-overview.md
+│   └── mall-order/
+│       ├── tb_order.md
+│       └── _service-overview.md
+├── apis/                 # API文档
+│   ├── index.md          # API索引
+│   ├── internal/         # 内部服务API (Feign接口)
+│   │   ├── user-service-api.md
+│   │   └── order-service-api.md
+│   └── third-party/      # 第三方API
+│       ├── wechat-pay-api.md
+│       └── alipay-api.md
 ├── zh/docs/              # 中文文档
 │   ├── specs/            # 技术规范
 │   │   ├── 错误码规范.md
 │   │   ├── 架构规范.md
 │   │   └── 编码规范.md
-│   ├── apis/             # API文档
-│   │   ├── internal/     # 内部服务API
-│   │   └── third-party/  # 第三方API
-│   ├── frameworks/       # 框架文档
-│   │   ├── spring-boot/
-│   │   └── mybatis-plus/
 │   └── guides/           # 操作指南
 │       ├── deployment/
 │       └── operations/
@@ -146,28 +156,7 @@ tools: Read, Grep, Glob
 - agent-service-api.md: 智能员工服务接口
 ```
 
-### 类型 4: 框架文档查询 (framework)
-
-查询框架使用文档，如Spring Boot、MyBatis-Plus等。
-
-**适用场景**:
-- 开发时查询框架用法
-- 了解框架配置和最佳实践
-- 解决框架相关问题
-
-**输入示例**:
-```
-关键词: "mybatis-plus 分页"
-类型: framework
-```
-
-**输出示例**:
-```
-匹配结果:
-- mybatis-plus/guide.md: 分页查询章节
-```
-
-### 类型 5: 历史坑点查询 (pitfall)
+### 类型 4: 历史坑点查询 (pitfall)
 
 查询历史坑点档案，避免重复踩坑。
 
@@ -192,7 +181,7 @@ tools: Read, Grep, Glob
 - facade-feign-prohibition.md: 门面服务禁止创建 feign 目录
 ```
 
-### 类型 6: 综合查询 (all)
+### 类型 5: 综合查询 (all)
 
 跨所有类型进行查询，返回最相关的结果。
 
@@ -200,6 +189,38 @@ tools: Read, Grep, Glob
 - 不确定内容属于哪个分类
 - 需要全面了解某个主题
 - 初步调研阶段
+
+### 类型 6: 数据库表结构查询 (schema)
+
+查询数据库表结构档案，支持旧项目改造时了解现有表设计。
+
+**适用场景**:
+- 旧项目改造需要了解现有表结构
+- 新功能开发需要基于旧表扩展字段
+- 避免字段命名冲突
+- 了解表关系和索引设计
+
+**目标目录**: `.qoder/repowiki/schemas/`
+
+**输入示例**:
+```
+关键词: "tb_user"
+类型: schema
+目标路径: .qoder/repowiki/schemas/mall-user/
+```
+
+**输出示例**:
+```
+匹配结果:
+- tb_user.md: 用户主表结构，包含15个字段，3个索引
+- tb_user_role.md: 用户角色关联表
+- tb_user_address.md: 用户地址表
+
+字段信息:
+- id: BIGINT, 主键, 自增
+- username: VARCHAR(64), 唯一索引
+- phone: VARCHAR(20), 敏感字段，AES加密
+```
 
 ---
 
@@ -241,7 +262,7 @@ tools: Read, Grep, Glob
 #### 文档查询流程
 
 ```
-1. 确定查询范围 (specs/ | apis/ | frameworks/ | guides/)
+1. 确定查询范围 (specs/ | apis/ | guides/)
 2. 遍历目录下的所有文档
 3. 匹配文件名和内容
 4. 提取最相关的片段
@@ -281,6 +302,43 @@ tools: Read, Grep, Glob
 - 发现时间: 2026-02-27
 - 发现人: Qoder
 - 相关 Program: P-2026-001-REQ-018
+```
+
+#### 数据库表结构查询流程
+
+```
+1. 确定查询范围: .qoder/repowiki/schemas/{service}/
+2. 遍历表结构档案文件
+3. 匹配表名、字段名、注释
+4. 提取表基本信息、字段清单、索引信息
+5. 返回给代码生成 Skill 用于旧表改造
+```
+
+**表结构档案格式**:
+```markdown
+---
+table_name: tb_user
+description: 用户主表，存储用户基本信息
+database: mall_user
+service: mall-user
+---
+
+# tb_user
+
+## 基本信息
+...
+
+## 字段清单
+| 字段名 | 数据类型 | 约束 | 注释 |
+|--------|----------|------|------|
+| id | BIGINT | PK | 主键ID |
+| username | VARCHAR(64) | UK | 用户名 |
+
+## 索引信息
+...
+
+## 外键关系
+...
 ```
 
 ### Step 3: 生成查询报告
@@ -389,6 +447,37 @@ Agent:
   → 返回功能档案 + 错误码规范 + 相关API
 ```
 
+### 场景 5: 旧项目改造查询表结构
+
+```
+用户: "需要在用户表上添加新字段，现有表结构是什么样的？"
+
+Agent:
+  → 调用 knowledge-base-query Skill
+  → 类型: schema
+  → 关键词: "tb_user"
+  → 目标路径: .qoder/repowiki/schemas/mall-user/
+  → 返回 tb_user 表结构档案
+  → 提取字段清单: 现有15个字段，避免命名冲突
+  → 提取索引信息: 评估新字段对性能的影响
+  → 提取外键关系: 了解表间依赖
+```
+
+### 场景 6: 新功能依赖旧表
+
+```
+用户: "新功能需要使用订单表，查询订单表结构"
+
+Agent:
+  → 调用 knowledge-base-query Skill
+  → 类型: schema
+  → 关键词: "tb_order"
+  → 返回表结构档案
+  → 了解可用字段和字段含义
+  → 确认关联表（如 tb_order_item）
+  → 基于现有表设计生成新代码
+```
+
 ---
 
 ## 与其他 Skill 的协作
@@ -416,8 +505,24 @@ Agent:
 ```
 代码生成阶段:
   → 查询功能档案作为模板
-  → 查询框架文档获取用法
-  → 查询API文档了解调用方式
+  → 查询旧表结构（schema）- 改造项目
+  → 查询API文档了解调用方式（Feign接口、第三方API）
+```
+
+### 与数据库归档协作
+
+```
+旧表改造场景:
+  → 查询表结构档案（schema）
+  → 获取字段清单，避免命名冲突
+  → 了解索引情况，评估性能影响
+  → 确认外键关系，避免破坏约束
+  → 基于档案生成新代码
+
+新功能依赖旧表:
+  → 查询表结构了解可用字段
+  → 查询关联表了解数据关系
+  → 基于现有设计生成代码
 ```
 
 ---
@@ -447,6 +552,10 @@ Agent:
 ## 相关文档
 
 - **功能归档 Skill**: `.qoder/skills/feature-archiving.md`
+- **坑点归档 Skill**: `.qoder/skills/pitfalls-archiving.md`
+- **规范归档 Skill**: `.qoder/skills/spec-archiving.md`
+- **数据库归档 Skill**: `.qoder/skills/database-schema-archiving.md`
+- **API归档 Skill**: `.qoder/skills/api-archiving.md`
 - **需求澄清 Skill**: `.qoder/skills/requirement-clarification.md`
 - **技术规格生成 Skill**: `.qoder/skills/tech-spec-generation.md`
 - **代码生成 Skill**: `.qoder/skills/java-code-generation.md`

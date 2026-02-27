@@ -29,25 +29,32 @@ tools: Read, Write, Grep, Glob
 
 ## 输出
 
-- 功能档案：`.qoder/repowiki/feature/{feature-id}/feature-archive.md`
-- 功能索引：`.qoder/repowiki/feature/index.md`
-- 复用指南：`.qoder/repowiki/feature/{feature-id}/reuse-guide.md`
+- 功能档案：`.qoder/repowiki/features/{feature-id}/feature-archive.md`
+- 功能索引：`.qoder/repowiki/features/index.md`
+- 复用指南：`.qoder/repowiki/features/{feature-id}/reuse-guide.md`
 
 ---
 
 ## 工作流程
 
-### Step 1: 读取功能信息
+### Step 1: 读取功能信息与知识库更新
 
-1. 读取技术规格书，提取功能定义
-2. 读取代码生成报告，获取实现范围
-3. 扫描相关源代码文件
+1. **读取输入文档**
+   - 读取技术规格书，提取功能定义
+   - 读取代码生成报告，获取实现范围
+   - 扫描相关源代码文件
+
+2. **知识库更新判断**
+   - 更新功能档案（feature）：归档新功能设计，供后续复用
+   - 更新坑点档案（pitfall）：如开发过程中发现新的违规模式
+   - 更新规范（spec）：如总结出新的编码规范或架构规范
+   - 更新表结构（schema）：如功能涉及旧表改造，更新表结构档案
 
 ### Step 2: 生成功能档案
 
-1. 读取模板：`.qoder/repowiki/feature/_TEMPLATE/feature-archive.md`
+1. 读取模板：`.qoder/repowiki/features/_TEMPLATE/feature-archive.md`
 2. 根据功能信息填充模板变量
-3. 生成档案文件：`.qoder/repowiki/feature/{feature-id}/feature-archive.md`
+3. 生成档案文件：`.qoder/repowiki/features/{feature-id}/feature-archive.md`
 
 **档案包含内容**：
 - 基本信息（ID、名称、服务、版本等）
@@ -62,7 +69,7 @@ tools: Read, Write, Grep, Glob
 
 ### Step 3: 更新功能索引
 
-在 `.qoder/repowiki/feature/index.md` 中添加条目：
+在 `.qoder/repowiki/features/index.md` 中添加条目：
 
 ```markdown
 | 功能ID | 功能名称 | 服务 | 归档日期 | 状态 |
@@ -72,7 +79,7 @@ tools: Read, Write, Grep, Glob
 
 ### Step 4: 生成复用指南
 
-生成 `.qoder/repowiki/feature/{feature-id}/reuse-guide.md`，包含：
+生成 `.qoder/repowiki/features/{feature-id}/reuse-guide.md`，包含：
 - 快速复用场景（完整功能复用、部分组件复用）
 - 修改建议
 - 问题解答
@@ -138,6 +145,7 @@ tools: Read, Write, Grep, Glob
 ## 相关文档
 
 - **知识库查询 Skill**: `.qoder/skills/knowledge-base-query.md`（用于检索已归档功能）
-- **功能归档目录**: `.qoder/repowiki/feature/`
-- **功能归档模板**: `.qoder/repowiki/feature/_TEMPLATE/feature-archive.md`
+- **功能归档目录**: `.qoder/repowiki/features/`
+- **功能归档模板**: `.qoder/repowiki/features/_TEMPLATE/feature-archive.md`
+- **API归档 Skill**: `.qoder/skills/api-archiving.md`（归档功能相关的API）
 - **代码生成 Skill**: `.qoder/skills/java-code-generation.md`

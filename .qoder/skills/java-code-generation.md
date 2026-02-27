@@ -44,13 +44,20 @@ tools: Read, Write, Grep, Glob
 
 ## 工作流程
 
-### Step 1: 读取配置
+### Step 1: 读取配置与知识库查询
 
-1. 读取技术规格书（tech-spec.md）
-2. 读取 API 定义（openapi.yaml）
-3. 读取项目资源映射（RESOURCE-MAP.yml）
-4. 读取写入范围（SCOPE.yml）
-5. 读取编码规范和架构规范
+1. **读取输入文档**
+   - 读取技术规格书（tech-spec.md）
+   - 读取 API 定义（openapi.yaml）
+   - 读取项目资源映射（RESOURCE-MAP.yml）
+   - 读取写入范围（SCOPE.yml）
+   - 读取编码规范和架构规范
+
+2. **知识库查询**
+   - 查询类似功能档案（feature）：参考已有功能代码结构
+   - 查询旧表结构（schema）：改造项目时了解现有字段，避免命名冲突
+   - 查询API接口（api）：了解依赖服务的Feign接口定义、第三方API
+   - 查询历史坑点（pitfall）：避免已知陷阱（如Feign客户端重复创建）
 
 ### Step 2: 服务分析
 

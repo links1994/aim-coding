@@ -79,8 +79,7 @@ output_language: 中文
 - [ ] 使用 knowledge-base-query Skill 查询相关内容
   - 查询类似功能档案: 类型 feature + 关键词
   - 查询技术规范: 类型 spec + 关键词 (错误码规范、架构规范等)
-  - 查询API文档: 类型 api + 服务名
-  - 查询框架文档: 类型 framework + 关键词
+  - 查询API文档: 类型 api + 服务名 (内部服务API、第三方API)
 - [ ] 当不确定任何技术细节时，优先使用知识库查询
 
 ### 2.2 现有数据库设计
