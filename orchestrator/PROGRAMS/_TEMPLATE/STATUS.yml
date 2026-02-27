@@ -1,0 +1,49 @@
+program: P-YYYY-NNN
+name: 任务标题
+phase: planning          # planning / in-progress / review / done
+status: not-started      # not-started / active / blocked / deployed
+
+# Spec Mode 阶段跟踪（用于 implementation program）
+spec_phases:
+  - name: 需求澄清
+    status: pending      # pending / in-progress / done / blocked
+  - name: 技术规格
+    status: pending
+  - name: 开发实现
+    status: pending
+  - name: 测试验证
+    status: pending
+  - name: 功能归档
+    status: pending
+
+tasks:
+  - id: t1
+    name: 任务描述
+    status: pending      # pending / in-progress / done / blocked
+  - id: t2
+    name: 任务描述
+    status: pending
+
+# 产出物跟踪
+artifacts:
+  - path: workspace/questions.md
+    status: pending
+    desc: 问题清单
+  - path: workspace/answers.md
+    status: pending
+    desc: 确认结果
+  - path: workspace/decisions.md
+    status: pending
+    desc: 技术决策记录
+  - path: workspace/tech-spec.md
+    status: pending
+    desc: 技术规格书
+  - path: workspace/openapi.yaml
+    status: pending
+    desc: OpenAPI 定义
+  - path: workspace/checklist.md
+    status: pending
+    desc: 验收清单
+  - path: .qoder/repowiki/feature/{feature-id}/feature-archive.md
+    status: pending
+    desc: 功能归档档案

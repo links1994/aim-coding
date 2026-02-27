@@ -1,0 +1,95 @@
+# 资源索引 — 仓库、基础设施、部署配置
+#
+# 此文件由 Agent 在首次启动时根据用户描述自动生成。
+# 格式参考如下，Agent 会根据实际情况填充。
+
+# ==================== 仓库列表 ====================
+repos:
+  # 门面服务层
+  mall-admin:
+    path: repos/mall-admin
+    desc: 管理后台门面服务（供 AI 智能平台管理后台调用）
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall.admin
+    status: active
+
+  mall-app:
+    path: repos/mall-app
+    desc: 客户端门面服务（供 APP 端）
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall.client
+    status: active
+
+  mall-chat:
+    path: repos/mall-chat
+    desc: AI 对话门面服务（供 APP 端对话功能，直接调用大模型）
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall.chat
+    status: active
+
+  # 应用服务层
+  mall-agent:
+    path: repos/mall-agent
+    desc: AI 智能体员工服务（核心业务）
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall.agent
+    status: active
+
+  # 支撑服务层
+  mall-user:
+    path: repos/mall-user
+    desc: 用户服务
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall.user
+    status: active
+
+  # API 模块（内部服务间调用）
+  mall-inner-api:
+    path: repos/mall-inner-api
+    desc: 内部 API 模块集合（包含 mall-agent-api, mall-user-api 等）
+    lang: Java
+    framework: Spring Cloud
+    package: com.aim.mall
+    status: active
+    modules:
+      - mall-agent-api
+      - mall-user-api
+
+# ==================== 服务调用关系 ====================
+service_dependencies:
+  mall-admin:
+    calls:
+      - mall-agent
+      - mall-user
+  mall-app:
+    calls:
+      - mall-agent
+      - mall-user
+  mall-chat:
+    calls:
+      - mall-agent
+  mall-agent:
+    calls:
+      - mall-user
+
+# ==================== 基础设施 ====================
+# 注：基础设施（网关、Redis、鉴权等）由运维团队维护，本配置仅作参考
+# infrastructure:
+#   gateway:
+#     name: API Gateway
+#     desc: 统一入口，路由到门面服务
+#   
+#   databases:
+#     mall-agent-db:
+#       desc: 智能员工服务数据库
+#     mall-user-db:
+#       desc: 用户服务数据库
+#
+#   cache:
+#     redis:
+#       desc: 缓存服务（由基础设施团队维护）
