@@ -10,21 +10,21 @@
 
 ### 核心开发 Skills（Spec 模式）
 
-| Skill     | 文件                             | 说明                         | 使用时机    | 依赖 Rule |
+| Skill     | 目录                             | 说明                         | 使用时机    | 依赖 Rule |
 |-----------|--------------------------------|----------------------------|---------|-----------|
-| 需求分解      | `prd-decomposition.md`         | 根据 PRD 进行需求拆解 | Phase 1 | `01-prd-decomposition.md` |
-| 需求澄清      | `requirement-clarification.md` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 | `02-requirement-clarification.md` |
-| 技术规格生成    | `tech-spec-generation.md`      | 生成技术规格书 | Phase 3 | `03-tech-spec-generation.md` |
-| Java 代码生成 | `java-code-generation.md`      | 生成 Java 微服务代码 | Phase 4 | `04-coding-standards.md`, `05-architecture-standards.md` |
-| HTTP 测试生成 | `http-test-generation.md`      | 生成 HTTP 测试文件 | Phase 5 | - |
-| 代码质量分析    | `code-quality-analysis.md`     | 代码质量分析和优化 | Phase 6 | - |
+| 需求分解      | `prd-decomposition/`         | 根据 PRD 进行需求拆解 | Phase 1 | `01-prd-decomposition.md` |
+| 需求澄清      | `requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 | `02-requirement-clarification.md` |
+| 技术规格生成    | `tech-spec-generation/`      | 生成技术规格书 | Phase 3 | `03-tech-spec-generation.md` |
+| Java 代码生成 | `java-code-generation/`      | 生成 Java 微服务代码 | Phase 4 | `04-coding-standards.md`, `05-architecture-standards.md` |
+| HTTP 测试生成 | `http-test-generation/`      | 生成 HTTP 测试文件 | Phase 5 | - |
+| 代码质量分析    | `code-quality-analysis/`     | 代码质量分析和优化 | Phase 6 | - |
 
 ### 上下文管理 Skills（按需加载）
 
-| Skill  | 文件                     | 说明                            | 使用时机    |
+| Skill  | 目录                     | 说明                            | 使用时机    |
 |--------|------------------------|-------------------------------|---------|
-| 知识库查询 | `knowledge-base-query.md` | 统一查询 repowiki 知识库 | 任何需要查询时 |
-| 业务功能归档 | `feature-archiving.md` | 功能归档到 repowiki，支持下次迭代复用 | 功能完成后 |
+| 知识库查询 | `knowledge-base-query/` | 统一查询 repowiki 知识库 | 任何需要查询时 |
+| 业务功能归档 | `feature-archiving/` | 功能归档到 repowiki，支持下次迭代复用 | 功能完成后 |
 
 ---
 
@@ -72,40 +72,39 @@ Skill 是**可复用的执行模块**，特点：
 ```yaml
 ---
 name: skill-name
-description: Skill 描述
-tools: Read, Write, Grep, Glob
+description: Skill description with trigger keywords. Use when user says "xxx" or needs to do yyy.
 ---
 
-# Skill 标题
+# Skill Title
 
-> **前置条件**：执行前必须先读取 `.qoder/rules/xx-xxxx.md` 获取规范标准
+> **Prerequisite**: Must read `.qoder/rules/xx-xxxx.md` before execution to obtain specification standards.
 
-## 触发条件
+## Trigger Conditions
 
-何时使用此 Skill。
+When to use this Skill.
 
-## 输入
+## Inputs
 
-- 输入项 1
-- 输入项 2
-- `.qoder/rules/xx-xxxx.md` — 规范文件（**必须先读取**）
+- Input item 1
+- Input item 2
+- `.qoder/rules/xx-xxxx.md` — specification file (**must read first**)
 
-## 输出
+## Outputs
 
-- 输出项 1
-- 输出项 2
+- Output item 1
+- Output item 2
 
-## 工作流程
+## Workflow
 
-详细的工作步骤...
+Detailed workflow steps...
 
-## 返回格式
+## Return Format
 
 ```
-状态：已完成/失败/需要决策
-报告：workspace/xxx.md
-产出：N 个文件
-决策点：[如有]
+Status: Completed/Failed/Needs Decision
+Report: workspace/xxx.md
+Output: N files
+Decision Points: [if any]
 ```
 ```
 
@@ -150,7 +149,7 @@ tools: Read, Write, Grep, Glob
 
 如需新增 Skill：
 
-1. 创建 `{skill-name}.md` 文件
-2. 遵循上述文件格式（包含前置条件说明）
+1. 创建 `{skill-name}/SKILL.md` 文件（注意：使用目录结构，不是单个文件）
+2. 遵循上述文件格式（只保留 `name` 和 `description` 在 Frontmatter）
 3. 更新本 README 的 Skill 列表
 4. 如有对应规范，在 `.qoder/rules/` 创建 Rule 文件
