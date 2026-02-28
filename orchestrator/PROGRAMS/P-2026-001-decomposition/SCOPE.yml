@@ -1,0 +1,52 @@
+program: P-2026-001-ai-agent-platform
+
+# 写入范围定义
+# 列出本 Program 允许修改的文件/目录
+
+allowed_paths:
+  # 需求文档
+  - orchestrator/PROGRAMS/P-2026-001-ai-agent-platform/workspace/
+  
+  # mall-admin 门面服务
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/controller/
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/dto/
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/feign/
+  
+  # mall-app 门面服务
+  - repos/mall-app/src/main/java/com/aim/mall/app/controller/
+  - repos/mall-app/src/main/java/com/aim/mall/app/dto/
+  - repos/mall-app/src/main/java/com/aim/mall/app/feign/
+  
+  # mall-chat 对话门面服务
+  - repos/mall-chat/src/main/java/com/aim/mall/chat/controller/
+  - repos/mall-chat/src/main/java/com/aim/mall/chat/dto/
+  - repos/mall-chat/src/main/java/com/aim/mall/chat/service/
+  
+  # mall-agent 核心业务服务
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/controller/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/service/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/domain/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/infrastructure/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/dto/
+  - repos/mall-agent/src/main/resources/db/
+  - repos/mall-agent/src/main/resources/mapper/
+  
+  # mall-user 用户服务
+  - repos/mall-user/src/main/java/com/aim/mall/user/feign/
+  - repos/mall-user/src/main/java/com/aim/mall/user/service/
+
+# 禁止修改的范围（即使有 allowed_paths，这些也明确禁止）
+forbidden_paths:
+  - repos/mall-product/
+  - .idea/
+  - .qoder/
+
+# 跨服务共享定义
+shared_interfaces:
+  feign_clients:
+    - mall-agent → mall-user
+    - mall-admin → mall-agent
+    - mall-admin → mall-user
+    - mall-app → mall-agent
+    - mall-app → mall-user
+    - mall-chat → mall-agent

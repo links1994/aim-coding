@@ -1,0 +1,17 @@
+program: P-2026-001-decomposition
+name: AI智能体代理平台 - 需求拆分
+status: deployed
+
+phase: done
+
+tasks:
+  - name: 需求拆分
+    status: done
+
+artifacts:
+  - path: workspace/decomposition.md
+    status: done
+    desc: 需求拆分文档（46个子需求）
+
+completed_at: 2026-02-28
+
