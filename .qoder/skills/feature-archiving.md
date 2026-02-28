@@ -1,12 +1,12 @@
 ---
 name: feature-archiving
-description: 业务功能归档 Skill，将已完成功能归档保存，支持下次迭代基于归档文件直接复用
+description: 业务功能归档 Skill，将已完成功能归档到知识库
 tools: Read, Write, Grep, Glob
 ---
 
 # 业务功能归档 Skill
 
-将已完成的业务功能进行结构化归档，生成可复用的功能档案，支持下次迭代时快速理解和复用。
+将已完成的业务功能进行结构化归档到知识库，供后续开发自动检索复用。
 
 ---
 
@@ -14,7 +14,7 @@ tools: Read, Write, Grep, Glob
 
 - 业务功能开发完成并通过测试
 - 用户明确指令："归档功能" 或 "委托: 归档功能"
-- 主 Agent 在功能验收后调用
+- 主 Agent 在功能验收后调用（作为最后一个 task）
 
 ---
 
@@ -22,6 +22,7 @@ tools: Read, Write, Grep, Glob
 
 - `orchestrator/PROGRAMS/{program_id}/workspace/tech-spec.md` — 技术规格书
 - `orchestrator/PROGRAMS/{program_id}/workspace/openapi.yaml` — API 定义
+- `orchestrator/PROGRAMS/{program_id}/workspace/decisions.md` — 技术决策记录
 - `{service}/src/main/java/` — 相关 Java 源代码（相对于项目根目录）
 - `orchestrator/ALWAYS/RESOURCE-MAP.yml` — 项目资源映射
 
@@ -37,18 +38,17 @@ tools: Read, Write, Grep, Glob
 
 ## 工作流程
 
-### Step 1: 读取功能信息与知识库更新
+### Step 1: 读取功能信息
 
 1. **读取输入文档**
    - 读取技术规格书，提取功能定义
-   - 读取代码生成报告，获取实现范围
+   - 读取技术决策记录，获取关键设计决策
    - 扫描相关源代码文件
 
 2. **知识库更新判断**
-   - 更新功能档案（feature）：归档新功能设计，供后续复用
-   - 更新坑点档案（pitfall）：如开发过程中发现新的违规模式
-   - 更新规范（spec）：如总结出新的编码规范或架构规范
-   - 更新表结构（schema）：如功能涉及旧表改造，更新表结构档案
+   - 更新功能档案（feature）：归档新功能设计
+   - 更新坑点档案（pitfall）：如发现新的违规模式
+   - 更新表结构（schema）：如功能涉及旧表改造
 
 ### Step 2: 生成功能档案
 
@@ -89,14 +89,14 @@ tools: Read, Write, Grep, Glob
 ## 归档目录结构
 
 ```
-.qoder/repowiki/feature/              # 功能归档目录（按 repowiki 格式组织）
-├── index.md                          # 功能索引
-├── _TEMPLATE/                        # 功能归档模板
+.qoder/repowiki/features/              # 功能归档目录
+├── index.md                           # 功能索引
+├── _TEMPLATE/                         # 功能归档模板
 │   └── feature-archive.md
 ├── F-001-create-agent/
-│   ├── feature-archive.md            # 功能档案（repowiki 格式）
-│   ├── reuse-guide.md                # 复用指南
-│   └── snippets/                     # 代码片段
+│   ├── feature-archive.md             # 功能档案
+│   ├── reuse-guide.md                 # 复用指南
+│   └── snippets/                      # 代码片段
 │       ├── controller-snippet.java
 │       └── service-snippet.java
 └── F-002-agent-dialogue/
@@ -109,43 +109,17 @@ tools: Read, Write, Grep, Glob
 
 ```
 状态：已完成
-报告：.qoder/repowiki/feature/{feature-id}/feature-archive.md
+报告：.qoder/repowiki/features/{feature-id}/feature-archive.md
 产出：3 个文件（档案、索引更新、复用指南）
-决策点：无
-```
 
----
-
-## 使用示例
-
-### 归档单个功能
-
-```
-用户: "归档功能 F-001"
-主 Agent:
-  → 调用 feature-archiving Skill
-  → 读取 tech-spec.md 和源代码
-  → 生成 feature-archive.md
-  → 更新 index.md
-  → 生成 reuse-guide.md
-```
-
-### 基于档案复用
-
-```
-用户: "基于 F-001 档案创建新功能"
-主 Agent:
-  → 读取 .qoder/repowiki/feature/F-001/feature-archive.md
-  → 理解功能结构和设计决策
-  → 调用 java-code-generation Skill 生成新代码
+功能档案已归档到知识库，后续开发可通过 knowledge-base-query Skill 自动检索复用。
 ```
 
 ---
 
 ## 相关文档
 
-- **知识库查询 Skill**: `.qoder/skills/knowledge-base-query.md`（用于检索已归档功能）
+- **知识库查询 Skill**: `.qoder/skills/knowledge-base-query.md`
 - **功能归档目录**: `.qoder/repowiki/features/`
-- **功能归档模板**: `.qoder/repowiki/features/_TEMPLATE/feature-archive.md`
-- **API归档 Skill**: `.qoder/skills/api-archiving.md`（归档功能相关的API）
+- **API归档 Skill**: `.qoder/skills/api-archiving.md`
 - **代码生成 Skill**: `.qoder/skills/java-code-generation.md`

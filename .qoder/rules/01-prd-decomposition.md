@@ -1,11 +1,17 @@
 ---
 trigger: model_decision
-description: 需求拆分与依赖分析规范
+description: 需求拆分与依赖分析规范（纯规范定义）
 ---
 
-## 拆分原则
+# 需求拆分规范
 
-### 1. 功能维度拆分
+本文档只定义**规范标准**，不涉及执行流程。执行流程见 Skill 文件。
+
+---
+
+## 1. 拆分原则
+
+### 1.1 功能维度拆分
 
 ```
 PRD 功能模块
@@ -13,13 +19,12 @@ PRD 功能模块
 │   ├── 子需求 1.1 [mall-admin] 管理后台接口
 │   ├── 子需求 1.2 [mall-app] APP 端接口
 │   ├── 子需求 1.3 [mall-agent] 智能员工业务逻辑
-│   ├── 子需求 1.4 [mall-user] 用户数据操作
-│   └── 子需求 1.5 [DB] 数据库表设计
+│   └── 子需求 1.4 [mall-user] 用户数据操作
 ├── 用户故事 2
 │   └── ...
 ```
 
-### 2. 服务归属判断规则
+### 1.2 服务归属判断规则
 
 **本规则只关注后端服务，不涉及前端/基础设施**
 
@@ -30,16 +35,19 @@ PRD 功能模块
 | **门面服务-AI对话** | AI 对话功能，直接调用大模型 | `[mall-chat]`  | `mall-chat/.../chat/controller/`   |
 | **智能员工服务**   | 智能员工核心业务逻辑     | `[mall-agent]` | `mall-agent/.../agent/`            |
 | **用户服务**     | 用户相关数据操作       | `[mall-user]`  | `mall-user/.../user/`              |
-| **数据库**      | 表结构设计、DDL      | `[DB]`         | `{服务}/src/main/resources/db/`      |
 | **跨服务共享**    | DTO、Feign 接口定义 | `[SHARED]`      | 各服务的 `dto/` `feign/` 包                     |
 
-**数据库设计规范参考**：详细的数据库字段类型、字符集、通用字段等规范见 `05-architecture-standards.md` 数据库设计章节
+**数据库设计说明**：表结构不单独拆分，跟随具体需求实现，由功能归档步骤统一归档。
 
-### 3. 架构设计约束
+**数据库设计规范参考**：`.qoder/rules/05-architecture-standards.md` 数据库设计章节
+
+---
+
+## 2. 架构设计约束
 
 > **详细规范参考**：`.qoder/rules/05-architecture-standards.md`
 
-#### 3.1 服务类型定义
+### 2.1 服务类型定义
 
 | 术语 | 英文 | 定义 | 调用方 |
 |------|------|------|--------|
@@ -47,7 +55,7 @@ PRD 功能模块
 | **应用服务** | Application Service | 后端内部服务，通过 Feign 供门面服务调用 | 门面服务、其他应用服务 |
 | **支撑服务** | Support Service | 提供基础能力的应用服务 | 应用服务 |
 
-#### 3.2 核心约束
+### 2.2 核心约束
 
 **分层调用关系**：
 ```
@@ -59,7 +67,7 @@ PRD 功能模块
 - 参数必要性校验在门面层完成
 - 应用服务专注业务逻辑，信任门面层已做基础校验
 
-#### 3.3 路径与参数规范（摘要）
+### 2.3 路径与参数规范（摘要）
 
 | 服务类型 | 路径前缀 | 参数规则 |
 |----------|----------|----------|
@@ -79,13 +87,15 @@ GET /inner/api/v1/ai-employee/detail?employeeId=xxx
 POST /inner/api/v1/ai-employee/offline（参数在 body 中）
 ```
 
-**3.6 技术选型约束**
+### 2.4 技术选型约束
 
 - **技术栈**：Spring Boot 3.x + MyBatis/MyBatis-Plus
 - **异常处理**：仅允许使用三种标准异常类型（MethodArgumentValidationException、RemoteApiCallException、BusinessException）
 - **数据库访问**：CRUD 操作规范，禁止使用 QueryWrapper、SELECT *、脚本标签
 
-### 4. 服务调用关系
+---
+
+## 3. 服务调用关系
 
 ```mermaid
 graph TD
@@ -112,7 +122,9 @@ graph TD
 - 禁止跨层级调用（如应用服务直接调用门面服务）
 - 所有跨服务调用通过 OpenFeign 实现
 
-### 5. 依赖关系定义
+---
+
+## 4. 依赖关系定义
 
 依赖关系直接记录在子需求中，不再单独生成 `dependencies.md` 文件。
 
@@ -136,46 +148,9 @@ graph TD
 
 ---
 
-## 执行流程
+## 5. 输出格式规范
 
-### Step 1: 读取 PRD
-
-1. 解析 PRD 文档结构
-2. 提取功能模块列表
-3. 识别用户故事和验收标准
-
-### Step 2: 逐模块拆分
-
-对每个功能模块，按以下步骤分析：
-
-1. **识别调用入口**
-    - 管理后台功能 → 标记 `[mall-admin]`
-    - APP/商家端功能 → 标记 `[mall-app]`
-    - AI 对话功能 → 标记 `[mall-chat]`
-
-2. **识别业务归属**
-    - 智能员工相关逻辑 → 标记 `[mall-agent]`
-    - 用户相关操作 → 标记 `[mall-user]`
-
-3. **识别数据存储**
-    - 新表/字段设计 → 标记 `[DB]`
-
-4. **识别跨服务调用**
-    - Feign 客户端定义 → 标记 `[SHARED]`
-
-### Step 3: 依赖分析
-
-```
-分析顺序：
-1. 服务调用链（mall-admin/app/chat → mall-agent → mall-user）
-2. 内部依赖（Controller → Service → Repository）
-3. Feign 接口契约（被调用方优先定义）
-4. 数据流向（DB → Service → Controller）
-```
-
-### Step 4: 生成拆分文档
-
-**decomposition.md 结构：**
+**decomposition.md 结构标准：**
 
 ```markdown
 # 需求分解结果
@@ -243,48 +218,12 @@ graph TD
 - **Inner 接口路径**: `GET /inner/api/v1/user/detail?userId={userId}`
 - **依赖模块**:
   - 依赖服务: 无
-  - 依赖数据库表: aim_user
+  - 依赖数据库表: aim_user（本需求同步设计）
 - **验收标准**:
+  - [ ] 设计 aim_user 表结构
   - [ ] 定义 Feign 接口（使用 Query 参数，禁止路径参数）
   - [ ] 实现用户查询逻辑
   - [ ] 返回 Response DTO 对象
-
-#### REQ-005: [DB] 智能员工表设计
-
-- **来源**: PRD 第 2.1 节
-- **描述**: 设计智能员工数据表
-- **代码位置**: `mall-agent/src/main/resources/db/V001__create_agent.sql`
-- **涉及表**: aim_employee
-- **依赖模块**:
-  - 被依赖: REQ-003, REQ-004
-- **验收标准**:
-  - [ ] 表结构设计
-  - [ ] 索引设计
-  - [ ] 字段注释
-
-### 数据库设计汇总
-
-#### 表清单
-
-| 序号 | 表名 | 所属服务 | 用途 | 关联子需求 |
-|------|------|----------|------|------------|
-| 1 | aim_employee | mall-agent | 智能员工表 | REQ-003, REQ-005 |
-| 2 | aim_user | mall-user | 用户表 | REQ-004, REQ-005 |
-
-#### 表结构详情
-
-**aim_employee**
-
-```sql
-CREATE TABLE aim_employee (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
-    name VARCHAR(100) NOT NULL COMMENT '员工名称',
-    -- 其他字段
-    create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    deleted TINYINT DEFAULT 0 COMMENT '删除标记'
-) COMMENT='智能员工表';
-```
 
 ### 依赖关系图
 
@@ -303,15 +242,9 @@ graph TD
         REQ004[REQ-004: mall-user 服务]
     end
 
-    subgraph "数据层"
-        REQ005[REQ-005: 数据库]
-    end
-
     REQ001 --> REQ003
     REQ002 --> REQ003
     REQ003 --> REQ004
-    REQ003 --> REQ005
-    REQ004 --> REQ005
 ```
 
 ### 依赖矩阵
@@ -321,16 +254,65 @@ graph TD
 | REQ-001 | mall-agent | aim_employee | - |
 | REQ-002 | mall-agent | aim_employee | - |
 | REQ-003 | mall-user | aim_employee, aim_user | REQ-001, REQ-002 |
-| REQ-004 | - | aim_user | REQ-003 |
-| REQ-005 | - | - | REQ-003, REQ-004 |
+| REQ-004 | - | aim_user（本需求设计） | REQ-003 |
 
 ### 开发顺序建议
 
-1. **第一阶段**: REQ-005（数据库表设计）
-2. **第二阶段**: REQ-004（mall-user 服务）
-3. **第三阶段**: REQ-003（mall-agent 业务）
-4. **第四阶段**: REQ-001, REQ-002（门面接口）
+1. **第一阶段**: REQ-004（mall-user 服务，同步设计 aim_user 表）
+2. **第二阶段**: REQ-003（mall-agent 业务，同步设计 aim_employee 表）
+3. **第三阶段**: REQ-001, REQ-002（门面接口）
+
+### 数据库设计说明
+
+- 表结构不单独拆分，跟随具体需求实现
+- 每个需求负责设计自己需要的表
+- 表结构由功能归档步骤统一归档到知识库
+
+---
+
+## 6. 开发顺序排序原则
+
+### 6.1 双维度排序规则
+
+子需求按以下两个维度排序，确定实现优先级：
+
+| 优先级 | 维度 | 规则 | 说明 |
+|--------|------|------|------|
+| **第一** | 依赖数量 | 依赖少的优先 | 无外部依赖 > 有依赖 |
+| **第二** | 业务复杂度 | CRUD 优先 | 简单 CRUD > 复杂业务 |
+
+### 6.2 实现顺序矩阵
+
+根据以上规则，实现顺序如下：
+
 ```
+第一阶段：无依赖的 CRUD
+├── 基础数据表设计
+├── 单表增删改查接口
+└── 枚举/常量定义
+
+第二阶段：无依赖的复杂业务
+├── 复杂领域逻辑
+├── 状态机/工作流
+└── 计算/聚合逻辑
+
+第三阶段：有依赖的 CRUD
+├── 依赖基础服务的查询接口
+├── 关联表操作
+└── 聚合查询
+
+第四阶段：有依赖的复杂业务
+├── 跨服务业务流程
+├── 复杂业务编排
+└── 门面层聚合接口
+```
+
+### 6.3 复杂度判断标准
+
+| 类型 | 特征 | 示例 |
+|------|------|------|
+| **简单 CRUD** | 单表操作、无复杂逻辑、无外部调用 | 用户列表查询、字典项管理 |
+| **复杂业务** | 多表关联、状态流转、外部调用、复杂计算 | 订单状态机、智能员工调度 |
 
 ---
 
@@ -372,7 +354,7 @@ graph TD
 - [ ] 接口入口正确区分（管理端 vs 客户端）
 - [ ] Feign 调用关系已识别
 - [ ] 每个子需求的依赖模块已标注（依赖服务、依赖数据库表）
-- [ ] 数据库表设计已汇总到文档末尾
+- [ ] 表设计跟随需求（不单独拆分），功能归档时统一处理
 - [ ] 代码路径符合项目结构规范
 - [ ] 分层接口风格规范已明确（门面层 RESTful / 应用层简化）
 - [ ] 参数校验职责已明确（门面层负责）

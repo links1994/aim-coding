@@ -36,6 +36,7 @@ Program: {名称}
 - 如果 Program 目录不存在，询问用户是否创建（从 `_TEMPLATE` 复制）
 - 如果存在 `workspace/CHECKPOINT.md`，优先读取恢复上下文
 - 如果存在 `workspace/HANDOFF.md`，读取上次交接内容
+- 两者均不存在时，依据 `STATUS.yml` 状态执行 CORE.md 定义的"启动时状态判断"流程
 
 ## 新建 Program
 

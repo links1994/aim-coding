@@ -101,25 +101,95 @@ updated_at: {updated-date}
 
 ---
 
-## 数据库变更
+## 数据库设计归档
 
-### 新增表
+> **说明**：本功能涉及的数据库表结构在此归档。如该表已在之前功能中归档，通过版本号区分迭代；无修改则无需重复归档。
 
-| 表名 | 说明 | 数据量预估 | 主要字段 |
-|------|------|------------|----------|
-| {table-name} | {description} | {estimate} | {fields} |
+### 本功能涉及的表
 
-### 修改表
+| 序号 | 表名 | 设计版本 | 设计需求 | 操作类型 | 说明 |
+|------|------|----------|----------|----------|------|
+| 1 | {table-name} | v1.0 | {req-id} | 新增/修改 | {description} |
 
-| 表名 | 变更类型 | 变更内容 | 影响评估 |
+### 表结构详情
+
+#### {table-name} (v{version})
+
+**基本信息**
+
+| 属性 | 值 |
+|------|-----|
+| 表名 | {table-name} |
+| 中文名 | {table-comment} |
+| 所属服务 | {service-name} |
+| 设计版本 | v{version} |
+| 设计需求 | {req-id} |
+| 数据量预估 | {estimate} |
+
+**字段定义**
+
+| 字段名 | 类型 | 长度 | 是否可空 | 默认值 | 说明 | 索引 |
+|--------|------|------|----------|--------|------|------|
+| {field-name} | {type} | {length} | {nullable} | {default} | {comment} | {index} |
+
+**索引设计**
+
+| 索引名 | 类型 | 字段 | 说明 |
+|--------|------|------|------|
+| {index-name} | {type} | {fields} | {description} |
+
+**业务规则**
+
+- {rule-1}
+- {rule-2}
+
+### 表操作流程
+
+**读操作流程**
+
+```
+{读操作场景1}
+├── 输入: {input-params}
+├── 查询表: {table-name}
+├── 查询条件: {query-conditions}
+└── 返回: {return-fields}
+
+{读操作场景2}
+├── 输入: {input-params}
+├── 查询表: {table-name}
+├── 关联表: {join-table}
+└── 返回: {return-fields}
+```
+
+**写操作流程**
+
+```
+{写操作场景1}
+├── 前置校验: {validation-rules}
+├── 操作类型: INSERT/UPDATE/DELETE
+├── 操作表: {table-name}
+├── 事务控制: {transaction-scope}
+└── 后置操作: {post-actions}
+
+{写操作场景2}
+├── 前置校验: {validation-rules}
+├── 操作类型: INSERT/UPDATE/DELETE
+├── 操作表: {table-name}
+└── 并发控制: {concurrency-control}
+```
+
+**批量操作**
+
+| 场景 | 批量大小 | 优化策略 | 注意事项 |
 |------|----------|----------|----------|
-| {table-name} | {type} | {content} | {impact} |
+| {scenario} | {batch-size} | {strategy} | {notice} |
 
-### 索引
+### 历史版本
 
-| 表名 | 索引名 | 字段 | 类型 | 说明 |
-|------|--------|------|------|------|
-| {table-name} | {index-name} | {fields} | {type} | {description} |
+| 版本 | 日期 | 变更内容 | 变更需求 |
+|------|------|----------|----------|
+| v1.0 | {date} | 初始设计 | {req-id} |
+| v1.1 | {date} | {changes} | {req-id} |
 
 ---
 

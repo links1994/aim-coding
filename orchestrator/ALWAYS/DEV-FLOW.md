@@ -10,11 +10,7 @@
 
 ## 完整开发周期
 
-### 1. 确认任务
-
-从 Program 的 PROGRAM.md 和 STATUS.yml 确认当前要做什么。
-
-### 2. 创建 Worktree
+### 1. 创建 Worktree
 
 ```bash
 cd repos/<repo>
@@ -26,9 +22,7 @@ cd ../repos/<repo>-<feature>
 # pnpm install / go mod download / cargo fetch / pip install -r requirements.txt
 ```
 
-### 3. 开发
-
-在 worktree 中开发，提交代码：
+### 2. 开发与提交
 
 ```bash
 # 检查命令（按项目技术栈）
@@ -37,62 +31,36 @@ git add . && git commit -m "feat: xxx"
 git push -u origin feature/<name>
 ```
 
-开发过程中更新 STATUS.yml 跟踪进度。
-
-### 4. 提交 PR
+### 3. 提交 PR
 
 ```bash
 cd repos/<repo>-<feature>
 gh pr create --base main --head feature/<name>
 ```
 
-### 5. 合并
+### 4. 合并与清理
 
 ```bash
 cd repos/<repo>
 gh pr merge <PR号> --merge --delete-branch
-```
-
-### 6. 清理 Worktree
-
-```bash
-cd repos/<repo>
 git worktree remove ../repos/<repo>-<feature>
-git branch -D feature/<name>  # 如果本地分支还在
+git branch -D feature/<name>
 ```
 
-### 7. 更新 Program 状态
+### 5. 更新 Program 状态
 
-更新 `STATUS.yml`，如果 Program 完成则写 `workspace/RESULT.md`。
-
-### 8. 功能归档（可选但推荐）
-
-功能开发完成并合并后，进行功能归档：
-
-```bash
-# 功能归档由 Agent 自动执行
-# 生成位置: .qoder/repowiki/feature/{feature-name}/
-```
-
-**归档内容**：
-- 功能档案 (`feature-archive.md`): 功能描述、接口清单、核心类、设计决策
-- 复用指南 (`reuse-guide.md`): 如何复用此功能
-- 代码片段 (`snippets/`): 可复用的代码片段
-
-**触发方式**：
-- 用户指令: "归档功能" 或 "委托: 归档功能"
-- 自动触发: Program 完成后自动归档（如配置了自动归档）
+更新 STATUS.yml，如果 Program 完成则写 workspace/RESULT.md。
 
 ---
 
 ## 分支说明
 
-| 分支 | 用途 |
-|------|------|
-| `main` | 稳定版本 |
-| `dev` | 测试集成（可选） |
-| `feature/*` | 功能开发 |
-| `fix/*` | Bug 修复 |
+| 分支          | 用途       |
+|-------------|----------|
+| `main`      | 稳定版本     |
+| `dev`       | 测试集成（可选） |
+| `feature/*` | 功能开发     |
+| `fix/*`     | Bug 修复   |
 
 ---
 
@@ -100,16 +68,17 @@ git branch -D feature/<name>  # 如果本地分支还在
 
 格式：`<type>: <description>`
 
-| Type | 说明 |
-|------|------|
-| `feat` | 新功能 |
-| `fix` | Bug 修复 |
-| `docs` | 文档 |
-| `refactor` | 重构 |
-| `test` | 测试 |
-| `chore` | 杂项 |
+| Type       | 说明     |
+|------------|--------|
+| `feat`     | 新功能    |
+| `fix`      | Bug 修复 |
+| `docs`     | 文档     |
+| `refactor` | 重构     |
+| `test`     | 测试     |
+| `chore`    | 杂项     |
 
 示例：
+
 - `feat: add user authentication`
 - `fix: resolve race condition in queue`
 - `refactor: extract message parser`
