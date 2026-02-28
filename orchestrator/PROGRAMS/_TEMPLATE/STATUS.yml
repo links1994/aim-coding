@@ -7,12 +7,13 @@ phase: planning          # planning / in-progress / review / done
 
 # 任务列表（由流程控制根据 Program 类型动态生成）
 # 
-# Implementation Program 典型任务流：
-#   - 需求澄清
-#   - 技术规格  
-#   - 开发实现
-#   - 测试验证
-#   - 功能归档
+# Implementation Program 典型任务流（Spec 模式七阶段）：
+#   - Phase 2: 需求澄清
+#   - Phase 3: 技术规格  
+#   - Phase 4: 开发实现
+#   - Phase 5: 测试验证
+#   - Phase 6: 代码质量
+#   - Phase 7: 功能归档
 #
 # Decomposition Program 典型任务流：
 #   - 需求拆分

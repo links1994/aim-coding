@@ -33,9 +33,9 @@ P-YYYY-NNN-{name}/
 - **目标**：一句话描述要实现什么
 - **背景**：为什么要做这个任务
 - **方案**：技术方案概述
-  - 整体思路
-  - 关键设计决策
-  - 涉及的模块
+    - 整体思路
+    - 关键设计决策
+    - 涉及的模块
 - **涉及文件**：需要修改的主要文件
 - **验收标准**：完成条件
 
@@ -134,6 +134,7 @@ cp -r orchestrator/PROGRAMS/_TEMPLATE orchestrator/PROGRAMS/P-2026-002-feature-n
 ```
 
 然后编辑：
+
 1. `PROGRAM.md` - 填写任务定义
 2. `SCOPE.yml` - 设置写入范围
 3. `STATUS.yml` - 初始化状态
@@ -158,7 +159,7 @@ Agent:
 
 1. 创建：从模板创建目录结构
 2. 规划：编写 PROGRAM.md，明确目标和方案
-3. 执行：按 Spec 模式推进（Phase 1-6）
+3. 执行：按 Spec 模式推进（Phase 1-7）
 4. 完成：编写 RESULT.md，更新 STATUS.yml
 ```
 
@@ -174,6 +175,7 @@ Program ID 格式：`P-YYYY-NNN-{name}`
 - **name**：功能名称（小写，用连字符连接）
 
 示例：
+
 - `P-2026-001-ai-agent-decomposition`
 - `P-2026-002-user-login`
 - `P-2026-003-order-management`
@@ -182,8 +184,8 @@ Program ID 格式：`P-YYYY-NNN-{name}`
 
 ## 快速命令
 
-| 命令 | 作用 |
-|------|------|
-| `继续 P-2026-001` | 加载并继续指定 Program |
-| `新 Program: xxx` | 创建新的开发任务 |
-| `查看 P-2026-001 状态` | 读取 STATUS.yml |
+| 命令                 | 作用              |
+|--------------------|-----------------|
+| `继续 P-2026-001`    | 加载并继续指定 Program |
+| `新 Program: xxx`   | 创建新的开发任务        |
+| `查看 P-2026-001 状态` | 读取 STATUS.yml   |

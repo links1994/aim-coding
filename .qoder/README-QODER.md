@@ -57,6 +57,7 @@ Skills 是可复用的能力模块，定义了"具体怎么做"：
 | Java 代码生成 | `java-code-generation.md`  | 根据技术规格书生成 Java 微服务代码      | Phase 4 |
 | HTTP 测试生成 | `http-test-generation.md`  | 为 Controller 生成 HTTP 测试文件 | Phase 5 |
 | 代码质量分析    | `code-quality-analysis.md` | 对生成的代码进行质量分析和优化           | Phase 6 |
+| 功能归档      | `feature-archiving.md`     | 功能归档到 repowiki 知识库            | Phase 7 |
 
 ---
 
@@ -90,6 +91,8 @@ Phase 4: 代码生成 (java-code-generation.md + 04-coding-standards.md)
 Phase 5: HTTP 测试生成 (http-test-generation.md)
   ↓
 Phase 6: 代码质量优化 (code-quality-analysis.md)
+  ↓
+Phase 7: 功能归档 (feature-archiving.md)
 ```
 
 ---

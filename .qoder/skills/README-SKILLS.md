@@ -10,21 +10,30 @@
 
 ### 核心开发 Skills（Spec 模式）
 
-| Skill     | 目录                             | 说明                         | 使用时机    | 依赖 Rule |
-|-----------|--------------------------------|----------------------------|---------|-----------|
-| 需求分解      | `prd-decomposition/`         | 根据 PRD 进行需求拆解 | Phase 1 | `01-prd-decomposition.md` |
-| 需求澄清      | `requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 | `02-requirement-clarification.md` |
-| 技术规格生成    | `tech-spec-generation/`      | 生成技术规格书 | Phase 3 | `03-tech-spec-generation.md` |
-| Java 代码生成 | `java-code-generation/`      | 生成 Java 微服务代码 | Phase 4 | `04-coding-standards.md`, `05-architecture-standards.md` |
-| HTTP 测试生成 | `http-test-generation/`      | 生成 HTTP 测试文件 | Phase 5 | - |
-| 代码质量分析    | `code-quality-analysis/`     | 代码质量分析和优化 | Phase 6 | - |
+| Skill     | 目录                           | 说明                   | 使用时机    | 依赖 Rule                                                  |
+|-----------|------------------------------|----------------------|---------|----------------------------------------------------------|
+| 需求分解      | `prd-decomposition/`         | 根据 PRD 进行需求拆解        | Phase 1 | `01-prd-decomposition.md`                                |
+| 需求澄清      | `requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 | `02-requirement-clarification.md`                        |
+| 技术规格生成    | `tech-spec-generation/`      | 生成技术规格书              | Phase 3 | `03-tech-spec-generation.md`                             |
+| Java 代码生成 | `java-code-generation/`      | 生成 Java 微服务代码        | Phase 4 | `04-coding-standards.md`, `05-architecture-standards.md` |
+| HTTP 测试生成 | `http-test-generation/`      | 生成 HTTP 测试文件         | Phase 5 | -                                                        |
+| 代码质量分析    | `code-quality-analysis/`     | 代码质量分析和优化            | Phase 6 | -                                                        |
+| 功能归档      | `feature-archiving/`         | 功能归档到 repowiki 知识库   | Phase 7 | -                                                        |
+
+### 归档类 Skills（按需加载）
+
+| Skill  | 目录                           | 说明                   | 使用时机      |
+|--------|------------------------------|----------------------|-----------|
+| API 归档 | `api-archiving/`             | 归档 API 定义到 repowiki  | API 设计完成后 |
+| 数据库归档  | `database-schema-archiving/` | 归档数据库表结构到 repowiki   | 表设计完成后    |
+| 规格书归档  | `spec-archiving/`            | 归档技术规格书到 repowiki    | 规格书完成后    |
+| 陷阱归档   | `pitfalls-archiving/`        | 归档代码陷阱和反模式到 repowiki | 发现问题时     |
 
 ### 上下文管理 Skills（按需加载）
 
-| Skill  | 目录                     | 说明                            | 使用时机    |
-|--------|------------------------|-------------------------------|---------|
+| Skill | 目录                      | 说明                | 使用时机    |
+|-------|-------------------------|-------------------|---------|
 | 知识库查询 | `knowledge-base-query/` | 统一查询 repowiki 知识库 | 任何需要查询时 |
-| 业务功能归档 | `feature-archiving/` | 功能归档到 repowiki，支持下次迭代复用 | 功能完成后 |
 
 ---
 
@@ -77,34 +86,36 @@ description: Skill description with trigger keywords. Use when user says "xxx" o
 
 # Skill Title
 
-> **Prerequisite**: Must read `.qoder/rules/xx-xxxx.md` before execution to obtain specification standards.
+  > **Prerequisite**: Must read `.qoder/rules/xx-xxxx.md` before execution to obtain specification standards.
 
-## Trigger Conditions
+  ## Trigger Conditions
 
-When to use this Skill.
+  When to use this Skill.
 
-## Inputs
+  ## Inputs
 
 - Input item 1
 - Input item 2
 - `.qoder/rules/xx-xxxx.md` — specification file (**must read first**)
 
-## Outputs
+  ## Outputs
 
 - Output item 1
 - Output item 2
 
-## Workflow
+  ## Workflow
 
-Detailed workflow steps...
+  Detailed workflow steps...
 
-## Return Format
+  ## Return Format
 
 ```
+
 Status: Completed/Failed/Needs Decision
 Report: workspace/xxx.md
 Output: N files
 Decision Points: [if any]
+
 ```
 ```
 
@@ -135,13 +146,13 @@ Decision Points: [if any]
 
 ## 与 Agent 的区别
 
-| 特性    | Agent    | Skill    |
-|-------|----------|----------|
-| 复杂度   | 高（完整工作流） | 低（单一能力）  |
-| 决策能力  | 有        | 无（按规范执行） |
-| 上下文管理 | 需要维护上下文  | 输入即上下文   |
-| 使用方式  | 独立运行或被委托 | 被调用执行    |
-| 规范依赖  | 自主判断  | 必须读取 Rule  |
+| 特性    | Agent    | Skill     |
+|-------|----------|-----------|
+| 复杂度   | 高（完整工作流） | 低（单一能力）   |
+| 决策能力  | 有        | 无（按规范执行）  |
+| 上下文管理 | 需要维护上下文  | 输入即上下文    |
+| 使用方式  | 独立运行或被委托 | 被调用执行     |
+| 规范依赖  | 自主判断     | 必须读取 Rule |
 
 ---
 
