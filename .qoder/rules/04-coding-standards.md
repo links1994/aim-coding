@@ -690,7 +690,80 @@ public CommonResult<Void> handleException(Exception e) {
 
 ---
 
+## 8. 操作人ID传递规范
+
+### 8.1 门面服务获取操作人ID
+
+门面服务通过 HTTP Header 接收用户信息，使用 `UserInfoUtil` 工具类解析获取用户ID。
+
+**依赖引入**:
+
+```java
+import com.aim.mall.common.utils.UserInfoUtil;
+import com.aim.mall.common.constant.AuthConstant;
+```
+
+**正确示例**:
+
+```java
+@PostMapping("/create")
+@Operation(summary = "创建岗位类型")
+public CommonResult<Long> createJobType(
+        @RequestBody @Valid JobTypeCreateRequest request,
+        @RequestHeader(AuthConstant.USER_TOKEN_HEADER) String user) {
+    
+    // 解析获取用户ID
+    Long userId = UserInfoUtil.getUserInfo(user).getId();
+    
+    // 转换为 API 请求对象，传入操作人ID
+    JobTypeCreateApiRequest apiRequest = new JobTypeCreateApiRequest();
+    apiRequest.setCode(request.getCode());
+    apiRequest.setName(request.getName());
+    apiRequest.setOperatorId(userId);  // 设置操作人ID
+    
+    return jobTypeRemoteService.createJobType(apiRequest);
+}
+```
+
+### 8.2 应用服务接收操作人ID
+
+应用服务通过方法参数接收操作人ID，**不直接解析 HTTP Header**。
+
+**正确示例**:
+
+```java
+@PostMapping("/create")
+@Operation(summary = "创建岗位类型")
+public CommonResult<Long> createJobType(
+        @RequestBody @Valid JobTypeCreateApiRequest request) {
+    
+    // 从请求对象中获取操作人ID
+    Long operatorId = request.getOperatorId();
+    
+    // 转换为 DTO，传入操作人ID
+    JobTypeCreateDTO dto = new JobTypeCreateDTO();
+    dto.setCode(request.getCode());
+    dto.setName(request.getName());
+    dto.setOperatorId(operatorId);
+    
+    Long jobTypeId = jobTypeManageService.createJobType(dto);
+    return CommonResult.success(jobTypeId);
+}
+```
+
+### 8.3 规范要点
+
+| 服务类型 | 获取方式 | Header 解析 | 职责 |
+|---------|---------|------------|------|
+| **门面服务** | `@RequestHeader` + `UserInfoUtil` | ✅ 需要 | 解析用户信息并传递 |
+| **应用服务** | 方法参数接收 | ❌ 不需要 | 执行业务逻辑，记录操作人 |
+
+**详细规范文档**: [操作人ID传递规范](../repowiki/specs/operator-id-spec.md)
+
+---
+
 ## 相关文档
 
 - **代码生成模板**：`.qoder/skills/java-code-generation.md`
 - **架构规范**：`.qoder/rules/05-architecture-standards.md`
+- **操作人ID传递规范**：`.qoder/repowiki/specs/operator-id-spec.md`

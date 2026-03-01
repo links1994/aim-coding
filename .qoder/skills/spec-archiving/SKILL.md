@@ -119,6 +119,25 @@ Update `.qoder/repowiki/docs/index.md`.
 
 ---
 
+## Archive Examples
+
+### Example 1: Operator ID Specification
+
+**Source**: User requirement about operator ID passing convention
+
+**Archive Location**: `.qoder/repowiki/specs/operator-id-spec.md`
+
+**Key Content**:
+- Facade service: `@RequestHeader(AuthConstant.USER_TOKEN_HEADER) String user` + `UserInfoUtil.getUserInfo(user).getId()`
+- Application service: Receive via method parameter (e.g., `operatorId` in ApiRequest)
+- Clear separation of concerns between facade and application services
+
+**Related Updates**:
+- Add section to `.qoder/rules/04-coding-standards.md`
+- Reference in related spec documents
+
+---
+
 ## Return Format
 
 ```
