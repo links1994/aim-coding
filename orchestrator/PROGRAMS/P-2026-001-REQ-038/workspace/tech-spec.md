@@ -135,7 +135,7 @@ CREATE TABLE aim_job_type
   "code": 200,
   "message": "success",
   "data": {
-    "list": [
+    "items": [
       {
         "id": 1,
         "name": "销售顾问",
@@ -148,12 +148,12 @@ CREATE TABLE aim_job_type
         "updateTime": "2026-03-01 10:00:00"
       }
     ],
-    "total": 1,
-    "pageNum": 1,
-    "pageSize": 10
+    "totalCount": 1
   }
 }
 ```
+
+> **注意**: 分页数据遵循 [CommonResult 响应格式规范](../../../../.qoder/repowiki/specs/common-result-spec.md)，使用 `items` 和 `totalCount` 字段。
 
 #### 3.2.2 创建岗位类型
 
