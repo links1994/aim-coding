@@ -142,6 +142,6 @@ description: 技术规格书生成规范（纯规范定义）
 
 | 子需求 | 设计章节 | 数据库表 | API 接口 | 实现类 |
 |--------|----------|----------|----------|--------|
-| REQ-001 | 3.1, 4.2 | aim_employee | POST /admin/api/v1/agent | AgentAdminController |
-| REQ-003 | 3.3, 4.2 | aim_employee | POST /inner/api/v1/agent | AgentService |
-| REQ-005 | 2.2 | aim_employee, aim_skill | - | - |
+| REQ-001 | 3.1, 4.2 | aim_agent_employee | POST /admin/api/v1/agent | AgentAdminController |
+| REQ-003 | 3.3, 4.2 | aim_agent_employee | POST /inner/api/v1/agent | AgentService |
+| REQ-005 | 2.2 | aim_agent_employee, aim_skill | - | - |

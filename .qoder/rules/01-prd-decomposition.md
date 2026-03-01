@@ -133,7 +133,7 @@ graph TD
 | 依赖项 | 说明 | 示例 |
 |--------|------|------|
 | **依赖服务** | 需要调用的其他服务 | mall-agent, mall-user |
-| **依赖数据库表** | 需要访问的数据库表 | aim_employee, aim_user |
+| **依赖数据库表** | 需要访问的数据库表 | aim_agent_employee, aim_user |
 | **被谁依赖** | 哪些子需求依赖本需求 | REQ-001, REQ-002 |
 
 **依赖类型说明：**
@@ -173,7 +173,7 @@ graph TD
 - **接口路径**: `POST /admin/api/v1/ai-employee`
 - **依赖模块**:
   - 依赖服务: mall-agent
-  - 依赖数据库表: aim_employee
+  - 依赖数据库表: aim_agent_employee
 - **验收标准**:
   - [ ] 接收创建智能员工请求参数
   - [ ] 调用 mall-agent 服务创建智能员工
@@ -187,7 +187,7 @@ graph TD
 - **接口路径**: `GET /app/api/v1/ai-employee/list`
 - **依赖模块**:
   - 依赖服务: mall-agent
-  - 依赖数据库表: aim_employee
+  - 依赖数据库表: aim_agent_employee
 - **验收标准**:
   - [ ] 支持分页查询
   - [ ] 调用 mall-agent 服务获取数据
@@ -203,7 +203,7 @@ graph TD
   - `GET /inner/api/v1/ai-employee/list`
 - **依赖模块**:
   - 依赖服务: mall-user
-  - 依赖数据库表: aim_employee, aim_user
+  - 依赖数据库表: aim_agent_employee, aim_user
 - **验收标准**:
   - [ ] 实现创建智能员工逻辑
   - [ ] 实现查询智能员工逻辑
@@ -251,15 +251,15 @@ graph TD
 
 | 子需求 | 依赖服务 | 依赖数据库表 | 被谁依赖 |
 |--------|----------|--------------|----------|
-| REQ-001 | mall-agent | aim_employee | - |
-| REQ-002 | mall-agent | aim_employee | - |
-| REQ-003 | mall-user | aim_employee, aim_user | REQ-001, REQ-002 |
+| REQ-001 | mall-agent | aim_agent_employee | - |
+| REQ-002 | mall-agent | aim_agent_employee | - |
+| REQ-003 | mall-user | aim_agent_employee, aim_user | REQ-001, REQ-002 |
 | REQ-004 | - | aim_user（本需求设计） | REQ-003 |
 
 ### 开发顺序建议
 
 1. **第一阶段**: REQ-004（mall-user 服务，同步设计 aim_user 表）
-2. **第二阶段**: REQ-003（mall-agent 业务，同步设计 aim_employee 表）
+2. **第二阶段**: REQ-003（mall-agent 业务，同步设计 aim_agent_employee 表）
 3. **第三阶段**: REQ-001, REQ-002（门面接口）
 
 ### 数据库设计说明

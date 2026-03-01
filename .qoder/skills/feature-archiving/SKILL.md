@@ -70,7 +70,7 @@ Archive completed features to `.qoder/repowiki/features/` for future development
     │   └── _service-overview.md  # Service overview template
     ├── mall-agent/              # Service-level schema directory
     │   ├── _service-overview.md   # Service schema overview
-    │   ├── aim_employee.md
+    │   ├── aim_agent_employee.md
     │   ├── aim_job_type.md
     │   └── ...
     ├── mall-user/
@@ -152,15 +152,15 @@ Brief description of the feature.
 
 | Table Name | Description | Design REQ | Archive Location |
 |------------|-------------|------------|------------------|
-| aim_employee | Smart employee main table | REQ-031 | schemas/mall-agent/aim_employee.md |
+| aim_agent_employee | Smart employee main table | REQ-031 | schemas/mall-agent/aim_agent_employee.md |
 | aim_quota_config | Quota configuration table | REQ-032 | schemas/mall-agent/aim_quota_config.md |
 
 ### Table Relationships
 
 ```mermaid
 erDiagram
-    AIM_EMPLOYEE ||--|| AIM_QUOTA_CONFIG : "references"
-    AIM_EMPLOYEE {
+    aim_agent_employee ||--|| AIM_QUOTA_CONFIG : "references"
+    aim_agent_employee {
         bigint id PK
         bigint user_id FK
         varchar employee_no UK
@@ -205,7 +205,7 @@ See [reuse-guide.md](./reuse-guide.md)
 
 ### Table Structure Reference
 
-See [schemas/mall-agent/aim_employee.md](../schemas/mall-agent/aim_employee.md)
+See [schemas/mall-agent/aim_agent_employee.md](../schemas/mall-agent/aim_agent_employee.md)
 
 ### Adaptation Points
 
@@ -213,7 +213,7 @@ See [schemas/mall-agent/aim_employee.md](../schemas/mall-agent/aim_employee.md)
 |----------|----------|-------|
 | AiEmployee | XxxEntity | Change entity name |
 | employeeQuota | xxxQuota | Change quota field |
-| aim_employee | aim_xxx | Change table name |
+| aim_agent_employee | aim_xxx | Change table name |
 
 ## Code Snippets
 
@@ -239,7 +239,7 @@ Update `.qoder/repowiki/features/index.md`:
 
 | ID | Name | Service | Tags | Program | Tables |
 |----|------|---------|------|---------|--------|
-| F-001 | Smart Employee Creation | mall-agent | employee,creation | P-2026-001-REQ-031 | aim_employee |
+| F-001 | Smart Employee Creation | mall-agent | employee,creation | P-2026-001-REQ-031 | aim_agent_employee |
 ```
 
 ---
@@ -262,7 +262,7 @@ For each table designed in this feature, generate:
 
 ```markdown
 ---
-table_name: aim_employee
+table_name: aim_agent_employee
 description: Smart employee main table, stores employee basic information and status
 database: mall_agent
 service: mall-agent
@@ -274,13 +274,13 @@ feature_ref: F-001
 version: v1.0
 ---
 
-# aim_employee
+# aim_agent_employee
 
 ## Basic Info
 
 | Attribute | Value |
 |-----------|-------|
-| Table Name | aim_employee |
+| Table Name | aim_agent_employee |
 | Chinese Name | 智能员工表 |
 | Service | mall-agent |
 | Database | mall_agent |
@@ -328,7 +328,7 @@ version: v1.0
 ## DDL
 
 ```sql
-CREATE TABLE `aim_employee` (
+CREATE TABLE `aim_agent_employee` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'Primary key ID',
   `user_id` BIGINT NOT NULL COMMENT 'User ID',
   `employee_no` VARCHAR(20) NOT NULL COMMENT 'Employee number',
@@ -364,13 +364,13 @@ CREATE TABLE `aim_employee` (
 
 ### Query by Employee Number
 ```sql
-SELECT * FROM aim_employee 
+SELECT * FROM aim_agent_employee 
 WHERE employee_no = 'AIM001' AND is_deleted = 0;
 ```
 
 ### Query by User
 ```sql
-SELECT * FROM aim_employee 
+SELECT * FROM aim_agent_employee 
 WHERE user_id = ? AND is_deleted = 0;
 ```
 
@@ -411,7 +411,7 @@ This service manages AI employee related data including employees, job types, co
 
 | Table Name | Chinese Name | Description | Designed By | Feature Ref |
 |------------|--------------|-------------|-------------|-------------|
-| aim_employee | 智能员工表 | Employee main table | REQ-031 | F-001 |
+| aim_agent_employee | 智能员工表 | Employee main table | REQ-031 | F-001 |
 | aim_job_type | 岗位类型表 | Job type configuration | REQ-038 | F-00X |
 | aim_quota_config | 名额配置表 | Quota configuration | REQ-032 | F-00X |
 | ... | ... | ... | ... | ... |
@@ -420,9 +420,9 @@ This service manages AI employee related data including employees, job types, co
 
 ```mermaid
 erDiagram
-    AIM_EMPLOYEE ||--|| AIM_JOB_TYPE : "belongs_to"
-    AIM_EMPLOYEE ||--o{ AIM_CONVERSATION : "has"
-    AIM_EMPLOYEE ||--o{ AIM_SCRIPT : "has"
+    aim_agent_employee ||--|| AIM_JOB_TYPE : "belongs_to"
+    aim_agent_employee ||--o{ AIM_CONVERSATION : "has"
+    aim_agent_employee ||--o{ AIM_SCRIPT : "has"
 ```
 
 ## Naming Conventions
@@ -460,14 +460,14 @@ tables: 50+
 
 | Table | Service | Description |
 |-------|---------|-------------|
-| aim_employee | mall-agent | Smart employee |
+| aim_agent_employee | mall-agent | Smart employee |
 | aim_user | mall-user | User info |
 
 ### By Feature
 
 | Feature | Tables |
 |---------|--------|
-| Employee Creation | aim_employee, aim_quota_config |
+| Employee Creation | aim_agent_employee, aim_quota_config |
 ```
 
 ---
@@ -527,7 +527,7 @@ Section: Database Schema → Tables Designed
 
 **Find feature by table:**
 ```
-Lookup: .qoder/repowiki/schemas/mall-agent/aim_employee.md
+Lookup: .qoder/repowiki/schemas/mall-agent/aim_agent_employee.md
 Frontmatter: designed_by, feature_ref
 ```
 

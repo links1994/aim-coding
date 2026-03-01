@@ -28,7 +28,7 @@
 - mall-user（用户支撑服务）
 
 ### 数据库表
-共13张表：aim_employee, aim_job_type, aim_employee_script, aim_knowledge_file, aim_conversation, aim_conversation_message, aim_conversation_report, aim_style_config, aim_agent_product, aim_category_mapping, aim_quota_config, aim_activation_record, aim_script_template
+共13张表：aim_agent_employee, aim_job_type, aim_agent_employee_script, aim_knowledge_file, aim_conversation, aim_conversation_message, aim_conversation_report, aim_style_config, aim_agent_product, aim_category_mapping, aim_quota_config, aim_activation_record, aim_script_template
 
 ### 下一步
 根据 decomposition.md 创建 implementation Program 进行开发实现
