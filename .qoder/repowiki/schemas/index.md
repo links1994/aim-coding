@@ -10,7 +10,7 @@ tables: 0
 
 | 服务 | 表数量 | 说明 |
 |---------|--------|-------------|
-| [mall-agent](./mall-agent/_service-overview.md) | 0 | AI 智能员工服务 |
+| [mall-agent](./mall-agent/_service-overview.md) | 1 | AI 智能员工服务 |
 | [mall-user](./mall-user/_service-overview.md) | 0 | 用户服务 |
 
 ## 快速参考
@@ -19,7 +19,7 @@ tables: 0
 
 | 表名 | 服务 | 说明 | 设计需求 |
 |-------|---------|-------------|-------------|
-| - | - | - | - |
+| [aim_job_type](./mall-agent/aim_job_type.md) | mall-agent | 岗位类型表 | REQ-038 |
 
 ### 按功能
 

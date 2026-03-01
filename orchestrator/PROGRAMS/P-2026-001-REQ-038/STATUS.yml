@@ -1,9 +1,9 @@
 program: P-2026-001-REQ-038
 name: 岗位类型管理服务
-status: active      # not-started / active / blocked / deployed
+status: deployed      # not-started / active / blocked / deployed
 
 # 当前阶段（整个 Program 的执行状态）
-phase: in-progress          # planning / in-progress / review / done
+phase: done          # planning / in-progress / review / done
 
 # 任务列表（Spec 模式七阶段）
 tasks:
@@ -29,8 +29,8 @@ tasks:
     desc: 代码审查、规范检查（63项检查通过）
   - id: t6
     name: Phase 7: 功能归档
-    status: pending
-    desc: 归档表结构到 feature-archive.md
+    status: done
+    desc: 归档到 repowiki/features/ 和 repowiki/schemas/
 
 # 产出物跟踪
 artifacts:
