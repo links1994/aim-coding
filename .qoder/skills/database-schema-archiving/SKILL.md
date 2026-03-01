@@ -1,38 +1,38 @@
 ---
 name: database-schema-archiving
-description: Archive database table structures to repowiki. Use when table design is complete, for legacy project documentation, or when other features need to reference existing table structures.
+description: 归档数据库表结构到 repowiki。在表设计完成、遗留项目文档化或其他功能需要引用现有表结构时使用。
 ---
 
-# Database Schema Archiving Skill
+# 数据库表结构归档 Skill
 
-Archive database table structures to `.qoder/repowiki/schemas/` for reference and reuse.
-
----
-
-## Trigger Conditions
-
-- Table design completed
-- Need to document existing tables for legacy projects
-- Other features need to reference table structures
-- User command: "archive table schema"
+将数据库表结构归档到 `.qoder/repowiki/schemas/`，用于参考和复用。
 
 ---
 
-## Inputs
+## 触发条件
 
-- Table DDL or Entity class
-- Table documentation
-- Service归属 information
-
----
-
-## Outputs
-
-- Schema archive → `.qoder/repowiki/schemas/{service}/{table-name}.md`
+- 表设计完成
+- 需要为遗留项目记录现有表
+- 其他功能需要引用表结构
+- 用户指令："归档表结构"
 
 ---
 
-## Archive Structure
+## 输入
+
+- 表 DDL 或实体类
+- 表文档
+- 服务归属信息
+
+---
+
+## 输出
+
+- 表结构归档 → `.qoder/repowiki/schemas/{service}/{table-name}.md`
+
+---
+
+## 归档结构
 
 ```
 .qoder/repowiki/schemas/
@@ -48,12 +48,12 @@ Archive database table structures to `.qoder/repowiki/schemas/` for reference an
 
 ---
 
-## Schema Document Format
+## 表结构文档格式
 
 ```markdown
 ---
 table_name: tb_user
-description: User main table, stores user basic information
+description: 用户主表，存储用户基本信息
 database: mall_user
 service: mall-user
 engine: InnoDB
@@ -63,37 +63,37 @@ created_at: 2026-02-28
 
 # tb_user
 
-## Basic Info
+## 基本信息
 
-| Attribute | Value |
+| 属性 | 值 |
 |-----------|-------|
-| Table Name | tb_user |
-| Description | User main table |
-| Service | mall-user |
-| Database | mall_user |
+| 表名 | tb_user |
+| 说明 | 用户主表 |
+| 服务 | mall-user |
+| 数据库 | mall_user |
 
-## Field List
+## 字段列表
 
-| Field Name | Data Type | Nullable | Default | Constraint | Comment |
+| 字段名 | 数据类型 | 可空 | 默认值 | 约束 | 说明 |
 |------------|-----------|----------|---------|------------|---------|
-| id | BIGINT | NO | AUTO_INCREMENT | PK | Primary key ID |
-| username | VARCHAR(64) | NO | - | UK | Username |
-| phone | VARCHAR(20) | YES | NULL | - | Phone number, AES encrypted |
-| status | TINYINT | NO | 1 | - | Status: 1-active, 0-inactive |
-| create_time | DATETIME | NO | CURRENT_TIMESTAMP | - | Create time |
-| update_time | DATETIME | NO | CURRENT_TIMESTAMP | ON UPDATE | Update time |
+| id | BIGINT | 否 | AUTO_INCREMENT | 主键 | 主键 ID |
+| username | VARCHAR(64) | 否 | - | 唯一 | 用户名 |
+| phone | VARCHAR(20) | 是 | NULL | - | 手机号，AES 加密 |
+| status | TINYINT | 否 | 1 | - | 状态：1-启用，0-禁用 |
+| create_time | DATETIME | 否 | CURRENT_TIMESTAMP | - | 创建时间 |
+| update_time | DATETIME | 否 | CURRENT_TIMESTAMP | 更新时 | 更新时间 |
 
-## Index Info
+## 索引信息
 
-| Index Name | Type | Fields | Comment |
+| 索引名 | 类型 | 字段 | 说明 |
 |------------|------|--------|---------|
-| PRIMARY | Primary | id | - |
-| uk_username | Unique | username | Username unique |
-| idx_phone | Normal | phone | Phone lookup |
+| PRIMARY | 主键 | id | - |
+| uk_username | 唯一 | username | 用户名唯一 |
+| idx_phone | 普通 | phone | 手机号查询 |
 
-## Foreign Keys
+## 外键
 
-| Name | Field | Ref Table | Ref Field | On Delete |
+| 名称 | 字段 | 引用表 | 引用字段 | 删除时 |
 |------|-------|-----------|-----------|-----------|
 | fk_user_role | role_id | tb_role | id | CASCADE |
 
@@ -110,36 +110,36 @@ CREATE TABLE `tb_user` (
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Extract Table Info
+### 步骤 1：提取表信息
 
-From DDL or Entity:
-- Table name
-- Field definitions
-- Index definitions
-- Foreign keys
+从 DDL 或实体类中提取：
+- 表名
+- 字段定义
+- 索引定义
+- 外键
 
-### Step 2: Determine Service
+### 步骤 2：确定服务
 
-Identify which service owns this table.
+确定该表属于哪个服务。
 
-### Step 3: Create Archive
+### 步骤 3：创建归档
 
-Generate schema document following format above.
+按照上述格式生成表结构文档。
 
-### Step 4: Update Index
+### 步骤 4：更新索引
 
-Update service overview and main index.
+更新服务概览和主索引。
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed
-Archive: .qoder/repowiki/schemas/{service}/{table}.md
-Service: {service}
-Fields: X
-Indexes: Y
+状态：已完成
+归档：.qoder/repowiki/schemas/{service}/{table}.md
+服务：{service}
+字段数：X
+索引数：Y
 ```

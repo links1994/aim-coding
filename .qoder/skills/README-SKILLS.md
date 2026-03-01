@@ -83,40 +83,40 @@ Skill 是**可复用的执行模块**，特点：
 ```yaml
 ---
 name: skill-name
-description: Skill description with trigger keywords. Use when user says "xxx" or needs to do yyy.
+description: Skill 描述，包含触发关键词。在用户说"xxx"或需要做 yyy 时使用。
 ---
 
-# Skill Title
+# Skill 标题
 
-  > **Prerequisite**: Must read `.qoder/rules/xx-xxxx.md` before execution to obtain specification standards.
+  > **前置条件**：执行前必须先读取 `.qoder/rules/xx-xxxx.md` 以获取规范标准。
 
-  ## Trigger Conditions
+  ## 触发条件
 
-  When to use this Skill.
+  何时使用此 Skill。
 
-  ## Inputs
+  ## 输入
 
-- Input item 1
-- Input item 2
-- `.qoder/rules/xx-xxxx.md` — specification file (**must read first**)
+- 输入项 1
+- 输入项 2
+- `.qoder/rules/xx-xxxx.md` — 规范文件（**必须先读取**）
 
-  ## Outputs
+  ## 输出
 
-- Output item 1
-- Output item 2
+- 输出项 1
+- 输出项 2
 
-  ## Workflow
+  ## 工作流程
 
-  Detailed workflow steps...
+  详细的工作流程步骤...
 
-  ## Return Format
+  ## 返回格式
 
 ```
 
-Status: Completed/Failed/Needs Decision
-Report: workspace/xxx.md
-Output: N files
-Decision Points: [if any]
+状态：已完成/失败/需要决策
+报告：workspace/xxx.md
+输出：N 个文件
+决策点：[如有]
 
 ```
 ```
@@ -162,7 +162,7 @@ Decision Points: [if any]
 
 如需新增 Skill：
 
-1. 创建 `{skill-name}/skill.md` 文件（注意：使用目录结构，不是单个文件）
+1. 创建 `{skill-name}/SKILL.md` 文件（注意：使用目录结构，不是单个文件）
 2. 遵循上述文件格式（只保留 `name` 和 `description` 在 Frontmatter）
 3. 更新本 README 的 Skill 列表
 4. 如有对应规范，在 `.qoder/rules/` 创建 Rule 文件

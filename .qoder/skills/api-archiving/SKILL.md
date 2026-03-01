@@ -1,83 +1,83 @@
 ---
 name: api-archiving
-description: Archive API definitions to repowiki. Use when API design is complete, for service interface documentation, or when other services need to reference API contracts.
+description: 归档 API 定义到 repowiki。在 API 设计完成、需要服务接口文档或其他服务需要引用 API 契约时使用。
 ---
 
-# API Archiving Skill
+# API 归档 Skill
 
-Archive API definitions to `.qoder/repowiki/apis/` for service interface documentation and reference.
-
----
-
-## Trigger Conditions
-
-- API design completed
-- Need to document service interfaces
-- Other services need to reference API contracts
-- User command: "archive API"
+将 API 定义归档到 `.qoder/repowiki/apis/`，用于服务接口文档和引用参考。
 
 ---
 
-## Inputs
+## 触发条件
 
-- OpenAPI definition or interface code
-- Service information
-- API documentation
-
----
-
-## Outputs
-
-- API archive → `.qoder/repowiki/apis/{type}/{service-name}.md`
+- API 设计完成
+- 需要记录服务接口
+- 其他服务需要引用 API 契约
+- 用户指令："归档 API"
 
 ---
 
-## Archive Structure
+## 输入
+
+- OpenAPI 定义或接口代码
+- 服务信息
+- API 文档
+
+---
+
+## 输出
+
+- API 归档 → `.qoder/repowiki/apis/{type}/{service-name}.md`
+
+---
+
+## 归档结构
 
 ```
 .qoder/repowiki/apis/
 ├── index.md
-├── internal/               # Internal service APIs
+├── internal/               # 内部服务 API
 │   ├── user-service-api.md
 │   └── agent-service-api.md
-└── third-party/            # Third-party APIs
+└── third-party/            # 第三方 API
     ├── wechat-pay-api.md
     └── alipay-api.md
 ```
 
 ---
 
-## API Document Format
+## API 文档格式
 
 ```markdown
 ---
 service: mall-user
 api_type: internal
-description: User service internal APIs for Feign calls
+description: 用户服务内部 API，用于 Feign 调用
 version: 1.0.0
 created_at: 2026-02-28
 ---
 
-# User Service API
+# 用户服务 API
 
-## Overview
+## 概述
 
-Base URL: `http://mall-user/inner/api/v1`
+基础 URL: `http://mall-user/inner/api/v1`
 
-## Endpoints
+## 接口列表
 
-### Get User Detail
+### 获取用户详情
 
 ```
 GET /user/detail?userId={userId}
 ```
 
-**Parameters**:
-| Name | Type | Required | Description |
+**参数**:
+| 名称 | 类型 | 必填 | 说明 |
 |------|------|----------|-------------|
-| userId | Long | Yes | User ID |
+| userId | Long | 是 | 用户 ID |
 
-**Response**:
+**响应**:
 ```json
 {
   "code": 200,
@@ -89,7 +89,7 @@ GET /user/detail?userId={userId}
 }
 ```
 
-### Get User Level
+### 获取用户等级
 
 ```
 GET /user/level?userId={userId}
@@ -97,7 +97,7 @@ GET /user/level?userId={userId}
 
 ...
 
-## Feign Client
+## Feign 客户端
 
 ```java
 @FeignClient(name = "mall-user")
@@ -107,46 +107,46 @@ public interface UserRemoteService {
 }
 ```
 
-## Error Codes
+## 错误码
 
-| Code | Description |
+| 错误码 | 说明 |
 |------|-------------|
-| 2001001 | User not found |
-| 2001002 | Invalid user ID |
+| 2001001 | 用户不存在 |
+| 2001002 | 用户 ID 无效 |
 ```
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Extract API Info
+### 步骤 1：提取 API 信息
 
-From OpenAPI or code:
-- Endpoints
-- Parameters
-- Responses
-- Error codes
+从 OpenAPI 或代码中提取：
+- 接口端点
+- 参数
+- 响应
+- 错误码
 
-### Step 2: Determine Type
+### 步骤 2：确定类型
 
-- internal — Service internal APIs (Feign)
-- third-party — Third-party APIs
+- internal — 服务内部 API（Feign）
+- third-party — 第三方 API
 
-### Step 3: Create Archive
+### 步骤 3：创建归档
 
-Generate API document following format above.
+按照上述格式生成 API 文档。
 
-### Step 4: Update Index
+### 步骤 4：更新索引
 
-Update `.qoder/repowiki/apis/index.md`.
+更新 `.qoder/repowiki/apis/index.md`。
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed
-Archive: .qoder/repowiki/apis/{type}/{service}.md
-Type: {internal|third-party}
-Endpoints: X
+状态：已完成
+归档：.qoder/repowiki/apis/{type}/{service}.md
+类型：{internal|third-party}
+接口数：X
 ```

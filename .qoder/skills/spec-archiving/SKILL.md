@@ -1,148 +1,148 @@
 ---
 name: spec-archiving
-description: Archive technical specifications to repowiki. Use when technical specifications are finalized, for standards documentation, or when teams need to reference project conventions.
+description: 归档技术规格书到 repowiki。在技术规格书定稿、需要标准文档或团队需要引用项目约定时使用。
 ---
 
-# Specification Archiving Skill
+# 规格书归档 Skill
 
-Archive technical specifications to `.qoder/repowiki/docs/` for standards documentation and team reference.
-
----
-
-## Trigger Conditions
-
-- Technical specifications finalized
-- Need to document project standards
-- Teams need to reference conventions
-- User command: "archive specification"
+将技术规格书归档到 `.qoder/repowiki/docs/`，用于标准文档和团队参考。
 
 ---
 
-## Inputs
+## 触发条件
 
-- Specification documents
-- Rule files
-- Convention definitions
-
----
-
-## Outputs
-
-- Spec archive → `.qoder/repowiki/docs/{lang}/specs/{spec-name}.md`
+- 技术规格书定稿
+- 需要记录项目标准
+- 团队需要引用约定
+- 用户指令："归档规格书"
 
 ---
 
-## Archive Structure
+## 输入
+
+- 规格书文档
+- 规则文件
+- 约定定义
+
+---
+
+## 输出
+
+- 规格书归档 → `.qoder/repowiki/docs/{lang}/specs/{spec-name}.md`
+
+---
+
+## 归档结构
 
 ```
 .qoder/repowiki/docs/
-├── zh/                     # Chinese documents
-│   ├── specs/              # Technical specifications
+├── zh/                     # 中文文档
+│   ├── specs/              # 技术规格书
 │   │   ├── error-code-spec.md
 │   │   ├── architecture-spec.md
 │   │   └── coding-spec.md
-│   └── guides/             # Operation guides
+│   └── guides/             # 操作指南
 │       ├── deployment/
 │       └── operations/
-└── en/                     # English documents
+└── en/                     # 英文文档
     └── ...
 ```
 
 ---
 
-## Spec Document Format
+## 规格书文档格式
 
 ```markdown
 ---
-spec_name: Error Code Specification
+spec_name: 错误码规范
 version: 1.0.0
-description: Standard error code format and usage
+description: 标准错误码格式和使用
 created_at: 2026-02-28
 ---
 
-# Error Code Specification
+# 错误码规范
 
-## Overview
+## 概述
 
-This document defines the standard error code format for the project.
+本文档定义项目的标准错误码格式。
 
-## Format
+## 格式
 
-Error codes follow the format: `SSMMTNNN`
+错误码遵循格式：`SSMMTNNN`
 
-| Segment | Meaning | Description |
+| 段 | 含义 | 说明 |
 |---------|---------|-------------|
-| SS | System | 20=Common, 30=Admin, 40=Agent |
-| MM | Module | 01=User, 02=Order, 03=Employee |
-| T | Type | 0=Success, 1=Client Error, 2=Server Error, 3=Business Error |
-| NNN | Number | Sequential number (001-999) |
+| SS | 系统 | 20=通用，30=管理，40=智能体 |
+| MM | 模块 | 01=用户，02=订单，03=员工 |
+| T | 类型 | 0=成功，1=客户端错误，2=服务端错误，3=业务错误 |
+| NNN | 序号 | 顺序编号 (001-999) |
 
-## Examples
+## 示例
 
-| Code | Meaning |
+| 错误码 | 含义 |
 |------|---------|
-| 2000000 | Success |
-| 2001001 | User not found |
-| 4003001 | Employee already exists |
+| 2000000 | 成功 |
+| 2001001 | 用户不存在 |
+| 4003001 | 员工已存在 |
 
-## Usage
+## 使用
 
 ```java
-// Return success
+// 返回成功
 return CommonResult.success(data);
 
-// Return error
-return CommonResult.error(2001001, "User not found");
+// 返回错误
+return CommonResult.error(2001001, "用户不存在");
 ```
 ```
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Read Source
+### 步骤 1：读取源文件
 
-Read specification source files.
+读取规格书源文件。
 
-### Step 2: Determine Language
+### 步骤 2：确定语言
 
-- zh — Chinese
-- en — English
+- zh — 中文
+- en — 英文
 
-### Step 3: Create Archive
+### 步骤 3：创建归档
 
-Generate spec document following format above.
+按照上述格式生成规格书文档。
 
-### Step 4: Update Index
+### 步骤 4：更新索引
 
-Update `.qoder/repowiki/docs/index.md`.
-
----
-
-## Archive Examples
-
-### Example 1: Operator ID Specification
-
-**Source**: User requirement about operator ID passing convention
-
-**Archive Location**: `.qoder/repowiki/specs/operator-id-spec.md`
-
-**Key Content**:
-- Facade service: `@RequestHeader(AuthConstant.USER_TOKEN_HEADER) String user` + `UserInfoUtil.getUserInfo(user).getId()`
-- Application service: Receive via method parameter (e.g., `operatorId` in ApiRequest)
-- Clear separation of concerns between facade and application services
-
-**Related Updates**:
-- Add section to `.qoder/rules/04-coding-standards.md`
-- Reference in related spec documents
+更新 `.qoder/repowiki/docs/index.md`。
 
 ---
 
-## Return Format
+## 归档示例
+
+### 示例 1：操作人 ID 传递规范
+
+**来源**：用户关于操作人 ID 传递约定的需求
+
+**归档位置**：`.qoder/repowiki/specs/operator-id-spec.md`
+
+**关键内容**：
+- 门面服务：`@RequestHeader(AuthConstant.USER_TOKEN_HEADER) String user` + `UserInfoUtil.getUserInfo(user).getId()`
+- 应用服务：通过方法参数接收（如 ApiRequest 中的 `operatorId`）
+- 门面服务和应用服务之间职责清晰分离
+
+**相关更新**：
+- 添加章节到 `.qoder/rules/04-coding-standards.md`
+- 在相关规格书文档中引用
+
+---
+
+## 返回格式
 
 ```
-Status: Completed
-Archive: .qoder/repowiki/docs/{lang}/specs/{name}.md
-Language: {zh|en}
-Version: X.Y.Z
+状态：已完成
+归档：.qoder/repowiki/docs/{lang}/specs/{name}.md
+语言：{zh|en}
+版本：X.Y.Z
 ```

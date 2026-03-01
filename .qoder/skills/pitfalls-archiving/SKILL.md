@@ -1,39 +1,39 @@
 ---
 name: pitfalls-archiving
-description: Archive code pitfalls and anti-patterns to repowiki. Use when discovering recurring issues, during code review findings, or documenting lessons learned to prevent future mistakes.
+description: 归档代码陷阱和反模式到 repowiki。在发现重复问题、代码审查发现问题或记录经验教训以防止未来错误时使用。
 ---
 
-# Pitfalls Archiving Skill
+# 代码陷阱归档 Skill
 
-Archive code pitfalls and anti-patterns to `.qoder/repowiki/pitfalls/` for future reference and automated detection.
-
----
-
-## Trigger Conditions
-
-- Discovered recurring issue during development
-- Code review findings
-- User command: "archive pitfall" or "document issue"
-- Need to document lessons learned
+将代码陷阱和反模式归档到 `.qoder/repowiki/pitfalls/`，用于未来参考和自动检测。
 
 ---
 
-## Inputs
+## 触发条件
 
-- Issue description
-- Violation examples (code)
-- Correct solution (code)
-- Related specifications
-
----
-
-## Outputs
-
-- Pitfall archive → `.qoder/repowiki/pitfalls/{category}/{pitfall-name}.md`
+- 开发过程中发现重复问题
+- 代码审查发现
+- 用户指令："归档陷阱" 或 "记录问题"
+- 需要记录经验教训
 
 ---
 
-## Archive Structure
+## 输入
+
+- 问题描述
+- 违规示例（代码）
+- 正确解决方案（代码）
+- 相关规范
+
+---
+
+## 输出
+
+- 陷阱归档 → `.qoder/repowiki/pitfalls/{category}/{pitfall-name}.md`
+
+---
+
+## 归档结构
 
 ```
 .qoder/repowiki/pitfalls/
@@ -51,90 +51,90 @@ Archive code pitfalls and anti-patterns to `.qoder/repowiki/pitfalls/` for futur
 
 ---
 
-## Pitfall Document Format
+## 陷阱文档格式
 
 ```markdown
-# Pitfall Title
+# 陷阱标题
 
-## Problem Description
+## 问题描述
 
-Brief description of what this pitfall is and why it's problematic.
+简要描述这个陷阱是什么以及为什么有问题。
 
-## Violation Pattern
+## 违规模式
 
-Code characteristics or patterns for automatic detection.
+用于自动检测的代码特征或模式。
 
-## Violation Example
+## 违规示例
 
 ```java
-// Incorrect code
+// 错误代码
 @FeignClient(name = "mall-agent")
 public interface AgentService {
-    // This creates duplicate client
+    // 这会创建重复的客户端
 }
 ```
 
-## Correct Solution
+## 正确方案
 
 ```java
-// Correct code
-// Use shared RemoteService from mall-agent-api
+// 正确代码
+// 使用 mall-agent-api 中的共享 RemoteService
 @Autowired
 private AgentRemoteService agentRemoteService;
 ```
 
-## Related Specifications
+## 相关规范
 
-- Architecture specification: Service layer responsibilities
-- Coding specification: Feign client usage
+- 架构规范：服务层职责
+- 编码规范：Feign 客户端使用
 
-## Archive Info
+## 归档信息
 
-- Discovery time: 2026-02-27
-- Discoverer: Qoder
-- Related Program: P-2026-001-REQ-018
-- Severity: High
+- 发现时间：2026-02-27
+- 发现者：Qoder
+- 相关 Program：P-2026-001-REQ-018
+- 严重程度：高
 ```
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Categorize Pitfall
+### 步骤 1：分类陷阱
 
-Determine category:
-- feign — Feign related issues
-- naming — Naming convention issues
-- architecture — Architecture violations
-- maven — Maven/dependency issues
-- performance — Performance anti-patterns
-- security — Security issues
+确定类别：
+- feign — Feign 相关问题
+- naming — 命名规范问题
+- architecture — 架构违规
+- maven — Maven/依赖问题
+- performance — 性能反模式
+- security — 安全问题
 
-### Step 2: Generate Document
+### 步骤 2：生成文档
 
-Create pitfall document following format above.
+按照上述格式创建陷阱文档。
 
-### Step 3: Update Index
+### 步骤 3：更新索引
 
-Update `.qoder/repowiki/pitfalls/index.md`:
+更新 `.qoder/repowiki/pitfalls/index.md`：
 
 ```markdown
-# Pitfall Index
+# 陷阱索引
 
 ## Feign
-- [Feign Client Duplication](./feign/feign-client-duplication.md)
+- [Feign 客户端重复创建](./feign/feign-client-duplication.md)
 
-## Naming
-- [Module Based Naming](./naming/module-based-naming.md)
+## 命名
+- [基于模块的命名](./naming/module-based-naming.md)
 ```
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed
-Archive: .qoder/repowiki/pitfalls/{category}/{name}.md
-Category: {category}
-Severity: {severity}
+状态：已完成
+归档：.qoder/repowiki/pitfalls/{category}/{name}.md
+类别：{category}
+严重程度：{severity}
 ```

@@ -1,146 +1,146 @@
 ---
 name: requirement-clarification
-description: Clarify requirements interactively using ReAct pattern. Use when user says "clarify REQ-xxx", "confirm requirement REQ-xxx", or needs to clarify business rules before technical design. Supports question-by-question confirmation with real-time documentation updates.
+description: 使用 ReAct 模式进行交互式需求澄清。在用户说"澄清 REQ-xxx"、"确认需求 REQ-xxx"或需要在技术设计前澄清业务规则时使用。支持逐题确认和实时文档更新。
 ---
 
-# Requirement Clarification Skill
+# 需求澄清 Skill
 
-> **Language Constraint**: All outputs from this Skill must be in Chinese, including questions, options, documentation content, and status reports.
+> **语言约束**：此 Skill 的所有输出必须使用中文，包括问题、选项、文档内容和状态报告。
 
-Use ReAct (Reasoning + Acting) design pattern for interactive requirement clarification with users.
+使用 ReAct（推理 + 行动）设计模式与用户进行交互式需求澄清。
 
-> **Prerequisite**: Must read `.qoder/rules/02-requirement-clarification.md` before execution to obtain specification standards.
-
----
-
-## Trigger Conditions
-
-- User command: "clarify REQ-xxx" or "confirm requirement REQ-xxx"
-- Current Program is Implementation type (not decomposition type)
-- Need to reference decomposition document from decomposition Program
+> **前置条件**：执行前必须先读取 `.qoder/rules/02-requirement-clarification.md` 以获取规范标准。
 
 ---
 
-## Program Type
+## 触发条件
 
-This Skill applies to **Implementation Program** (implementation type), not Decomposition Program.
-
-Implementation Program naming convention: `{parent-ID}-REQ-xxx`
-
-Examples:
-- Decomposition Program: `P-2026-001-decomposition`
-- Implementation Program: `P-2026-001-REQ-031` (this Skill runs in such Programs)
+- 用户指令："澄清 REQ-xxx" 或 "确认需求 REQ-xxx"
+- 当前 Program 是实现类型（不是分解类型）
+- 需要引用分解 Program 的分解文档
 
 ---
 
-## Inputs
+## Program 类型
 
-- Target requirement ID (e.g., REQ-031)
-- `orchestrator/PROGRAMS/{decomposition_program_id}/workspace/decomposition.md` — requirement decomposition document
-- `.qoder/rules/02-requirement-clarification.md` — requirement clarification specification (**must read first**)
-- Current Program's STATUS.yml — update phase status
+此 Skill 适用于 **实现 Program**（implementation 类型），不适用于分解 Program。
 
----
+实现 Program 命名约定：`{parent-ID}-REQ-xxx`
 
-## Outputs
-
-- Confirmation results → `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md`
-- Technical decisions → `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md`
-- Update STATUS.yml → phase changes from "requirement clarification" to "technical specification"
+示例：
+- 分解 Program：`P-2026-001-decomposition`
+- 实现 Program：`P-2026-001-REQ-031`（此 Skill 在此类 Program 中运行）
 
 ---
 
-## ReAct Workflow
+## 输入
+
+- 目标需求 ID（如：REQ-031）
+- `orchestrator/PROGRAMS/{decomposition_program_id}/workspace/decomposition.md` — 需求分解文档
+- `.qoder/rules/02-requirement-clarification.md` — 需求澄清规范（**必须先读取**）
+- 当前 Program 的 STATUS.yml — 更新阶段状态
+
+---
+
+## 输出
+
+- 确认结果 → `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md`
+- 技术决策 → `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md`
+- 更新 STATUS.yml → 阶段从"需求澄清"变为"技术规格书"
+
+---
+
+## ReAct 工作流程
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      ReAct Loop                             │
+│                      ReAct 循环                              │
 ├─────────────────────────────────────────────────────────────┤
-│  1. Reason: Analyze problem, generate options               │
+│  1. 推理：分析问题，生成选项                                   │
 │      ↓                                                      │
-│  2. Action: Call ask_user_question to get user choice       │
+│  2. 行动：调用 ask_user_question 获取用户选择                 │
 │      ↓                                                      │
-│  3. Observe: Record user answer, update memory state        │
+│  3. 观察：记录用户答案，更新记忆状态                           │
 │      ↓                                                      │
-│  4. Update: Real-time update questions.md and answers.md    │
+│  4. 更新：实时更新 questions.md 和 answers.md                 │
 │      ↓                                                      │
-│  5. Next: Next question or finish                           │
+│  5. 下一步：下一题或完成                                       │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Initialization and Knowledge Base Query
+### 步骤 1：初始化和知识库查询
 
-1. **Read Inputs**
-   - Read decomposition.md to locate target requirement
-   - **Must read** clarification specification (02-requirement-clarification.md)
+1. **读取输入**
+   - 读取 decomposition.md 定位目标需求
+   - **必须先读取** 澄清规范（02-requirement-clarification.md）
 
-2. **Knowledge Base Query (Auto-reuse existing decisions)**
+2. **知识库查询（自动复用现有决策）**
 
-   **Use knowledge-base-query Skill to query**:
+   **使用 knowledge-base-query Skill 查询**：
    ```
-   Query type: feature
-   Keywords: {current requirement feature keywords}
+   查询类型：feature
+   关键词：{当前需求功能关键词}
    
-   Purpose:
-   - Query similar function clarification question lists
-   - Reference existing technical decisions
-   - Avoid re-clarifying confirmed business rules
+   目的：
+   - 查询类似功能的澄清问题列表
+   - 参考现有技术决策
+   - 避免重复澄清已确认的业务规则
    ```
    
-   **Query result processing**:
-   - If similar function has decisions.md → Pre-fill technical decisions, reduce clarification questions
-   - If no similar function → Follow standard process to generate clarification questions
+   **查询结果处理**：
+   - 如果类似功能有 decisions.md → 预填充技术决策，减少澄清问题
+   - 如果没有类似功能 → 按照标准流程生成澄清问题
 
-3. **Check Existing Status**
-   - Check if `workspace/answers.md` already exists
-   - Determine current clarification progress
-   - Check current Program STATUS.yml to confirm in "requirement clarification" phase
+3. **检查现有状态**
+   - 检查 `workspace/answers.md` 是否已存在
+   - 确定当前澄清进度
+   - 检查当前 Program STATUS.yml 确认处于"需求澄清"阶段
 
-### Step 2: ReAct Loop - Question-by-Question Clarification
+### 步骤 2：ReAct 循环 - 逐题澄清
 
-**For each unclarified question, execute the following loop:**
+**对每个未澄清的问题，执行以下循环：**
 
-#### 2.1 Reason - Analyze Problem
+#### 2.1 推理 - 分析问题
 
-Analyze current question's business background, generate 2-4 clarification options:
+分析当前问题的业务背景，生成 2-4 个澄清选项：
 
-- Options should cover common business scenarios
-- Provide recommended default option (marked "recommended")
-- Must include an "Other (custom)" option
+- 选项应覆盖常见业务场景
+- 提供推荐的默认选项（标记"推荐"）
+- 必须包含一个"其他（自定义）"选项
 
-**Zero Assumption Principle**: Do not infer answers based on "common practices" or "typical implementations". Every uncertainty must be confirmed through Options-Based Inquiry.
+**零假设原则**：不要基于"常见做法"或"典型实现"推断答案。每个不确定性都必须通过选项式询问确认。
 
-#### 2.2 Action - Ask User
+#### 2.2 行动 - 询问用户
 
-Use `ask_user_question` tool, ask one question at a time.
+使用 `ask_user_question` 工具，一次只问一个问题。
 
-#### 2.3 Observe - Record Answer
+#### 2.3 观察 - 记录答案
 
-Record result based on user choice:
-- If preset option selected: Directly record option value
-- If "Other" selected: Continue asking for specific requirements
+根据用户选择记录结果：
+- 如果选择了预设选项：直接记录选项值
+- 如果选择了"其他"：继续询问具体需求
 
-#### 2.4 Update - Real-time Document Update
+#### 2.4 更新 - 实时文档更新
 
-**Real-time update `workspace/answers.md`**
+**实时更新 `workspace/answers.md`**
 
-Document format reference: "Output Format Specification" chapter in `.qoder/rules/02-requirement-clarification.md`
+文档格式参考：`.qoder/rules/02-requirement-clarification.md` 中的"输出格式规范"章节
 
-#### 2.5 Next - Determine Continue or Finish
+#### 2.5 下一步 - 确定继续或完成
 
-- If more unclarified questions exist → Continue to next question
-- If all questions clarified → Generate decision records, finish
+- 如果还有更多未澄清的问题 → 继续下一题
+- 如果所有问题都已澄清 → 生成决策记录，完成
 
-### Step 3: Generate Technical Decision Records
+### 步骤 3：生成技术决策记录
 
-After all questions clarified:
+所有问题澄清后：
 
-1. Generate `workspace/decisions.md` (format reference ADR specification in Rule)
-2. Update STATUS.yml:
+1. 生成 `workspace/decisions.md`（格式参考规则中的 ADR 规范）
+2. 更新 STATUS.yml：
    ```yaml
    current_phase: technical specification
    phases:
@@ -152,20 +152,20 @@ After all questions clarified:
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed / In Progress / Needs Further Clarification
-Reports:
+状态：已完成 / 进行中 / 需要进一步澄清
+报告：
   - workspace/answers.md
   - workspace/decisions.md
-Progress: X/Y questions confirmed
+进度：X/Y 个问题已确认
 
-Program Status Update:
+Program 状态更新：
   - current_phase: technical specification
   - phases.requirement_clarification.status: done
 
-Decision Points:
-  - All high-priority questions confirmed: Yes/No
-  - Can proceed to technical specification phase: Yes/No
+决策点：
+  - 所有高优先级问题已确认：是/否
+  - 可以进入技术规格书阶段：是/否
 ```

@@ -1,198 +1,198 @@
 ---
 name: tech-spec-generation
-description: Generate detailed technical specification documents with iterative refinement and bidirectional traceability. Use when user says "generate tech spec", "design SPEC", or after requirement clarification is complete to create technical design documentation.
+description: 生成详细的技术规格书文档，支持迭代完善和双向可追溯。在用户说"生成技术规格书"、"设计 SPEC"或需求澄清完成后创建技术设计文档时使用。
 ---
 
-# Technical Specification Generation Skill
+# 技术规格书生成 Skill
 
-> **Language Constraint**: All outputs from this Skill must be in Chinese, including technical specifications, OpenAPI definitions, acceptance checklists, and status reports.
+> **语言约束**：此 Skill 的所有输出必须使用中文，包括技术规格书、OpenAPI 定义、验收清单和状态报告。
 
-Generate detailed technical specifications based on requirement decomposition and clarification results.
+基于需求分解和澄清结果生成详细的技术规格书。
 
-> **Prerequisite**: Must read `.qoder/rules/03-tech-spec-generation.md`, `.qoder/rules/04-coding-standards.md`, and `.qoder/rules/05-architecture-standards.md` before execution to obtain specification standards.
-
----
-
-## Trigger Conditions
-
-- User command: "generate technical specification" or "design SPEC"
-- Current Program is Implementation type
-- Requirement clarification completed (workspace/answers.md generated)
+> **前置条件**：执行前必须先读取 `.qoder/rules/03-tech-spec-generation.md`、`.qoder/rules/04-coding-standards.md` 和 `.qoder/rules/05-architecture-standards.md` 以获取规范标准。
 
 ---
 
-## Program Type
+## 触发条件
 
-This Skill applies to **Implementation Program** (implementation type).
-
-Example: Run this Skill in `P-2026-001-REQ-031` Program
-
----
-
-## Inputs
-
-- `orchestrator/PROGRAMS/{decomposition_program_id}/workspace/decomposition.md` — requirement decomposition document
-- `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md` — requirement clarification results
-- `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md` — technical decision records
-- `.qoder/rules/03-tech-spec-generation.md` — technical specification specification (**must read first**)
-- `.qoder/rules/04-coding-standards.md` — coding standards (**must read first**)
-- `.qoder/rules/05-architecture-standards.md` — architecture specification (**must read first**)
-- Current Program's STATUS.yml — update phase status
+- 用户指令："生成技术规格书" 或 "设计 SPEC"
+- 当前 Program 是实现类型
+- 需求澄清完成（已生成 workspace/answers.md）
 
 ---
 
-## Outputs
+## Program 类型
 
-- Technical specification → `orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md`
-- OpenAPI definition → `orchestrator/PROGRAMS/{current_program_id}/workspace/openapi.yaml`
-- Acceptance checklist → `orchestrator/PROGRAMS/{current_program_id}/workspace/checklist.md`
-- Update STATUS.yml → phase changes from "technical specification" to "code generation"
+此 Skill 适用于 **实现 Program**（implementation 类型）。
+
+示例：在 `P-2026-001-REQ-031` Program 中运行此 Skill
 
 ---
 
-## Workflow
+## 输入
 
-### Step 1: Read Input Documents and Specifications
+- `orchestrator/PROGRAMS/{decomposition_program_id}/workspace/decomposition.md` — 需求分解文档
+- `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md` — 需求澄清结果
+- `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md` — 技术决策记录
+- `.qoder/rules/03-tech-spec-generation.md` — 技术规格书规范（**必须先读取**）
+- `.qoder/rules/04-coding-standards.md` — 编码规范（**必须先读取**）
+- `.qoder/rules/05-architecture-standards.md` — 架构规范（**必须先读取**）
+- 当前 Program 的 STATUS.yml — 更新阶段状态
 
-1. **Derive decomposition Program ID**
-   - Current Program: `P-2026-001-REQ-031`
-   - Decomposition Program: `P-2026-001-decomposition`
+---
 
-2. Read requirement decomposition document (decomposition.md)
-   - Only extract parts related to current REQ
+## 输出
 
-3. Read current Program's requirement clarification results (workspace/answers.md)
-4. Read current Program's technical decision records (workspace/decisions.md)
-5. **Must read** technical specification, coding standards, and architecture specifications
-6. Check STATUS.yml to confirm in "technical specification" phase
+- 技术规格书 → `orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md`
+- OpenAPI 定义 → `orchestrator/PROGRAMS/{current_program_id}/workspace/openapi.yaml`
+- 验收清单 → `orchestrator/PROGRAMS/{current_program_id}/workspace/checklist.md`
+- 更新 STATUS.yml → 阶段从"技术规格书"变为"代码生成"
 
-### Step 2: Knowledge Base Query (Auto-reuse existing designs)
+---
 
-**Use knowledge-base-query Skill to collect existing system information:**
+## 工作流程
+
+### 步骤 1：读取输入文档和规范
+
+1. **推导分解 Program ID**
+   - 当前 Program：`P-2026-001-REQ-031`
+   - 分解 Program：`P-2026-001-decomposition`
+
+2. 读取需求分解文档（decomposition.md）
+   - 只提取与当前 REQ 相关的部分
+
+3. 读取当前 Program 的需求澄清结果（workspace/answers.md）
+4. 读取当前 Program 的技术决策记录（workspace/decisions.md）
+5. **必须先读取** 技术规格书、编码规范和架构规范
+6. 检查 STATUS.yml 确认处于"技术规格书"阶段
+
+### 步骤 2：知识库查询（自动复用现有设计）
+
+**使用 knowledge-base-query Skill 收集现有系统信息：**
 
 ```
-Query type: feature
-Keywords: {current requirement feature keywords}
+查询类型：feature
+关键词：{当前需求功能关键词}
 
-Purpose:
-- Query similar function technical specifications
-- Reference existing data model designs
-- Reuse existing interface definition patterns
-- Understand existing business rule implementations
+目的：
+- 查询类似功能的技术规格书
+- 参考现有数据模型设计
+- 复用现有接口定义模式
+- 了解现有业务规则实现
 ```
 
-**Query types and purposes:**
+**查询类型和目的：**
 
-| Query Type | Purpose | Example |
+| 查询类型 | 目的 | 示例 |
 |------------|---------|---------|
-| feature | Similar function archives | Smart employee creation |
-| spec | Technical specifications | Error code specification, architecture specification |
-| api | Internal service APIs | user-service-api |
-| schema | Database table structures | Existing user table fields |
+| feature | 类似功能归档 | 智能员工创建 |
+| spec | 技术规格书 | 错误码规范、架构规范 |
+| api | 内部服务 API | user-service-api |
+| schema | 数据库表结构 | 现有用户表字段 |
 
-**Query result processing**:
-- If similar function has tech-spec.md → Reference its design, mark reusable parts
-- If no similar function → Follow standard process for design
+**查询结果处理**：
+- 如果类似功能有 tech-spec.md → 参考其设计，标记可复用部分
+- 如果没有类似功能 → 按照标准流程设计
 
-### Step 3: Analyze Dependencies and Context
+### 步骤 3：分析依赖和上下文
 
-Based on knowledge base query results, analyze:
+基于知识库查询结果，分析：
 
-- Tables to reuse
-- Tables to add
-- Reusable interface patterns
-- Technical specifications to follow
+- 需要复用的表
+- 需要新增的表
+- 可复用的接口模式
+- 需要遵循的技术规范
 
-### Step 4: Generate Technical Specification (Draft)
+### 步骤 4：生成技术规格书（草稿）
 
-**Confirmation Checkpoint**: Before generating the draft, check for uncertain items:
-- Data model field constraints not specified
-- API pagination or threshold values unclear
-- Technical solution choices (caching strategy, async processing, etc.)
-- Third-party integration details missing
+**确认检查点**：生成草稿前，检查不确定项：
+- 数据模型字段约束未指定
+- API 分页或阈值不明确
+- 技术方案选择（缓存策略、异步处理等）
+- 第三方集成细节缺失
 
-If any uncertainty exists, use Options-Based Inquiry to confirm with user.
+如果存在任何不确定性，使用选项式询问向用户确认。
 
-Generate `tech-spec.md` according to specification format.
+按照规范格式生成 `tech-spec.md`。
 
-**Document structure reference**: "Technical Specification Structure Standard" chapter in `.qoder/rules/03-tech-spec-generation.md`
+**文档结构参考**：`.qoder/rules/03-tech-spec-generation.md` 中的"技术规格书结构标准"章节
 
-**Error code specification reference**: "Error Code Specification" chapter in Rule
+**错误码规范参考**：规则中的"错误码规范"章节
 
-**Reuse annotations**:
-- Mark "Reference F-xxx function archive" at chapter start
-- Add "Reused from F-xxx" for reused designs
-- Clearly mark new/modified designs
+**复用标注**：
+- 在章节开头标记"参考 F-xxx 功能归档"
+- 对复用的设计添加"复用自 F-xxx"
+- 清晰标记新增/修改的设计
 
-### Step 5: User Review and Iteration
+### 步骤 5：用户审查和迭代
 
-**Present technical specification to user:**
+**向用户展示技术规格书：**
 
 ```
-Technical specification generated: orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md
+技术规格书已生成：orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md
 
-Main content preview:
-├── Data Model: X tables (Y new, Z modified)
-├── API Endpoints: N endpoints
-├── Involved Services: mall-admin, mall-app, mall-agent
-├── Reuse References: F-001, F-003 (if any)
-└── Key Decisions: [List key design decisions]
+主要内容预览：
+├── 数据模型：X 张表（Y 张新增，Z 张修改）
+├── API 端点：N 个端点
+├── 涉及服务：mall-admin、mall-app、mall-agent
+├── 复用参考：F-001、F-003（如有）
+└── 关键决策：[列出关键设计决策]
 
-Please review technical specification, if following situations exist please inform:
-1. Need to supplement context (existing table structures, interface documents, etc.)
-2. Design scheme needs adjustment
-3. Missing necessary implementation details
+请审查技术规格书，如有以下情况请告知：
+1. 需要补充上下文（现有表结构、接口文档等）
+2. 设计方案需要调整
+3. 缺少必要的实现细节
 ```
 
-#### 5.1 Handle User Feedback
+#### 5.1 处理用户反馈
 
-**Scenario A: User supplements context**
-- Read provided table structures/interface documents
-- Update tech-spec.md
-- Mark revision records
+**场景 A：用户补充上下文**
+- 读取提供的表结构/接口文档
+- 更新 tech-spec.md
+- 标记修订记录
 
-**Scenario B: User requests design scheme modification**
-- Analyze change impact (use "Change Impact Analysis Matrix" in Rule)
-- Determine if requirement documents need synchronous update
-- Ask user for confirmation
-- Update tech-spec.md and related requirement documents
+**场景 B：用户要求调整设计方案**
+- 分析变更影响（使用规则中的"变更影响分析矩阵"）
+- 确定是否需要同步更新需求文档
+- 请求用户确认
+- 更新 tech-spec.md 和相关需求文档
 
-**Scenario C: User requests supplement implementation details**
-- Add corresponding chapters in tech-spec.md
-- If involving business rule changes, determine if requirement documents need update
+**场景 C：用户要求补充实现细节**
+- 在 tech-spec.md 中添加相应章节
+- 如果涉及业务规则变更，确定是否需要更新需求文档
 
-### Step 6: Generate Related Documents
+### 步骤 6：生成相关文档
 
-After technical specification confirmed, generate:
+技术规格书确认后，生成：
 
-1. **Acceptance Checklist** (`workspace/checklist.md`)
-   - Organize acceptance items by sub-requirement
+1. **验收清单**（`workspace/checklist.md`）
+   - 按子需求组织验收项
 
-### Step 7: Establish Bidirectional Traceability
+### 步骤 7：建立双向可追溯性
 
-Establish requirement traceability matrix in tech-spec.md (format reference Rule).
+在 tech-spec.md 中建立需求追溯矩阵（格式参考规则）。
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed / Needs Iteration
-Report: orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md
-Related Documents:
+状态：已完成 / 需要迭代
+报告：orchestrator/PROGRAMS/{current_program_id}/workspace/tech-spec.md
+相关文档：
   - workspace/openapi.yaml
   - workspace/checklist.md
 
-Program Status Update:
+Program 状态更新：
   - current_phase: code generation
   - phases.technical_specification.status: done
 
-Output Changes:
-  - Requirement document update: Yes/No
-  - Updated file list: [xxx.md, yyy.md]
+输出变更：
+  - 需求文档更新：是/否
+  - 更新文件列表：[xxx.md, yyy.md]
 
-Decision Points:
-  - Need to supplement context: Yes/No
-  - Need to adjust design: Yes/No
-  - Can proceed to code generation phase: Yes/No
+决策点：
+  - 需要补充上下文：是/否
+  - 需要调整设计：是/否
+  - 可以进入代码生成阶段：是/否
 ```
