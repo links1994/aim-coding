@@ -104,6 +104,14 @@ Based on knowledge base query results, analyze:
 
 ### Step 4: Generate Technical Specification (Draft)
 
+**Confirmation Checkpoint**: Before generating the draft, check for uncertain items:
+- Data model field constraints not specified
+- API pagination or threshold values unclear
+- Technical solution choices (caching strategy, async processing, etc.)
+- Third-party integration details missing
+
+If any uncertainty exists, use Options-Based Inquiry to confirm with user.
+
 Generate `tech-spec.md` according to specification format.
 
 **Document structure reference**: "Technical Specification Structure Standard" chapter in `.qoder/rules/03-tech-spec-generation.md`

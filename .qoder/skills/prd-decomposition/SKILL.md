@@ -52,6 +52,8 @@ Analyze PRD to identify:
 - Business processes
 - Interface requirements
 
+**Confirmation Checkpoint**: If PRD contains ambiguous requirements, missing business rules, or unclear scope, trigger Options-Based Inquiry to confirm with user before proceeding.
+
 ### Step 3: Service Attribution Analysis
 
 Based on architecture standards, determine service归属 for each requirement:

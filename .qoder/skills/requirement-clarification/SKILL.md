@@ -114,6 +114,8 @@ Analyze current question's business background, generate 2-4 clarification optio
 - Provide recommended default option (marked "recommended")
 - Must include an "Other (custom)" option
 
+**Zero Assumption Principle**: Do not infer answers based on "common practices" or "typical implementations". Every uncertainty must be confirmed through Options-Based Inquiry.
+
 #### 2.2 Action - Ask User
 
 Use `ask_user_question` tool, ask one question at a time.
