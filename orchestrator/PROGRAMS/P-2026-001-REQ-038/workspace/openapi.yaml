@@ -1,0 +1,276 @@
+openapi: 3.0.3
+info:
+  title: 岗位类型管理 Inner API
+  description: mall-agent 服务提供的岗位类型管理内部接口
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/inner/api/v1
+    description: 本地开发环境
+
+paths:
+  /job-types/list:
+    get:
+      summary: 岗位类型列表
+      description: 查询岗位类型列表，支持分页和关键词搜索
+      operationId: listJobTypes
+      parameters:
+        - name: keyword
+          in: query
+          description: 关键词（匹配名称/编码）
+          schema:
+            type: string
+        - name: pageNum
+          in: query
+          description: 页码
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          description: 每页大小
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResultJobTypeResponse'
+
+  /job-types/create:
+    post:
+      summary: 创建岗位类型
+      description: 创建新的岗位类型
+      operationId: createJobType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTypeCreateRequest'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultLong'
+
+  /job-types/update:
+    put:
+      summary: 更新岗位类型
+      description: 更新岗位类型信息
+      operationId: updateJobType
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTypeUpdateRequest'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultBoolean'
+
+  /job-types/status:
+    put:
+      summary: 状态变更
+      description: 启用或禁用岗位类型
+      operationId: updateJobTypeStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobTypeStatusRequest'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultBoolean'
+
+  /job-types/delete:
+    delete:
+      summary: 删除岗位类型
+      description: 删除岗位类型（需校验无关联员工）
+      operationId: deleteJobType
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: 岗位类型ID
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultBoolean'
+
+components:
+  schemas:
+    JobTypeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 岗位类型ID
+        name:
+          type: string
+          description: 岗位类型名称
+        code:
+          type: string
+          description: 岗位类型编码
+        description:
+          type: string
+          description: 岗位描述
+        status:
+          type: integer
+          description: 状态（0-禁用，1-启用）
+        sortOrder:
+          type: integer
+          description: 排序号
+        employeeCount:
+          type: integer
+          description: 关联员工数量（TODO：待实现）
+        createTime:
+          type: string
+          format: date-time
+          description: 创建时间
+        updateTime:
+          type: string
+          format: date-time
+          description: 更新时间
+
+    JobTypeCreateRequest:
+      type: object
+      required:
+        - name
+        - code
+      properties:
+        name:
+          type: string
+          description: 岗位类型名称（1-64字符）
+          minLength: 1
+          maxLength: 64
+        code:
+          type: string
+          description: 岗位类型编码（1-32字符，唯一）
+          minLength: 1
+          maxLength: 32
+          pattern: '^[A-Z0-9_]+$'
+        description:
+          type: string
+          description: 岗位描述（0-255字符）
+          maxLength: 255
+        sortOrder:
+          type: integer
+          description: 排序号，默认0
+          default: 0
+
+    JobTypeUpdateRequest:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 岗位类型ID
+        name:
+          type: string
+          description: 岗位类型名称（1-64字符）
+          minLength: 1
+          maxLength: 64
+        description:
+          type: string
+          description: 岗位描述（0-255字符）
+          maxLength: 255
+        sortOrder:
+          type: integer
+          description: 排序号
+
+    JobTypeStatusRequest:
+      type: object
+      required:
+        - id
+        - status
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: 岗位类型ID
+        status:
+          type: integer
+          description: 状态（0-禁用，1-启用）
+          enum: [0, 1]
+
+    PageDataJobTypeResponse:
+      type: object
+      properties:
+        list:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobTypeResponse'
+        total:
+          type: integer
+          format: int64
+          description: 总记录数
+        pageNum:
+          type: integer
+          description: 当前页码
+        pageSize:
+          type: integer
+          description: 每页大小
+
+    CommonResult:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 状态码
+        message:
+          type: string
+          description: 消息
+        data:
+          type: object
+
+    PageResultJobTypeResponse:
+      allOf:
+        - $ref: '#/components/schemas/CommonResult'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/PageDataJobTypeResponse'
+
+    ResultLong:
+      allOf:
+        - $ref: '#/components/schemas/CommonResult'
+        - type: object
+          properties:
+            data:
+              type: integer
+              format: int64
+              description: 创建成功的岗位类型ID
+
+    ResultBoolean:
+      allOf:
+        - $ref: '#/components/schemas/CommonResult'
+        - type: object
+          properties:
+            data:
+              type: boolean
+              description: 操作是否成功
