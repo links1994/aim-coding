@@ -9,7 +9,7 @@ description: Generate detailed technical specification documents with iterative 
 
 Generate detailed technical specifications based on requirement decomposition and clarification results.
 
-> **Prerequisite**: Must read `.qoder/rules/03-tech-spec-generation.md` and `.qoder/rules/05-architecture-standards.md` before execution to obtain specification standards.
+> **Prerequisite**: Must read `.qoder/rules/03-tech-spec-generation.md`, `.qoder/rules/04-coding-standards.md`, and `.qoder/rules/05-architecture-standards.md` before execution to obtain specification standards.
 
 ---
 
@@ -35,6 +35,7 @@ Example: Run this Skill in `P-2026-001-REQ-031` Program
 - `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md` — requirement clarification results
 - `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md` — technical decision records
 - `.qoder/rules/03-tech-spec-generation.md` — technical specification specification (**must read first**)
+- `.qoder/rules/04-coding-standards.md` — coding standards (**must read first**)
 - `.qoder/rules/05-architecture-standards.md` — architecture specification (**must read first**)
 - Current Program's STATUS.yml — update phase status
 
@@ -62,7 +63,7 @@ Example: Run this Skill in `P-2026-001-REQ-031` Program
 
 3. Read current Program's requirement clarification results (workspace/answers.md)
 4. Read current Program's technical decision records (workspace/decisions.md)
-5. **Must read** technical specification and architecture specifications
+5. **Must read** technical specification, coding standards, and architecture specifications
 6. Check STATUS.yml to confirm in "technical specification" phase
 
 ### Step 2: Knowledge Base Query (Auto-reuse existing designs)
