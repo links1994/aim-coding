@@ -468,10 +468,12 @@ public CommonResult<Long> createAgent(
 
 **说明**:
 
-- 参数校验异常（`MethodArgumentValidationException`）→ 自动返回 400 错误
-- 业务异常（`BusinessException`）→ 自动返回业务错误码
-- 远程调用异常（`RemoteApiCallException`）→ 自动返回服务错误
-- 其他未捕获异常 → 自动返回 500 系统错误
+- 参数校验异常（`MethodArgumentValidationException`）→ HTTP 200，响应体 code 为错误码
+- 业务异常（`BusinessException`）→ HTTP 200，响应体 code 为错误码
+- 远程调用异常（`RemoteApiCallException`）→ HTTP 200，响应体 code 为错误码
+- 其他未捕获异常 → HTTP 200，响应体 code 为系统错误码
+
+> **统一约定**：所有错误响应 HTTP 状态码均为 200，错误类型通过响应体中的 `code` 字段区分。
 
 ### 4.3 自定义异常
 
