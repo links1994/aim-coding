@@ -1,0 +1,48 @@
+program: P-2026-001-REQ-038
+name: 岗位类型管理服务
+status: not-started      # not-started / active / blocked / deployed
+
+# 当前阶段（整个 Program 的执行状态）
+phase: planning          # planning / in-progress / review / done
+
+# 任务列表（Spec 模式七阶段）
+tasks:
+  - id: t1
+    name: Phase 2: 需求澄清
+    status: pending
+    desc: 确认岗位类型字段、状态流转规则
+  - id: t2
+    name: Phase 3: 技术规格
+    status: pending
+    desc: 设计表结构、定义接口契约
+  - id: t3
+    name: Phase 4: 开发实现
+    status: pending
+    desc: 实现Entity、Mapper、Service、Controller
+  - id: t4
+    name: Phase 5: 测试验证
+    status: pending
+    desc: 单元测试、接口测试
+  - id: t5
+    name: Phase 6: 代码质量
+    status: pending
+    desc: 代码审查、规范检查
+  - id: t6
+    name: Phase 7: 功能归档
+    status: pending
+    desc: 归档表结构到 feature-archive.md
+
+# 产出物跟踪
+artifacts:
+  - path: workspace/answers.md
+    status: pending
+    desc: 需求澄清记录
+  - path: workspace/tech-spec.md
+    status: pending
+    desc: 技术规格书
+  - path: workspace/plan.md
+    status: pending
+    desc: 执行计划
+  - path: workspace/RESULT.md
+    status: pending
+    desc: 完成总结

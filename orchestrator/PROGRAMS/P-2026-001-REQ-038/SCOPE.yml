@@ -1,0 +1,21 @@
+# 写入范围控制
+#
+# write: Agent 可以修改的文件/目录
+# forbidden: 绝对不能写入的文件
+
+write:
+  # mall-agent 服务代码
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/entity/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/mapper/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/service/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/service/impl/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/controller/inner/
+  - repos/mall-agent/src/main/java/com/aim/mall/agent/dto/inner/
+  - repos/mall-agent/src/main/resources/mapper/
+  # 本 Program 工作目录
+  - orchestrator/PROGRAMS/P-2026-001-REQ-038/workspace/
+
+forbidden:
+  - .env
+  - repos/mall-agent/.env
+  - repos/mall-agent/src/main/resources/application-prod.yml
