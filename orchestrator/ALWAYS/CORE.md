@@ -52,6 +52,18 @@ PRD → [decomposition Program] → decomposition.md
 - `status`: Program 整体状态（not-started / active / blocked / deployed）
 - `phase`: 当前执行阶段（planning / in-progress / review / done）
 - `tasks`: 任务列表，由流程控制动态填充
+- `artifacts`: 产出物列表，跟踪各产出物的完成状态
+
+### Phase 状态判定规则
+
+`phase` 的最终状态由 **tasks** 和 **artifacts** 共同决定：
+
+| 条件 | Phase 状态 |
+|------|-----------|
+| 所有 tasks = done 且所有 artifacts = done | `done` |
+| 任一 task 或 artifact = blocked | `blocked` |
+| 任一 task 或 artifact = in-progress | `in-progress` |
+| 其他情况 | `planning` |
 
 ---
 
@@ -62,13 +74,13 @@ PRD → [decomposition Program] → decomposition.md
 ```
 1. 读取 STATUS.yml
 2. 状态一致性检查：
-   ├─ 所有 tasks = done 但 status ≠ deployed
+   ├─ 所有 tasks = done 且所有 artifacts = done，但 status ≠ deployed
    │   → 触发"Program 完成流程"（状态未同步场景）
    │   → 根据 Program 类型执行完成后分支
    │
    └─ 状态正常 → 继续步骤3
 
-3. 遍历 tasks，找到第一个非 done 的 task：
+3. 遍历 tasks 和 artifacts，找到第一个非 done 的项：
    ├─ status = pending
    │   → 生成 workspace/plan.md（执行计划）
    │   → 更新 task.status = in-progress
@@ -81,7 +93,7 @@ PRD → [decomposition Program] → decomposition.md
    ├─ status = blocked
    │   → 等待用户输入，解除阻塞后继续
    │
-   └─ 所有 task = done
+   └─ 所有 tasks = done 且所有 artifacts = done
        → 触发"Program 完成流程"
 ```
 
@@ -96,13 +108,15 @@ PRD → [decomposition Program] → decomposition.md
 ### task 完成后
 
 1. **更新 task 状态**：`status = done`
-2. **检查剩余 tasks**：
+2. **同步更新相关 artifact 状态**（如有对应产出物）：`status = done`
+3. **检查剩余 tasks 和 artifacts**：
     - 还有 pending/in-progress → 继续下一个
-    - 全部 done → 触发 Program 完成流程
+    - 所有 tasks = done 但还有 artifacts ≠ done → 继续完成剩余产出物
+    - 所有 tasks = done 且所有 artifacts = done → 触发 Program 完成流程
 
 ### Program 完成流程
 
-当所有 tasks 状态为 `done` 时：
+当所有 tasks 和 artifacts 状态均为 `done` 时：
 
 1. 更新 `phase = done`, `status = deployed`
 2. 生成 `workspace/RESULT.md`（最终成果总结，如不存在）
@@ -126,10 +140,18 @@ PRD → [decomposition Program] → decomposition.md
 
 无论何时更新状态，**必须同步更新 STATUS.yml**：
 
+### Tasks 状态更新
 - task 开始 → 更新为 in-progress
 - task 完成 → 更新为 done
 - task 阻塞 → 更新为 blocked
-- Program 完成 → 更新 phase = done, status = deployed
+
+### Artifacts 状态更新
+- artifact 开始生成 → 更新为 in-progress
+- artifact 生成完成 → 更新为 done
+- artifact 生成失败/阻塞 → 更新为 blocked
+
+### Program 状态更新
+- Program 完成（所有 tasks 和 artifacts = done）→ 更新 phase = done, status = deployed
 
 ---
 

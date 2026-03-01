@@ -50,5 +50,5 @@ artifacts:
     status: done
     desc: HTTP接口测试文件
   - path: workspace/RESULT.md
-    status: pending
+    status: done
     desc: 完成总结

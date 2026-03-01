@@ -410,7 +410,34 @@ DESC
 
 ## 5. 数据库设计规范
 
-### 4.1 通用字段规范
+### 4.1 表名命名规范
+
+所有业务表必须遵循统一的表名命名规则：
+
+**表名格式**：`aim_{模块}_{业务名}`
+
+| 组成部分 | 说明 | 示例 |
+|---------|------|------|
+| `aim_` | 固定前缀，标识 AIM 平台业务表 | - |
+| `{模块}` | 业务模块名，小写，多个单词用下划线分隔 | `agent`、`user`、`product` |
+| `{业务名}` | 业务实体名，小写，多个单词用下划线分隔 | `job_type`、`order_info` |
+
+**示例**：
+
+| 表名                     | 说明 |
+|------------------------|------|
+| `aim_agent_employee`   | 智能员工主表 |
+| `aim_agent_job_type`   | 智能员工岗位类型表 |
+| `aim_user_profile`     | 用户资料表 |
+| `aim_product_category` | 产品分类表 |
+
+**约束**：
+
+- 表名必须使用小写字母和下划线
+- 禁止使用数字开头或纯数字表名
+- 禁止超过 64 个字符
+
+### 4.2 通用字段规范
 
 所有业务表必须包含以下通用字段：
 
@@ -423,7 +450,7 @@ DESC
 | `creator_id`  | BIGINT   | NULLABLE                                              | 创建人ID（可选）           |
 | `updater_id`  | BIGINT   | NULLABLE                                              | 更新人ID（可选）           |
 
-### 4.2 数据类型选择规范
+### 4.3 数据类型选择规范
 
 | 数据类别       | 推荐类型       | 使用场景                     |
 |------------|------------|--------------------------|
@@ -437,15 +464,15 @@ DESC
 | **日期时间**   | DATETIME   | 无时区要求的日期时间（推荐）           |
 | **时间戳**    | TIMESTAMP  | 需要自动时区转换的场景              |
 
-### 4.3 字符集规范
+### 4.4 字符集规范
 
 - **默认字符集**：`DEFAULT CHARSET=utf8mb4`
 - **排序规则**：**禁止指定具体的 COLLATE**，使用数据库默认排序规则
 
-### 4.4 建表示例
+### 4.5 建表示例
 
 ```sql
-CREATE TABLE agent
+CREATE TABLE aim_agent_employee
 (
     id          BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     -- 业务字段
@@ -465,15 +492,15 @@ CREATE TABLE agent
     DEFAULT CHARSET = utf8mb4;
 ```
 
-### 4.5 DO 类命名规范
+### 4.6 DO 类命名规范
 
 严格按表名转换为大驼峰 + DO 后缀：
 
-| 表名                 | DO 类名              |
-|--------------------|--------------------|
-| `agent`            | `AimAgentDO`       |
-| `agent_skill`      | `AgentSkillDO`     |
-| `aim_product_info` | `AimProductInfoDO` |
+| 表名                      | DO 类名                  |
+|-------------------------|------------------------|
+| `aim_agent`             | `AimAgentDO`           |
+| `aim_agent_job_type`    | `AimAgentJobTypeDO`    |
+| `aim_product_info`      | `AimProductInfoDO`     |
 
 ---
 
