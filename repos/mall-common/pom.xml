@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.aim.mall</groupId>
+    <artifactId>mall-common</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>mall-common</name>
+    <description>mall-common project for mall</description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.aim.mall</groupId>
+                <artifactId>mall-swarm</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.volcengine</groupId>
+            <artifactId>ve-tos-java-sdk</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.volcengine</groupId>
+            <artifactId>volc-sdk-java</artifactId>
+            <version>1.0.244</version>
+        </dependency>
+    </dependencies>
+
+
+    <profiles>
+        <!-- ========== 开发环境配置（默认激活） ========== -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>aim_dev_snapshot</id>
+                    <uniqueVersion>false</uniqueVersion>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-dev-snapshot/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>aim_dev_release</id>
+                    <uniqueVersion>false</uniqueVersion>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-dev-release/</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>aim_dev_group</id>
+                    <name>aim-dev-group</name>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-dev-group/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>aliyunmaven</id>
+                    <name>aliyun</name>
+                    <url>https://maven.aliyun.com/repository/public</url>
+                </repository>
+                <repository>
+                    <id>central2</id>
+                    <name>central2</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                </repository>
+            </repositories>
+            <!-- 注意：这里不需要重复 distributionManagement，
+                 因为默认配置已经是开发环境 -->
+        </profile>
+
+        <!-- ========== 测试环境配置 ========== -->
+        <profile>
+            <id>test</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>aim_test_snapshot</id>
+                    <uniqueVersion>false</uniqueVersion>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-test-snapshot/</url>
+                    <layout>default</layout>
+                </snapshotRepository>
+                <repository>
+                    <id>aim_test_release</id>
+                    <uniqueVersion>false</uniqueVersion>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-test-release/</url>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>aim_test_group</id>
+                    <name>aim-test-group</name>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-test-group/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>aliyunmaven</id>
+                    <name>aliyun</name>
+                    <url>https://maven.aliyun.com/repository/public</url>
+                </repository>
+                <repository>
+                    <id>central2</id>
+                    <name>central2</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                </repository>
+            </repositories>
+        </profile>
+
+        <!-- ========== 生产环境配置 ========== -->
+        <profile>
+            <id>prod</id>
+            <distributionManagement>
+                <repository>
+                    <id>aim_prod_release</id>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-prod-release/</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+            <repositories>
+                <repository>
+                    <id>aim_prod_release</id>
+                    <name>aim-prod-release</name>
+                    <url>https://artifacts-cn-shanghai.volces.com/repository/aim-prod-release/</url>
+                    <snapshots>
+                        <updatePolicy>always</updatePolicy>
+                    </snapshots>
+                </repository>
+                <repository>
+                    <id>aliyunmaven</id>
+                    <name>aliyun</name>
+                    <url>https://maven.aliyun.com/repository/public</url>
+                </repository>
+                <repository>
+                    <id>central2</id>
+                    <name>central2</name>
+                    <url>https://repo1.maven.org/maven2/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aim.mall.agent.mapper.AimJobTypeMapper">
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        id, name, code, description, status, sort_order,
+        create_time, update_time, is_deleted, creator_id, updater_id
+    </sql>
+
+    <!-- 基础表名 -->
+    <sql id="Base_Table">
+        aim_job_type
+    </sql>
+
+    <!-- 基础查询条件（未删除） -->
+    <sql id="Base_Where">
+        WHERE is_deleted = 0
+    </sql>
+
+    <!-- 根据编码查询 -->
+    <select id="selectByCode" resultType="com.aim.mall.agent.domain.entity.AimJobTypeDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Base_Table"/>
+        <include refid="Base_Where"/>
+        AND code = #{code}
+        LIMIT 1
+    </select>
+
+    <!-- 分页查询列表 -->
+    <select id="selectPageByKeyword" resultType="com.aim.mall.agent.domain.entity.AimJobTypeDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="Base_Table"/>
+        <include refid="Base_Where"/>
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%') OR code LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY sort_order ASC, create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计总数 -->
+    <select id="countByKeyword" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM
+        <include refid="Base_Table"/>
+        <include refid="Base_Where"/>
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%') OR code LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+</mapper>

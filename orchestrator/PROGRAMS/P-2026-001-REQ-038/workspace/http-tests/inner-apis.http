@@ -1,0 +1,259 @@
+### 岗位类型管理 Inner API 测试
+### mall-agent 服务内部接口（供 Feign 调用）
+### 基础URL: {{baseUrl}}/inner/api/v1
+
+# ============================================
+# 1. 岗位类型列表查询
+# ============================================
+
+### 1.1 查询所有岗位类型（默认分页）
+POST {{baseUrl}}/inner/api/v1/job-types/list
+Content-Type: application/json
+
+{
+  "pageNum": 1,
+  "pageSize": 10
+}
+
+### 1.2 按关键词搜索岗位类型
+POST {{baseUrl}}/inner/api/v1/job-types/list
+Content-Type: application/json
+
+{
+  "keyword": "销售",
+  "pageNum": 1,
+  "pageSize": 10
+}
+
+### 1.3 分页查询（第二页）
+POST {{baseUrl}}/inner/api/v1/job-types/list
+Content-Type: application/json
+
+{
+  "pageNum": 2,
+  "pageSize": 5
+}
+
+# ============================================
+# 2. 创建岗位类型
+# ============================================
+
+### 2.1 创建销售岗位类型
+# @sql: sql/fixtures/job-type/init.sql
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "销售顾问",
+  "code": "SALES",
+  "description": "负责商品销售和客户维护",
+  "sortOrder": 1,
+  "operatorId": 1
+}
+
+### 2.2 创建技术岗位类型
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "技术工程师",
+  "code": "TECH",
+  "description": "负责技术开发和系统维护",
+  "sortOrder": 2,
+  "operatorId": 1
+}
+
+### 2.3 创建客服岗位类型
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "客服专员",
+  "code": "CS",
+  "description": "负责客户服务和投诉处理",
+  "sortOrder": 3,
+  "operatorId": 1
+}
+
+### 2.4 创建岗位类型（最小参数）
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "测试岗位",
+  "code": "TEST"
+}
+
+### 2.5 创建岗位类型（编码已存在-预期失败）
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "重复编码测试",
+  "code": "SALES",
+  "operatorId": 1
+}
+
+### 2.6 创建岗位类型（名称空-预期失败）
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "INVALID"
+}
+
+### 2.7 创建岗位类型（编码格式错误-预期失败）
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "格式错误测试",
+  "code": "invalid-code"
+}
+
+# ============================================
+# 3. 更新岗位类型
+# ============================================
+
+### 3.1 更新岗位类型信息
+PUT {{baseUrl}}/inner/api/v1/job-types/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "高级销售顾问",
+  "description": "负责大客户销售和团队管理",
+  "sortOrder": 1,
+  "operatorId": 1
+}
+
+### 3.2 更新岗位类型（ID不存在-预期失败）
+PUT {{baseUrl}}/inner/api/v1/job-types/update
+Content-Type: application/json
+
+{
+  "id": 99999,
+  "name": "不存在的岗位",
+  "operatorId": 1
+}
+
+### 3.3 更新岗位类型（名称为空-预期失败）
+PUT {{baseUrl}}/inner/api/v1/job-types/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "",
+  "operatorId": 1
+}
+
+# ============================================
+# 4. 状态变更（启用/禁用）
+# ============================================
+
+### 4.1 禁用岗位类型
+PUT {{baseUrl}}/inner/api/v1/job-types/status
+Content-Type: application/json
+
+{
+  "id": 1,
+  "status": 0,
+  "operatorId": 1
+}
+
+### 4.2 启用岗位类型
+PUT {{baseUrl}}/inner/api/v1/job-types/status
+Content-Type: application/json
+
+{
+  "id": 1,
+  "status": 1,
+  "operatorId": 1
+}
+
+### 4.3 状态变更（无效状态值-预期失败）
+PUT {{baseUrl}}/inner/api/v1/job-types/status
+Content-Type: application/json
+
+{
+  "id": 1,
+  "status": 99,
+  "operatorId": 1
+}
+
+### 4.4 状态变更（ID不存在-预期失败）
+PUT {{baseUrl}}/inner/api/v1/job-types/status
+Content-Type: application/json
+
+{
+  "id": 99999,
+  "status": 0,
+  "operatorId": 1
+}
+
+# ============================================
+# 5. 删除岗位类型
+# ============================================
+
+### 5.1 删除岗位类型
+# @sql-cleanup: sql/fixtures/job-type/cleanup.sql
+DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=3&operatorId=1
+
+### 5.2 删除岗位类型（ID不存在-预期失败）
+DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=99999&operatorId=1
+
+### 5.3 删除岗位类型（已删除-预期失败）
+DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=3&operatorId=1
+
+# ============================================
+# 6. 完整业务流程测试
+# ============================================
+
+### 6.1 创建 -> 查询 -> 更新 -> 禁用 -> 删除
+### 步骤1：创建新岗位类型
+POST {{baseUrl}}/inner/api/v1/job-types/create
+Content-Type: application/json
+
+{
+  "name": "临时测试岗位",
+  "code": "TEMP001",
+  "description": "用于测试完整流程",
+  "sortOrder": 99,
+  "operatorId": 1
+}
+
+### 步骤2：查询列表确认创建成功
+POST {{baseUrl}}/inner/api/v1/job-types/list
+Content-Type: application/json
+
+{
+  "keyword": "TEMP001",
+  "pageNum": 1,
+  "pageSize": 10
+}
+
+### 步骤3：更新岗位类型（使用实际返回的ID）
+PUT {{baseUrl}}/inner/api/v1/job-types/update
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "更新后的测试岗位",
+  "description": "已更新描述",
+  "sortOrder": 100,
+  "operatorId": 1
+}
+
+### 步骤4：禁用岗位类型
+PUT {{baseUrl}}/inner/api/v1/job-types/status
+Content-Type: application/json
+
+{
+  "id": 4,
+  "status": 0,
+  "operatorId": 1
+}
+
+### 步骤5：删除岗位类型
+DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=4&operatorId=1

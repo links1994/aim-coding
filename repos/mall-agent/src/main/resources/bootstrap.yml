@@ -1,0 +1,7 @@
+# 注意！在公版edas部署时server-addr和namespace在发布时会被edas替换成内置的注册中心和当前项目的namespace，
+# 所以这两个配置只在私有化时有效
+spring:
+  application:
+    name: mall-agent-employee-service
+  profiles:
+    active: @activatedProperties@

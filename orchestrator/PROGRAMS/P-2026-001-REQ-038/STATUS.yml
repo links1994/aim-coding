@@ -17,16 +17,16 @@ tasks:
     desc: 设计表结构、定义接口契约
   - id: t3
     name: Phase 4: 开发实现
-    status: in-progress
+    status: done
     desc: 实现Entity、Mapper、Service、Controller
   - id: t4
     name: Phase 5: 测试验证
-    status: pending
-    desc: 单元测试、接口测试
+    status: done
+    desc: HTTP接口测试、SQL测试数据
   - id: t5
     name: Phase 6: 代码质量
-    status: pending
-    desc: 代码审查、规范检查
+    status: done
+    desc: 代码审查、规范检查（63项检查通过）
   - id: t6
     name: Phase 7: 功能归档
     status: pending
@@ -43,6 +43,12 @@ artifacts:
   - path: workspace/checklist.md
     status: done
     desc: 验收清单
+  - path: workspace/quality-report.md
+    status: done
+    desc: 代码质量报告（63项检查通过）
+  - path: workspace/http-tests/
+    status: done
+    desc: HTTP接口测试文件
   - path: workspace/RESULT.md
     status: pending
     desc: 完成总结

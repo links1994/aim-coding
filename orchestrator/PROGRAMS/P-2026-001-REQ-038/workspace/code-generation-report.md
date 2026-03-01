@@ -73,7 +73,6 @@
 |------|------|------|
 | `JobTypeManageService.deleteJobType` | 员工数量校验 | 智能员工需求(REQ-031) |
 | `JobTypeDomainService.convertToResponse` | 员工数量统计 | 智能员工需求(REQ-031) |
-| `JobTypeInnerController` | 当前用户ID获取 | 用户认证上下文 |
 
 ## 问题
 

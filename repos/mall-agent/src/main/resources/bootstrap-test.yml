@@ -1,0 +1,13 @@
+# 注意！在公版edas部署时server-addr和namespace在发布时会被edas替换成内置的注册中心和当前项目的namespace，
+# 所以这两个配置只在私有化时有效
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.0.30:8848
+        namespace: test
+      config:
+        server-addr: 192.168.0.30:8848  # nacos配置中心地址
+        file-extension: yaml   #配置文件的后缀名
+        refresh-enabled: true  #自动刷新
+        namespace: test
