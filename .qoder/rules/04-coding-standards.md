@@ -498,6 +498,8 @@ public class AgentDomainException extends RuntimeException {
 
 ## 5. 响应格式规范
 
+> **详细规范文档**: [CommonResult 响应格式规范](../repowiki/specs/common-result-spec.md)
+
 ### 5.1 标准响应对象
 
 使用项目中已有的 `CommonResult<T>` 统一响应格式：
