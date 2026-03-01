@@ -44,7 +44,6 @@ Examples:
 
 ## Outputs
 
-- Question list → `orchestrator/PROGRAMS/{current_program_id}/workspace/questions.md`
 - Confirmation results → `orchestrator/PROGRAMS/{current_program_id}/workspace/answers.md`
 - Technical decisions → `orchestrator/PROGRAMS/{current_program_id}/workspace/decisions.md`
 - Update STATUS.yml → phase changes from "requirement clarification" to "technical specification"
@@ -97,7 +96,6 @@ Examples:
    - If no similar function → Follow standard process to generate clarification questions
 
 3. **Check Existing Status**
-   - Check if `workspace/questions.md` already exists
    - Check if `workspace/answers.md` already exists
    - Determine current clarification progress
    - Check current Program STATUS.yml to confirm in "requirement clarification" phase
@@ -128,7 +126,7 @@ Record result based on user choice:
 
 #### 2.4 Update - Real-time Document Update
 
-**Real-time update `workspace/questions.md` and `workspace/answers.md`**
+**Real-time update `workspace/answers.md`**
 
 Document format reference: "Output Format Specification" chapter in `.qoder/rules/02-requirement-clarification.md`
 
@@ -159,7 +157,6 @@ After all questions clarified:
 ```
 Status: Completed / In Progress / Needs Further Clarification
 Reports:
-  - workspace/questions.md
   - workspace/answers.md
   - workspace/decisions.md
 Progress: X/Y questions confirmed
