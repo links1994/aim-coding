@@ -806,7 +806,7 @@
 
 ## 六、跨服务共享定义
 
-### REQ-046: [SHARED] Feign接口定义
+### REQ-045: [SHARED] Feign接口定义
 
 - **描述**: 定义跨服务调用的Feign接口
 - **代码位置**:
@@ -818,7 +818,7 @@
 - **涉及接口**:
   - UserFeignClient - 用户服务调用
   - AiEmployeeFeignClient - 智能员工服务调用
-- **被依赖**: REQ-001~REQ-045
+- **被依赖**: REQ-001~REQ-044
 - **验收标准**:
   - [ ] 定义Request/Response DTO
   - [ ] 定义Feign接口

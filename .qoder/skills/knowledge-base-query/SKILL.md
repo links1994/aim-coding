@@ -549,11 +549,11 @@ Suggestions:
 
 ## Related Documents
 
-- **Feature Archiving Skill**: `.qoder/skills/feature-archiving/SKILL.md`
-- **Pitfall Archiving Skill**: `.qoder/skills/pitfalls-archiving/SKILL.md`
-- **Specification Archiving Skill**: `.qoder/skills/spec-archiving/SKILL.md`
-- **Database Archiving Skill**: `.qoder/skills/database-schema-archiving/SKILL.md`
-- **API Archiving Skill**: `.qoder/skills/api-archiving/SKILL.md`
-- **Requirement Clarification Skill**: `.qoder/skills/requirement-clarification/SKILL.md`
-- **Technical Specification Generation Skill**: `.qoder/skills/tech-spec-generation/SKILL.md`
-- **Code Generation Skill**: `.qoder/skills/java-code-generation/SKILL.md`
+- **Feature Archiving Skill**: `.qoder/skills/feature-archiving/skill.md`
+- **Pitfall Archiving Skill**: `.qoder/skills/pitfalls-archiving/skill.md`
+- **Specification Archiving Skill**: `.qoder/skills/spec-archiving/skill.md`
+- **Database Archiving Skill**: `.qoder/skills/database-schema-archiving/skill.md`
+- **API Archiving Skill**: `.qoder/skills/api-archiving/skill.md`
+- **Requirement Clarification Skill**: `.qoder/skills/requirement-clarification/skill.md`
+- **Technical Specification Generation Skill**: `.qoder/skills/tech-spec-generation/skill.md`
+- **Code Generation Skill**: `.qoder/skills/java-code-generation/skill.md`

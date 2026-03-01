@@ -26,18 +26,18 @@ aim-coding/
 │   │   └── 05-architecture-standards.md   # 架构规范
 │   └── skills/                    # Skill 能力模块
 │       ├── README-SKILLS.md       # Skill 使用指南
-│       ├── api-archiving/         # API 归档 Skill
-│       ├── code-quality-analysis/ # 代码质量分析 Skill
-│       ├── database-schema-archiving/ # 数据库归档 Skill
-│       ├── feature-archiving/     # 功能归档 Skill
-│       ├── http-test-generation/  # HTTP 测试生成 Skill
-│       ├── java-code-generation/  # Java 代码生成 Skill
-│       ├── knowledge-base-query/  # 知识库查询 Skill
-│       ├── pitfalls-archiving/    # 代码陷阱归档 Skill
-│       ├── prd-decomposition/     # 需求分解 Skill
-│       ├── requirement-clarification/ # 需求澄清 Skill
-│       ├── spec-archiving/        # 规格书归档 Skill
-│       └── tech-spec-generation/  # 技术规格生成 Skill
+│       ├── api-archiving/         # API 归档 Skill (skill.md)
+│       ├── code-quality-analysis/ # 代码质量分析 Skill (skill.md)
+│       ├── database-schema-archiving/ # 数据库归档 Skill (skill.md)
+│       ├── feature-archiving/     # 功能归档 Skill (skill.md)
+│       ├── http-test-generation/  # HTTP 测试生成 Skill (skill.md)
+│       ├── java-code-generation/  # Java 代码生成 Skill (skill.md)
+│       ├── knowledge-base-query/  # 知识库查询 Skill (skill.md)
+│       ├── pitfalls-archiving/    # 代码陷阱归档 Skill (skill.md)
+│       ├── prd-decomposition/     # 需求分解 Skill (skill.md)
+│       ├── requirement-clarification/ # 需求澄清 Skill (skill.md)
+│       ├── spec-archiving/        # 规格书归档 Skill (skill.md)
+│       └── tech-spec-generation/  # 技术规格生成 Skill (skill.md)
 │
 ├── inputs/                        # 输入文件目录
 │   ├── README-INPUTS.md           # 输入文件说明
@@ -261,7 +261,7 @@ AI Coding Agent 的工作指导文件，包含：
 
 #### skills/ 能力模块
 
-每个 Skill 目录包含 `SKILL.md` 文件，定义执行流程：
+每个 Skill 目录包含 `skill.md` 文件，定义执行流程：
 
 | Skill                        | 说明                         |
 |------------------------------|----------------------------|
@@ -445,7 +445,7 @@ Agent 的上下文窗口有限，以下机制保证跨会话零信息损失：
 
 ### 新增 Skill
 
-1. 在 `.qoder/skills/` 目录创建 `{skill-name}/SKILL.md`
+1. 在 `.qoder/skills/` 目录创建 `{skill-name}/skill.md`
 2. 遵循 Skill 文件格式
 3. 更新 `skills/README-SKILLS.md`
 4. 更新 `README-QODER.md`

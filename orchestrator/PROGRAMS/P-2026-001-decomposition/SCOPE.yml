@@ -5,7 +5,7 @@ program: P-2026-001-ai-agent-platform
 
 allowed_paths:
   # 需求文档
-  - orchestrator/PROGRAMS/P-2026-001-ai-agent-platform/workspace/
+  - orchestrator/PROGRAMS/P-2026-001-decomposition/workspace/
   
   # mall-admin 门面服务
   - repos/mall-admin/src/main/java/com/aim/mall/admin/controller/

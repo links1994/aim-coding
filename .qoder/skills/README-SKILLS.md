@@ -29,6 +29,8 @@
 | 规格书归档  | `spec-archiving/`            | 归档技术规格书到 repowiki    | 规格书完成后    |
 | 陷阱归档   | `pitfalls-archiving/`        | 归档代码陷阱和反模式到 repowiki | 发现问题时     |
 
+> **注意**: 功能归档 Skill (`feature-archiving`) 已集成数据库表结构归档功能，在归档功能时会自动归档相关的表结构到 `repowiki/schemas/` 目录。
+
 ### 上下文管理 Skills（按需加载）
 
 | Skill | 目录                      | 说明                | 使用时机    |
@@ -160,7 +162,7 @@ Decision Points: [if any]
 
 如需新增 Skill：
 
-1. 创建 `{skill-name}/SKILL.md` 文件（注意：使用目录结构，不是单个文件）
+1. 创建 `{skill-name}/skill.md` 文件（注意：使用目录结构，不是单个文件）
 2. 遵循上述文件格式（只保留 `name` 和 `description` 在 Frontmatter）
 3. 更新本 README 的 Skill 列表
 4. 如有对应规范，在 `.qoder/rules/` 创建 Rule 文件

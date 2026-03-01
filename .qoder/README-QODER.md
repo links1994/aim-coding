@@ -20,9 +20,9 @@
 │   └── README-AGENTS.md               # Agent 说明
 └── skills/                            # Skill 能力模块
     ├── README-SKILLS.md               # Skill 使用指南
-    ├── java-code-generation.md        # Java 代码生成
-    ├── http-test-generation.md        # HTTP 测试生成
-    └── code-quality-analysis.md       # 代码质量分析
+    ├── java-code-generation/skill.md  # Java 代码生成
+    ├── http-test-generation/skill.md  # HTTP 测试生成
+    └── code-quality-analysis/skill.md # 代码质量分析
 ```
 
 ---
@@ -52,12 +52,12 @@
 
 Skills 是可复用的能力模块，定义了"具体怎么做"：
 
-| Skill     | 文件                         | 说明                        | 使用时机    |
-|-----------|----------------------------|---------------------------|---------|
-| Java 代码生成 | `java-code-generation.md`  | 根据技术规格书生成 Java 微服务代码      | Phase 4 |
-| HTTP 测试生成 | `http-test-generation.md`  | 为 Controller 生成 HTTP 测试文件 | Phase 5 |
-| 代码质量分析    | `code-quality-analysis.md` | 对生成的代码进行质量分析和优化           | Phase 6 |
-| 功能归档      | `feature-archiving.md`     | 功能归档到 repowiki 知识库            | Phase 7 |
+| Skill     | 文件                           | 说明                        | 使用时机    |
+|-----------|------------------------------|---------------------------|---------|
+| Java 代码生成 | `java-code-generation/skill.md`  | 根据技术规格书生成 Java 微服务代码      | Phase 4 |
+| HTTP 测试生成 | `http-test-generation/skill.md`  | 为 Controller 生成 HTTP 测试文件 | Phase 5 |
+| 代码质量分析    | `code-quality-analysis/skill.md` | 对生成的代码进行质量分析和优化           | Phase 6 |
+| 功能归档      | `feature-archiving/skill.md`     | 功能归档到 repowiki 知识库            | Phase 7 |
 
 ---
 
@@ -86,13 +86,13 @@ Phase 2: 需求澄清 (02-requirement-clarification.md)
   ↓
 Phase 3: 技术规格书 (03-tech-spec-generation.md + 05-architecture-standards.md)
   ↓
-Phase 4: 代码生成 (java-code-generation.md + 04-coding-standards.md)
+Phase 4: 代码生成 (java-code-generation/skill.md + 04-coding-standards.md)
   ↓
-Phase 5: HTTP 测试生成 (http-test-generation.md)
+Phase 5: HTTP 测试生成 (http-test-generation/skill.md)
   ↓
-Phase 6: 代码质量优化 (code-quality-analysis.md)
+Phase 6: 代码质量优化 (code-quality-analysis/skill.md)
   ↓
-Phase 7: 功能归档 (feature-archiving.md)
+Phase 7: 功能归档 (feature-archiving/skill.md)
 ```
 
 ---
@@ -116,7 +116,7 @@ Phase 7: 功能归档 (feature-archiving.md)
 
 ### 新增 Skill
 
-1. 在 `skills/` 目录创建 `{name}.md`
+1. 在 `skills/` 目录创建 `{name}/skill.md`
 2. 遵循 Skill 文件格式
 3. 更新 `skills/README-SKILLS.md`
 4. 更新本文件
