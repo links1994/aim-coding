@@ -71,7 +71,7 @@ description: 归档已完成的功能到 repowiki 以供未来复用。在功能
     ├── mall-agent/              # 服务级表结构目录
     │   ├── _service-overview.md   # 服务表结构概览
     │   ├── aim_agent_employee.md
-    │   ├── aim_job_type.md
+    │   ├── aim_agent_job_type.md
     │   └── ...
     ├── mall-user/
     │   ├── _service-overview.md
@@ -153,13 +153,13 @@ tags: [employee, creation, validation]
 | 表名 | 说明 | 设计 REQ | 归档位置 |
 |------------|-------------|------------|------------------|
 | aim_agent_employee | 智能员工主表 | REQ-031 | schemas/mall-agent/aim_agent_employee.md |
-| aim_quota_config | 配额配置表 | REQ-032 | schemas/mall-agent/aim_quota_config.md |
+| aim_agent_quota_config | 配额配置表 | REQ-032 | schemas/mall-agent/aim_agent_quota_config.md |
 
 ### 表关系
 
 ```mermaid
 erDiagram
-    aim_agent_employee ||--|| AIM_QUOTA_CONFIG : "引用"
+    aim_agent_employee ||--|| aim_agent_quota_config : "引用"
     aim_agent_employee {
         bigint id PK
         bigint user_id FK
@@ -323,7 +323,7 @@ version: v1.0
 | 名称 | 字段 | 引用表 | 引用字段 | 删除时 |
 |------|-------|-----------|-----------|-----------|
 | fk_employee_user | user_id | aim_user | id | RESTRICT |
-| fk_employee_job_type | job_type_id | aim_job_type | id | RESTRICT |
+| fk_employee_job_type | job_type_id | aim_agent_job_type | id | RESTRICT |
 
 ## DDL
 
@@ -379,7 +379,7 @@ WHERE user_id = ? AND is_deleted = 0;
 | 表 | 关系 | 说明 |
 |-------|--------------|-------------|
 | aim_user | N:1 | 员工属于用户 |
-| aim_job_type | N:1 | 员工有岗位类型 |
+| aim_agent_job_type | N:1 | 员工有岗位类型 |
 | aim_conversation | 1:N | 员工有对话 |
 
 ## 变更历史
@@ -412,15 +412,15 @@ created_at: 2026-02-28
 | 表名 | 中文名 | 说明 | 设计者 | 功能引用 |
 |------------|--------------|-------------|-------------|-------------|
 | aim_agent_employee | 智能员工表 | 员工主表 | REQ-031 | F-001 |
-| aim_job_type | 岗位类型表 | 岗位类型配置 | REQ-038 | F-00X |
-| aim_quota_config | 名额配置表 | 名额配置 | REQ-032 | F-00X |
+| aim_agent_job_type | 岗位类型表 | 岗位类型配置 | REQ-038 | F-00X |
+| aim_agent_quota_config | 名额配置表 | 名额配置 | REQ-032 | F-00X |
 | ... | ... | ... | ... | ... |
 
 ## ER 图
 
 ```mermaid
 erDiagram
-    aim_agent_employee ||--|| AIM_JOB_TYPE : "属于"
+    aim_agent_employee ||--|| aim_agent_job_type : "属于"
     aim_agent_employee ||--o{ AIM_CONVERSATION : "拥有"
     aim_agent_employee ||--o{ AIM_SCRIPT : "拥有"
 ```
@@ -467,7 +467,7 @@ tables: 50+
 
 | 功能 | 表 |
 |---------|--------|
-| 员工创建 | aim_agent_employee, aim_quota_config |
+| 员工创建 | aim_agent_employee, aim_agent_quota_config |
 ```
 
 ---

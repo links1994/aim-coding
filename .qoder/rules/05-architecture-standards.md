@@ -396,7 +396,7 @@ public CommonResult<CommonResult.PageData<OrderResponse>> pageOrder(...) {
 
 ```sql
 -- ✅ 有索引的排序
-CREATE INDEX idx_sort_order ON aim_job_type (sort_order, create_time);
+CREATE INDEX idx_sort_order ON aim_agent_job_type (sort_order, create_time);
 
 -- ✅ 主键排序（默认有索引）
 ORDER BY id

@@ -44,15 +44,15 @@
 ## 关键数据表
 
 - `aim_agent_employee` - 智能员工表
-- `aim_job_type` - 岗位类型表
+- `aim_agent_job_type` - 岗位类型表
 - `aim_agent_employee_script` - 话术表
-- `aim_knowledge_file` - 知识库文件表
+- `aim_agent_knowledge_file` - 知识库文件表
 - `aim_conversation` - 对话记录表
-- `aim_style_config` - 人设风格配置表
+- `aim_agent_style_config` - 人设风格配置表
 - `aim_agent_product` - 代理商品配置表
 - `aim_category_mapping` - 类目映射表
-- `aim_quota_config` - 名额配置表
-- `aim_activation_record` - 激活记录表
+- `aim_agent_quota_config` - 名额配置表
+- `aim_agent_activation_record` - 激活记录表
 
 ## 文档索引
 

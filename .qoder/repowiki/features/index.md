@@ -10,7 +10,7 @@ services: 1
 
 | ID | 名称 | 服务 | 标签 | Program | 表 |
 |----|------|---------|------|---------|--------|
-| F-001 | 岗位类型管理 | mall-agent | job-type,crud,basic-data | P-2026-001-REQ-038 | aim_job_type |
+| F-001 | 岗位类型管理 | mall-agent | job-type,crud,basic-data | P-2026-001-REQ-038 | aim_agent_job_type |
 
 ## 按服务分类
 

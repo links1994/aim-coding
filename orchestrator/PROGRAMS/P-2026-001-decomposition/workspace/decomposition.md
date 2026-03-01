@@ -525,7 +525,7 @@
   - `POST /inner/api/v1/ai-employee/{employeeId}/status` - 更新状态
 - **依赖模块**:
   - 依赖服务: mall-user
-  - 依赖数据库表: aim_agent_employee（本需求同步设计）, aim_job_type（查询归档）, aim_agent_product（查询归档）
+  - 依赖数据库表: aim_agent_employee（本需求同步设计）, aim_agent_job_type（查询归档）, aim_agent_product（查询归档）
 - **被依赖**: REQ-001, REQ-002, REQ-003, REQ-006, REQ-011, REQ-017, REQ-023, REQ-024
 - **验收标准**:
   - [ ] 设计 aim_agent_employee 表结构
@@ -535,7 +535,7 @@
   - [ ] 校验商品代理冲突
   - [ ] 调用mall-user查询用户信息
 - **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_employee`
-- **前置查询**: 实现前查询 `feature-archive.md#aim_job_type` 和 `feature-archive.md#aim_agent_product`
+- **前置查询**: 实现前查询 `feature-archive.md#aim_agent_job_type` 和 `feature-archive.md#aim_agent_product`
 
 ### REQ-032: [mall-agent] 名额管理服务
 
@@ -548,15 +548,15 @@
   - `POST /inner/api/v1/quota/unlock` - 销售额解锁名额
 - **依赖模块**:
   - 依赖服务: mall-user
-  - 依赖数据库表: aim_quota_config（本需求同步设计）, aim_agent_employee（依赖REQ-031归档）
+  - 依赖数据库表: aim_agent_quota_config（本需求同步设计）, aim_agent_employee（依赖REQ-031归档）
 - **被依赖**: REQ-001, REQ-002, REQ-019, REQ-031
 - **验收标准**:
-  - [ ] 设计 aim_quota_config 表结构
+  - [ ] 设计 aim_agent_quota_config 表结构
   - [ ] 根据用户等级计算初始名额
   - [ ] 校验创建时名额充足
   - [ ] 销售额达标自动解锁名额
   - [ ] 封禁时释放名额
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_quota_config`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_quota_config`
 - **前置查询**: 实现前查询 `feature-archive.md#aim_agent_employee` 获取员工表结构
 
 ### REQ-033: [mall-agent] 解锁与激活服务
@@ -570,15 +570,15 @@
   - `POST /inner/api/v1/activation/manual` - 手动激活
 - **依赖模块**:
   - 依赖服务: mall-user
-  - 依赖数据库表: aim_activation_record（本需求同步设计）, aim_agent_employee（查询归档）
+  - 依赖数据库表: aim_agent_activation_record（本需求同步设计）, aim_agent_employee（查询归档）
 - **被依赖**: REQ-004, REQ-015, REQ-016, REQ-022
 - **验收标准**:
-  - [ ] 设计 aim_activation_record 表结构
+  - [ ] 设计 aim_agent_activation_record 表结构
   - [ ] 记录每次激活记录
   - [ ] 校验用户是否已注册
   - [ ] 达到解锁人数自动更新状态
   - [ ] 防止重复激活
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_activation_record`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_activation_record`
 - **前置查询**: 实现前查询 `feature-archive.md#aim_agent_employee` 获取员工表结构
 
 ### REQ-034: [mall-agent] 话术管理服务
@@ -617,15 +617,15 @@
   - `POST /inner/api/v1/knowledge/retrieve` - 向量检索
 - **依赖模块**:
   - 依赖外部: 向量数据库(Milvus), Embedding服务
-  - 依赖数据库表: aim_knowledge_file（本需求同步设计）
+  - 依赖数据库表: aim_agent_knowledge_file（本需求同步设计）
 - **被依赖**: REQ-009, REQ-012, REQ-030
 - **验收标准**:
-  - [ ] 设计 aim_knowledge_file 表结构
+  - [ ] 设计 aim_agent_knowledge_file 表结构
   - [ ] 文件上传与解析
   - [ ] 解析状态跟踪
   - [ ] 向量存储与检索（Top3）
   - [ ] 审核流程
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_knowledge_file`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_knowledge_file`
 
 ### REQ-036: [mall-agent] 对话记录服务
 
@@ -659,7 +659,7 @@
   - `GET /inner/api/v1/prompt/generate` - 生成Prompt
   - `GET /inner/api/v1/prompt/preview` - 预览Prompt
 - **依赖模块**:
-  - 依赖数据库表: aim_agent_employee, aim_style_config, aim_job_type（均查询归档）
+  - 依赖数据库表: aim_agent_employee, aim_agent_style_config, aim_agent_job_type（均查询归档）
 - **被依赖**: REQ-012, REQ-023, REQ-025
 - **验收标准**:
   - [ ] 根据员工配置选择模板
@@ -678,13 +678,13 @@
   - `PUT /inner/api/v1/job-types/update` - 更新
   - `PUT /inner/api/v1/job-types/status` - 状态变更
 - **依赖模块**:
-  - 依赖数据库表: aim_job_type（本需求同步设计）
+  - 依赖数据库表: aim_agent_job_type（本需求同步设计）
 - **被依赖**: REQ-018, REQ-031
 - **验收标准**:
-  - [ ] 设计 aim_job_type 表结构
+  - [ ] 设计 aim_agent_job_type 表结构
   - [ ] 支持岗位CRUD
   - [ ] 返回关联员工数
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_job_type`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_job_type`
 
 ### REQ-039: [mall-agent] 代理商品服务
 
@@ -735,14 +735,14 @@
   - `PUT /inner/api/v1/style-configs/update` - 更新
   - `DELETE /inner/api/v1/style-configs/delete` - 删除
 - **依赖模块**:
-  - 依赖数据库表: aim_style_config（本需求同步设计）
+  - 依赖数据库表: aim_agent_style_config（本需求同步设计）
 - **被依赖**: REQ-026, REQ-037
 - **验收标准**:
-  - [ ] 设计 aim_style_config 表结构
+  - [ ] 设计 aim_agent_style_config 表结构
   - [ ] 支持风格CRUD
   - [ ] 包含Prompt模板
   - [ ] 支持排序
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_style_config`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_style_config`
 
 ### REQ-042: [mall-agent] 话术模板服务
 
@@ -755,13 +755,13 @@
   - `PUT /inner/api/v1/script-templates/update` - 更新
   - `DELETE /inner/api/v1/script-templates/delete` - 删除
 - **依赖模块**:
-  - 依赖数据库表: aim_script_template（本需求同步设计）
+  - 依赖数据库表: aim_agent_script_template（本需求同步设计）
 - **被依赖**: REQ-029
 - **验收标准**:
-  - [ ] 设计 aim_script_template 表结构
+  - [ ] 设计 aim_agent_script_template 表结构
   - [ ] 支持模板CRUD
   - [ ] 支持Excel导入
-- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_script_template`
+- **归档内容**: 完成后归档表结构到 `feature-archive.md#aim_agent_script_template`
 
 ### REQ-043: [mall-agent] 首页统计服务
 
@@ -770,7 +770,7 @@
 - **代码位置**: `repos/mall-agent/src/main/java/com/aim/mall/agent/service/DashboardService.java`
 - **Inner 接口路径**: `GET /inner/api/v1/dashboard/statistics`
 - **依赖模块**:
-  - 依赖数据库表: aim_agent_employee, aim_conversation, aim_agent_employee_script, aim_knowledge_file（均查询归档）
+  - 依赖数据库表: aim_agent_employee, aim_conversation, aim_agent_employee_script, aim_agent_knowledge_file（均查询归档）
 - **被依赖**: REQ-017
 - **验收标准**:
   - [ ] 统计员工总数、上线数
@@ -835,16 +835,16 @@
 | 序号 | 表名 | 所属服务 | 用途 | 设计需求 | 归档位置 |
 |------|------|----------|------|----------|----------|
 | 1 | aim_user | mall-user | 用户表 | REQ-044 | feature-archive.md#aim_user |
-| 2 | aim_job_type | mall-agent | 岗位类型表 | REQ-038 | feature-archive.md#aim_job_type |
-| 3 | aim_style_config | mall-agent | 人设风格配置表 | REQ-041 | feature-archive.md#aim_style_config |
+| 2 | aim_agent_job_type | mall-agent | 岗位类型表 | REQ-038 | feature-archive.md#aim_agent_job_type |
+| 3 | aim_agent_style_config | mall-agent | 人设风格配置表 | REQ-041 | feature-archive.md#aim_agent_style_config |
 | 4 | aim_category_mapping | mall-agent | 类目映射表 | REQ-040 | feature-archive.md#aim_category_mapping |
 | 5 | aim_agent_product | mall-agent | 代理商品配置表 | REQ-039 | feature-archive.md#aim_agent_product |
-| 6 | aim_script_template | mall-agent | 话术模板表 | REQ-042 | feature-archive.md#aim_script_template |
+| 6 | aim_agent_script_template | mall-agent | 话术模板表 | REQ-042 | feature-archive.md#aim_agent_script_template |
 | 7 | aim_agent_employee_script | mall-agent | 话术表 | REQ-034 | feature-archive.md#aim_agent_employee_script |
-| 8 | aim_knowledge_file | mall-agent | 知识库文件表 | REQ-035 | feature-archive.md#aim_knowledge_file |
+| 8 | aim_agent_knowledge_file | mall-agent | 知识库文件表 | REQ-035 | feature-archive.md#aim_agent_knowledge_file |
 | 9 | aim_agent_employee | mall-agent | 智能员工表 | REQ-031 | feature-archive.md#aim_agent_employee |
-| 10 | aim_quota_config | mall-agent | 名额配置表 | REQ-032 | feature-archive.md#aim_quota_config |
-| 11 | aim_activation_record | mall-agent | 激活记录表 | REQ-033 | feature-archive.md#aim_activation_record |
+| 10 | aim_agent_quota_config | mall-agent | 名额配置表 | REQ-032 | feature-archive.md#aim_agent_quota_config |
+| 11 | aim_agent_activation_record | mall-agent | 激活记录表 | REQ-033 | feature-archive.md#aim_agent_activation_record |
 | 12 | aim_conversation | mall-agent | 对话记录表 | REQ-036 | feature-archive.md#aim_conversation |
 | 13 | aim_conversation_message | mall-agent | 对话消息表 | REQ-036 | feature-archive.md#aim_conversation_message |
 | 14 | aim_conversation_report | mall-agent | 对话举报表 | REQ-036 | feature-archive.md#aim_conversation_report |
@@ -926,18 +926,18 @@ graph TD
 | REQ-001~016 | mall-agent, mall-user | 查询归档 | - |
 | REQ-017~030 | mall-agent, mall-user | 查询归档 | - |
 | REQ-012 | mall-agent | 查询归档 | - |
-| REQ-031 | mall-user | aim_agent_employee（本需求设计）, aim_job_type（归档）, aim_agent_product（归档） | REQ-001~006, 011, 017, 023, 024 |
-| REQ-032 | mall-user | aim_quota_config（本需求设计）, aim_agent_employee（归档） | REQ-001, 002, 019, 031 |
-| REQ-033 | mall-user | aim_activation_record（本需求设计）, aim_agent_employee（归档） | REQ-004, 015, 016, 022 |
+| REQ-031 | mall-user | aim_agent_employee（本需求设计）, aim_agent_job_type（归档）, aim_agent_product（归档） | REQ-001~006, 011, 017, 023, 024 |
+| REQ-032 | mall-user | aim_agent_quota_config（本需求设计）, aim_agent_employee（归档） | REQ-001, 002, 019, 031 |
+| REQ-033 | mall-user | aim_agent_activation_record（本需求设计）, aim_agent_employee（归档） | REQ-004, 015, 016, 022 |
 | REQ-034 | - | aim_agent_employee_script（本需求设计） | REQ-008, 012, 028, 029 |
-| REQ-035 | Milvus | aim_knowledge_file（本需求设计） | REQ-009, 012, 030 |
+| REQ-035 | Milvus | aim_agent_knowledge_file（本需求设计） | REQ-009, 012, 030 |
 | REQ-036 | - | aim_conversation/message/report（本需求设计） | REQ-010, 012, 013, 014, 027 |
 | REQ-037 | - | 查询归档 | REQ-012, 023, 025 |
-| REQ-038 | - | aim_job_type（本需求设计） | REQ-018, 031 |
+| REQ-038 | - | aim_agent_job_type（本需求设计） | REQ-018, 031 |
 | REQ-039 | - | aim_agent_product（本需求设计） | REQ-002, 020 |
 | REQ-040 | - | aim_category_mapping（本需求设计） | REQ-002, 021 |
-| REQ-041 | - | aim_style_config（本需求设计） | REQ-026, 037 |
-| REQ-042 | - | aim_script_template（本需求设计） | REQ-029 |
+| REQ-041 | - | aim_agent_style_config（本需求设计） | REQ-026, 037 |
+| REQ-042 | - | aim_agent_script_template（本需求设计） | REQ-029 |
 | REQ-043 | - | 查询归档 | REQ-017 |
 | REQ-044 | - | aim_user（本需求设计） | REQ-031, 032, 033 |
 
@@ -951,20 +951,20 @@ graph TD
 **排序原则**：基础数据表 → 单表CRUD服务，每个需求同步设计自己的表并归档
 
 1. **REQ-044**: mall-user 用户信息查询服务（设计 aim_user 表）
-2. **REQ-038**: 岗位类型管理服务（设计 aim_job_type 表）→ 归档
-3. **REQ-041**: 人设风格服务（设计 aim_style_config 表）→ 归档
+2. **REQ-038**: 岗位类型管理服务（设计 aim_agent_job_type 表）→ 归档
+3. **REQ-041**: 人设风格服务（设计 aim_agent_style_config 表）→ 归档
 4. **REQ-040**: 类目映射服务（设计 aim_category_mapping 表）→ 归档
 5. **REQ-039**: 代理商品服务（设计 aim_agent_product 表）→ 归档
-6. **REQ-042**: 话术模板服务（设计 aim_script_template 表）→ 归档
+6. **REQ-042**: 话术模板服务（设计 aim_agent_script_template 表）→ 归档
 
 ### 第二阶段：无依赖的复杂业务（Week 1-2）
 **排序原则**：核心业务逻辑，部分需求需查询已归档的表结构
 
 7. **REQ-034**: 话术管理服务（设计 aim_agent_employee_script 表）→ 归档
-8. **REQ-035**: 知识库管理服务（设计 aim_knowledge_file 表）→ 归档
-9. **REQ-031**: 智能员工应用服务（设计 aim_agent_employee 表，查询 aim_job_type/aim_agent_product 归档）→ 归档
-10. **REQ-032**: 名额管理服务（设计 aim_quota_config 表，查询 aim_agent_employee 归档）→ 归档
-11. **REQ-033**: 解锁与激活服务（设计 aim_activation_record 表，查询 aim_agent_employee 归档）→ 归档
+8. **REQ-035**: 知识库管理服务（设计 aim_agent_knowledge_file 表）→ 归档
+9. **REQ-031**: 智能员工应用服务（设计 aim_agent_employee 表，查询 aim_agent_job_type/aim_agent_product 归档）→ 归档
+10. **REQ-032**: 名额管理服务（设计 aim_agent_quota_config 表，查询 aim_user 归档）→ 归档
+11. **REQ-033**: 解锁与激活服务（设计 aim_agent_activation_record 表，查询 aim_agent_employee 归档）→ 归档
 
 ### 第三阶段：有依赖的 CRUD（Week 2-3）
 **排序原则**：依赖基础服务，以数据查询为主
@@ -975,7 +975,7 @@ graph TD
 ### 第四阶段：有依赖的复杂业务（Week 3-4）
 **排序原则**：聚合逻辑、跨服务编排，实现前查询相关表归档
 
-14. **REQ-037**: Prompt生成服务（查询 aim_agent_employee/aim_style_config/aim_job_type 归档）
+14. **REQ-037**: Prompt生成服务（查询 aim_agent_employee/aim_agent_style_config/aim_agent_job_type 归档）
 15. **REQ-018~021, REQ-025~026**: mall-admin 基础配置接口（查询对应基础表归档）
 16. **REQ-022~024, REQ-027~030**: mall-admin 管理审核接口（查询业务表归档）
 17. **REQ-001~011, REQ-013~016**: mall-app 用户端接口（查询所有相关表归档）
@@ -992,16 +992,16 @@ graph TD
 | 表名 | 设计需求 | 归档位置 | 依赖它的需求 |
 |------|----------|----------|--------------|
 | aim_user | REQ-044 | feature-archive.md#aim_user | REQ-031, REQ-032, REQ-033 |
-| aim_job_type | REQ-038 | feature-archive.md#aim_job_type | REQ-031, REQ-037 |
-| aim_style_config | REQ-041 | feature-archive.md#aim_style_config | REQ-037 |
+| aim_agent_job_type | REQ-038 | feature-archive.md#aim_agent_job_type | REQ-031, REQ-037 |
+| aim_agent_style_config | REQ-041 | feature-archive.md#aim_agent_style_config | REQ-037 |
 | aim_category_mapping | REQ-040 | feature-archive.md#aim_category_mapping | REQ-002, REQ-021 |
 | aim_agent_product | REQ-039 | feature-archive.md#aim_agent_product | REQ-002, REQ-020, REQ-031 |
-| aim_script_template | REQ-042 | feature-archive.md#aim_script_template | REQ-029 |
+| aim_agent_script_template | REQ-042 | feature-archive.md#aim_agent_script_template | REQ-029 |
 | aim_agent_employee_script | REQ-034 | feature-archive.md#aim_agent_employee_script | REQ-008, REQ-012, REQ-028 |
-| aim_knowledge_file | REQ-035 | feature-archive.md#aim_knowledge_file | REQ-009, REQ-012, REQ-030 |
+| aim_agent_knowledge_file | REQ-035 | feature-archive.md#aim_agent_knowledge_file | REQ-009, REQ-012, REQ-030 |
 | aim_agent_employee | REQ-031 | feature-archive.md#aim_agent_employee | REQ-001~007, REQ-011, REQ-017, REQ-023~025, REQ-032, REQ-033, REQ-036, REQ-037, REQ-043 |
-| aim_quota_config | REQ-032 | feature-archive.md#aim_quota_config | REQ-001, REQ-002, REQ-019 |
-| aim_activation_record | REQ-033 | feature-archive.md#aim_activation_record | REQ-004, REQ-015, REQ-016, REQ-022 |
+| aim_agent_quota_config | REQ-032 | feature-archive.md#aim_agent_quota_config | REQ-001, REQ-002, REQ-019 |
+| aim_agent_activation_record | REQ-033 | feature-archive.md#aim_agent_activation_record | REQ-004, REQ-015, REQ-016, REQ-022 |
 | aim_conversation | REQ-036 | feature-archive.md#aim_conversation | REQ-010, REQ-012, REQ-013, REQ-014, REQ-027 |
 | aim_conversation_message | REQ-036 | feature-archive.md#aim_conversation_message | REQ-012, REQ-027 |
 | aim_conversation_report | REQ-036 | feature-archive.md#aim_conversation_report | REQ-014, REQ-027 |

@@ -119,13 +119,13 @@ updated_at: 2026-03-02
 
 | 序号 | 表名 | 中文名 | 设计版本 | 设计需求 | 操作类型 | Schema 归档 |
 |------|------|--------|----------|----------|----------|-------------|
-| 1 | aim_job_type | 岗位类型表 | v1.0 | REQ-038 | 新增 | [链接](../../schemas/mall-agent/aim_job_type.md) |
+| 1 | aim_agent_job_type | 岗位类型表 | v1.0 | REQ-038 | 新增 | [链接](../../schemas/mall-agent/aim_agent_job_type) |
 
 ### 表关系图
 
 ```mermaid
 erDiagram
-    aim_job_type {
+    aim_agent_job_type {
         bigint id PK
         varchar name
         varchar code UK
@@ -160,7 +160,7 @@ erDiagram
 
 ### 表结构快速参考
 
-#### aim_job_type
+#### aim_agent_job_type
 
 | 字段名 | 类型 | 可空 | 默认值 | 说明 |
 |--------|------|------|--------|------|
@@ -178,7 +178,7 @@ erDiagram
 
 **索引**: uk_code(唯一), idx_status, idx_sort_order
 
-**详细文档**: [../../schemas/mall-agent/aim_job_type.md](../../schemas/mall-agent/aim_job_type.md)
+**详细文档**: [../../schemas/mall-agent/aim_agent_job_type.md](../../schemas/mall-agent/aim_agent_job_type)
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 数据库设计
 
-- [ ] `aim_job_type` 表创建成功
+- [ ] `aim_agent_job_type` 表创建成功
 - [ ] 表结构符合规范（含通用字段：create_time, update_time, is_deleted, creator_id, updater_id）
 - [ ] 索引创建正确（uk_code, idx_status, idx_sort_order）
 - [ ] 字符集为 utf8mb4

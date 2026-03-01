@@ -1,5 +1,5 @@
 ---
-table_name: aim_job_type
+table_name: aim_agent_job_type
 description: 岗位类型表，存储智能员工的岗位分类信息
 database: mall_agent
 service: mall-agent
@@ -11,13 +11,13 @@ feature_ref: F-001
 version: v1.0
 ---
 
-# aim_job_type
+# aim_agent_job_type
 
 ## 基本信息
 
 | 属性 | 值 |
 |-----------|-------|
-| 表名 | aim_job_type |
+| 表名 | aim_agent_job_type |
 | 中文名 | 岗位类型表 |
 | 服务 | mall-agent |
 | 数据库 | mall_agent |
@@ -58,7 +58,7 @@ version: v1.0
 ## DDL
 
 ```sql
-CREATE TABLE aim_job_type
+CREATE TABLE aim_agent_job_type
 (
     id          BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     -- 业务字段
@@ -98,20 +98,20 @@ CREATE TABLE aim_job_type
 
 ### 按编码查询
 ```sql
-SELECT * FROM aim_job_type 
+SELECT * FROM aim_agent_job_type 
 WHERE code = 'SALES' AND is_deleted = 0;
 ```
 
 ### 按状态查询
 ```sql
-SELECT * FROM aim_job_type 
+SELECT * FROM aim_agent_job_type 
 WHERE status = 1 AND is_deleted = 0 
 ORDER BY sort_order ASC, create_time DESC;
 ```
 
 ### 关键词搜索
 ```sql
-SELECT * FROM aim_job_type 
+SELECT * FROM aim_agent_job_type 
 WHERE is_deleted = 0 
   AND (name LIKE '%关键词%' OR code LIKE '%关键词%')
 ORDER BY sort_order ASC, create_time DESC;

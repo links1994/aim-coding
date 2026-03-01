@@ -19,7 +19,7 @@ tables: 0
 
 | 表名 | 服务 | 说明 | 设计需求 |
 |-------|---------|-------------|-------------|
-| [aim_job_type](./mall-agent/aim_job_type.md) | mall-agent | 岗位类型表 | REQ-038 |
+| [aim_agent_job_type](./mall-agent/aim_agent_job_type) | mall-agent | 岗位类型表 | REQ-038 |
 
 ### 按功能
 

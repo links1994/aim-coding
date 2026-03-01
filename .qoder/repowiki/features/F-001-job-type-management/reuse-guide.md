@@ -88,13 +88,13 @@ wrapper.eq(XxxDO::getIsDeleted, 0);
 
 ### 表结构参考
 
-参见 [schemas/mall-agent/aim_job_type.md](../../schemas/mall-agent/aim_job_type.md)
+参见 [schemas/mall-agent/aim_agent_job_type.md](../../schemas/mall-agent/aim_agent_job_type)
 
 ### 适配点
 
 | 原始 | 适配为 | 说明 |
 |------|--------|------|
-| aim_job_type | aim_xxx | 修改表名前缀 |
+| aim_agent_job_type | aim_xxx | 修改表名前缀 |
 | code | xxx_code | 修改编码字段名 |
 | name | xxx_name | 修改名称字段名 |
 | JobTypeStatusEnum | XxxStatusEnum | 修改枚举名 |
@@ -159,7 +159,7 @@ cp -r F-001-job-type-management F-xxx-your-feature
 | JobType | YourFeature |
 | jobType | yourFeature |
 | job-type | your-feature |
-| aim_job_type | aim_your_feature |
+| aim_agent_job_type | aim_your_feature |
 
 ### 3. 修改字段
 

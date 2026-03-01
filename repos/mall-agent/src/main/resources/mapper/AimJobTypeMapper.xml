@@ -11,7 +11,7 @@
 
     <!-- 基础表名 -->
     <sql id="Base_Table">
-        aim_job_type
+        aim_agent_job_type
     </sql>
 
     <!-- 基础查询条件（未删除） -->

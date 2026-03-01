@@ -21,7 +21,7 @@
 
 | 表名 | 说明 | 状态 |
 |------|------|------|
-| `aim_job_type` | 岗位类型表 | ✅ 已设计并归档 |
+| `aim_agent_job_type` | 岗位类型表 | ✅ 已设计并归档 |
 
 **核心字段**: id, name, code, description, status, sort_order + 通用字段
 
@@ -60,7 +60,7 @@
 ### 5. 归档文档
 
 - 功能归档: `.qoder/repowiki/features/job-type-management/`
-- 表结构归档: `.qoder/repowiki/schemas/aim_job_type.md`
+- 表结构归档: `.qoder/repowiki/schemas/aim_agent_job_type.md`
 
 ---
 
@@ -83,7 +83,7 @@
 
 | 验收项 | 状态 | 说明 |
 |--------|------|------|
-| 设计 aim_job_type 表结构并归档 | ✅ | 已归档到 repowiki/schemas/ |
+| 设计 aim_agent_job_type 表结构并归档 | ✅ | 已归档到 repowiki/schemas/ |
 | 支持岗位类型 CRUD 操作 | ✅ | 5个接口完整实现 |
 | 返回关联员工数统计 | ✅ | 框架已预留，待 REQ-031 完成后实现 |
 | 支持启用/禁用状态控制 | ✅ | 状态变更接口已实现 |

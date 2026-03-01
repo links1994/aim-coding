@@ -417,7 +417,7 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
     </sql>
 
     <sql id="Base_Table">
-        aim_job_type
+        aim_agent_job_type
     </sql>
 
     <sql id="Base_Where">

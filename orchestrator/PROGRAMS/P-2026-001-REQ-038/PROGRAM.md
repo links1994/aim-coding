@@ -15,7 +15,7 @@
 
 ### 整体思路
 
-1. 设计 `aim_job_type` 表结构存储岗位类型数据
+1. 设计 `aim_agent_job_type` 表结构存储岗位类型数据
 2. 实现 JobTypeService 服务层，提供岗位CRUD及状态变更
 3. 提供 Inner API 供其他服务调用
 4. 完成后归档表结构到 feature-archive.md
@@ -33,7 +33,7 @@
 ## 涉及文件
 
 ### 数据库
-- 新建 `aim_job_type` 表（本需求设计并归档）
+- 新建 `aim_agent_job_type` 表（本需求设计并归档）
 
 ### 服务层
 - `repos/mall-agent/src/main/java/com/aim/mall/agent/service/JobTypeService.java` — 岗位类型业务逻辑
@@ -63,7 +63,7 @@
 
 ## 验收标准
 
-- [ ] 设计 aim_job_type 表结构并归档
+- [ ] 设计 aim_agent_job_type 表结构并归档
 - [ ] 支持岗位类型CRUD操作
 - [ ] 返回关联员工数统计
 - [ ] 支持启用/禁用状态控制

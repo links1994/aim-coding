@@ -16,13 +16,13 @@ updated_at: 2026-03-02
 
 | 表名 | 中文名 | 说明 | 设计者 | 功能引用 |
 |------------|--------------|-------------|-------------|-------------|
-| aim_job_type | 岗位类型表 | 岗位类型配置 | REQ-038 | F-001 |
+| aim_agent_job_type | 岗位类型表 | 岗位类型配置 | REQ-038 | F-001 |
 
 ## ER 图
 
 ```mermaid
 erDiagram
-    aim_job_type {
+    aim_agent_job_type {
         bigint id PK
         varchar code UK
         varchar name
@@ -43,4 +43,4 @@ erDiagram
 
 | 日期 | 变更 | 说明 |
 |------|------|------|
-| 2026-03-02 | 初始创建 | 添加 aim_job_type 表 |
+| 2026-03-02 | 初始创建 | 添加 aim_agent_job_type 表 |

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @author AI Agent
  */
 @Data
-@TableName("aim_job_type")
+@TableName("aim_agent_job_type")
 public class AimJobTypeDO {
 
     /**

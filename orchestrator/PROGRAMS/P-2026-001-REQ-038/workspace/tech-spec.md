@@ -38,7 +38,7 @@
 
 ```
 ┌─────────────────────────────────────┐
-│           aim_job_type              │
+│           aim_agent_job_type              │
 ├─────────────────────────────────────┤
 │ PK  id              BIGINT          │
 │     name            VARCHAR(64)     │
@@ -59,7 +59,7 @@
 ### 2.2 表结构定义
 
 ```sql
-CREATE TABLE aim_job_type
+CREATE TABLE aim_agent_job_type
 (
     id          BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
     -- 业务字段
@@ -86,7 +86,7 @@ CREATE TABLE aim_job_type
 
 | 操作 | 表名 | 说明 |
 |------|------|------|
-| 新增 | aim_job_type | 岗位类型表 |
+| 新增 | aim_agent_job_type | 岗位类型表 |
 
 ---
 
@@ -523,7 +523,7 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 ## 6. 验收标准
 
-- [x] 设计 aim_job_type 表结构并归档
+- [x] 设计 aim_agent_job_type 表结构并归档
 - [x] 支持岗位类型CRUD操作
 - [x] 返回关联员工数统计（TODO标记，待实现）
 - [x] 支持启用/禁用状态控制
@@ -544,7 +544,7 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 | 子需求 | 设计章节 | 数据库表 | API 接口 | 实现类 |
 |--------|----------|----------|----------|--------|
-| REQ-038 | 2.2, 3.2, 4.2, 5.3 | aim_job_type | /inner/api/v1/job-types/* | JobTypeInnerController, JobTypeDomainService |
+| REQ-038 | 2.2, 3.2, 4.2, 5.3 | aim_agent_job_type | /inner/api/v1/job-types/* | JobTypeInnerController, JobTypeDomainService |
 
 ### 7.3 变更影响分析
 

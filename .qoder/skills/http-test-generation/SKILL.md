@@ -119,17 +119,17 @@ workspace/http-tests/
 **sql/fixtures/job-type/init.sql:**
 ```sql
 -- 岗位类型测试数据
-INSERT INTO aim_job_type (id, code, name, description, status, create_time, update_time) 
+INSERT INTO aim_agent_job_type (id, code, name, description, status, create_time, update_time) 
 VALUES (1, 'SALES', '销售', '产品销售岗位', 1, NOW(), NOW());
 
-INSERT INTO aim_job_type (id, code, name, description, status, create_time, update_time) 
+INSERT INTO aim_agent_job_type (id, code, name, description, status, create_time, update_time) 
 VALUES (2, 'TECH', '技术', '技术研发岗位', 1, NOW(), NOW());
 ```
 
 **sql/fixtures/job-type/cleanup.sql:**
 ```sql
 -- 清理岗位类型测试数据
-DELETE FROM aim_job_type WHERE id IN (1, 2);
+DELETE FROM aim_agent_job_type WHERE id IN (1, 2);
 ```
 
 ---
