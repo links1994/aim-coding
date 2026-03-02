@@ -40,13 +40,14 @@ public class JobTypeManageService {
     public Long createJobType(JobTypeCreateDTO dto) {
         log.debug("创建岗位类型开始, dto: {}", dto);
 
-        // 创建实体（code 已由应用层生成并设置到 dto 中）
+        // 创建实体（code 和 sortOrder 已由应用层生成并设置到 dto 中）
         AimJobTypeDO entity = new AimJobTypeDO();
         entity.setName(dto.getName());
         entity.setCode(dto.getCode());
         entity.setDescription(dto.getDescription());
-        entity.setSortOrder(dto.getSortOrder() != null ? dto.getSortOrder() : 0);
-        entity.setStatus(StatusEnum.ENABLE.getCode()); // 默认启用
+        entity.setSortOrder(dto.getSortOrder());
+        // 状态：传入值或默认启用
+        entity.setStatus(dto.getStatus() != null ? dto.getStatus() : StatusEnum.ENABLE.getCode());
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());
         entity.setIsDeleted(DeleteStatusEnum.UNDELETE.getCode());
@@ -75,11 +76,11 @@ public class JobTypeManageService {
             throw new BusinessException(ErrorCodeEnum.JOB_TYPE_NOT_FOUND, "岗位类型不存在");
         }
 
-        // 更新字段（code不允许修改）
+        // 更新字段（code和sortOrder不允许修改）
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
-        if (dto.getSortOrder() != null) {
-            entity.setSortOrder(dto.getSortOrder());
+        if (dto.getStatus() != null) {
+            entity.setStatus(dto.getStatus());
         }
         entity.setUpdateTime(LocalDateTime.now());
         entity.setUpdaterId(dto.getUpdaterId());

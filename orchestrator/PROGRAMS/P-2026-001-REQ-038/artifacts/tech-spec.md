@@ -167,7 +167,7 @@ CREATE TABLE aim_agent_job_type
 |--------|------|------|------|
 | name | String | 是 | 岗位类型名称（1-64字符） |
 | description | String | 否 | 岗位描述（0-255字符） |
-| sortOrder | Integer | 否 | 排序号，默认0 |
+| status | Integer | 否 | 状态（0-禁用，1-启用），默认1 |
 
 **编码生成规则**
 
@@ -202,7 +202,7 @@ CREATE TABLE aim_agent_job_type
 | id | Long | 是 | 岗位类型ID |
 | name | String | 是 | 岗位类型名称（1-64字符） |
 | description | String | 否 | 岗位描述（0-255字符） |
-| sortOrder | Integer | 否 | 排序号 |
+| status | Integer | 否 | 状态（0-禁用，1-启用） |
 
 **响应数据**
 
@@ -297,6 +297,37 @@ public class JobTypeListApiRequest implements Serializable {
     private String keyword;
     private Integer pageNum = 1;
     private Integer pageSize = 10;
+}
+
+@Data
+public class JobTypeCreateApiRequest implements Serializable {
+    private static final long serialVersionUID = -1L;
+    
+    @NotBlank(message = "岗位类型名称不能为空")
+    @Size(max = 64, message = "岗位类型名称长度不能超过64")
+    private String name;
+    
+    @Size(max = 255, message = "岗位描述长度不能超过255")
+    private String description;
+    
+    private Integer status = 1; // 默认启用
+}
+
+@Data
+public class JobTypeUpdateApiRequest implements Serializable {
+    private static final long serialVersionUID = -1L;
+    
+    @NotNull(message = "岗位类型ID不能为空")
+    private Long id;
+    
+    @NotBlank(message = "岗位类型名称不能为空")
+    @Size(max = 64, message = "岗位类型名称长度不能超过64")
+    private String name;
+    
+    @Size(max = 255, message = "岗位描述长度不能超过255")
+    private String description;
+    
+    private Integer status;
 }
 ```
 
@@ -419,8 +450,8 @@ mall-agent/src/main/java/com/aim/mall/agent/
 │   │   └── AimJobTypeDO.java              # 数据库实体（DO后缀）
 │   ├── dto/
 │   │   ├── JobTypeDTO.java                # 内部DTO（DTO后缀）
-│   │   ├── JobTypeCreateDTO.java          # 创建DTO
-│   │   ├── JobTypeUpdateDTO.java          # 更新DTO
+│   │   ├── JobTypeCreateDTO.java          # 创建DTO（含name, description, status, sortOrder）
+│   │   ├── JobTypeUpdateDTO.java          # 更新DTO（含id, name, description, status）
 │   │   ├── JobTypeStatusDTO.java          # 状态更新DTO
 │   │   └── JobTypePageQuery.java          # 分页查询（PageQuery后缀）
 │   └── enums/
@@ -499,10 +530,11 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 1. 校验参数（name必填）
 2. **应用层**调用 mall-basic ID生成服务生成 code（格式：J + 年 + 6位序号）
-3. **应用层**将生成的 code 设置到 DTO 中，传递给 ManageService
-4. **Manage层**创建实体，设置默认状态为启用
-5. **Manage层**调用 `AimJobTypeService.save()` 保存到数据库
-6. 返回新创建记录的 ID
+3. **应用层**查询当前最大排序号，新记录排序号 = 最大值 + 1
+4. **应用层**将生成的 code 和计算出的 sortOrder 设置到 DTO 中，传递给 ManageService
+5. **Manage层**创建实体，设置状态（传入值或默认启用）
+6. **Manage层**调用 `AimJobTypeService.save()` 保存到数据库
+7. 返回新创建记录的 ID
 
 **编码生成说明**：
 - 生成位置：**JobTypeApplicationService**（应用层）
@@ -512,22 +544,39 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 - 示例：`J2026000001`、`J2026000002`
 - 分层原则：远程服务调用（IdGenRemoteService）属于强依赖，在应用层编排
 
+**排序号生成说明**：
+- 生成位置：**JobTypeApplicationService**（应用层）
+- 规则：查询 `aim_agent_job_type` 表中当前最大的 `sort_order` 值，新记录排序号 = 最大值 + 1
+- 若表为空，则排序号从 1 开始
+- 示例：当前最大排序号为 5，则新记录排序号为 6
+
 #### 5.3.2 更新流程
 
 1. 校验参数（id、name必填）
 2. 调用 `AimJobTypeService.getById()` 查询记录是否存在且未删除
-3. 更新字段（name、description、sortOrder）
-4. **注意**：code 不允许修改
+3. 更新字段（name、description、status）
+4. **注意**：code 和 sortOrder 不允许修改
 5. 调用 `AimJobTypeService.updateById()` 保存到数据库
 
-#### 5.3.3 删除流程
+#### 5.3.3 状态变更流程
+
+1. 校验参数（id、status必填）
+2. 调用 `AimJobTypeService.getById()` 查询记录是否存在且未删除
+3. 更新 status 字段
+4. 调用 `AimJobTypeService.updateById()` 保存到数据库
+
+> **设计说明**：状态变更既可以通过「更新接口」修改，也可以通过「独立状态变更接口」快速切换。两者区别在于：
+> - 更新接口：可同时修改 name、description、status 多个字段
+> - 状态变更接口：仅修改 status，适合列表页快速启用/禁用操作
+
+#### 5.3.4 删除流程
 
 1. 调用 `AimJobTypeService.getById()` 查询记录是否存在且未删除
 2. **TODO**: 调用员工 Service 查询关联员工数量
 3. 如果员工数 > 0，抛出 `BusinessException`
 4. 调用 `AimJobTypeService.removeById()` 执行逻辑删除
 
-#### 5.3.4 列表查询流程
+#### 5.3.5 列表查询流程
 
 1. 构建查询条件（keyword）
 2. 调用 `AimJobTypeService.page()` 执行分页查询（小表使用 MP 分页）
@@ -576,6 +625,7 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 | 版本 | 日期 | 变更内容 | 变更人 |
 |------|------|----------|--------|
 | 1.0 | 2026-03-02 | 初始版本 | AI Agent |
+| 1.1 | 2026-03-03 | 创建/更新接口：sortOrder改为后台自动生成，新增status字段 | AI Agent |
 
 ---
 

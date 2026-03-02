@@ -5,6 +5,7 @@ import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
 import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
+import com.aim.mall.agent.employee.mapper.AimJobTypeMapper;
 import com.aim.mall.basic.api.dto.request.IdGenApiRequest;
 import com.aim.mall.basic.api.dto.response.IdGenApiResponse;
 import com.aim.mall.basic.api.feign.IdGenRemoteService;
@@ -35,6 +36,7 @@ public class JobTypeApplicationService {
     private final JobTypeQueryService jobTypeQueryService;
     private final JobTypeManageService jobTypeManageService;
     private final IdGenRemoteService idGenRemoteService;
+    private final AimJobTypeMapper aimJobTypeMapper;
 
     /**
      * 分页查询岗位类型列表
@@ -68,7 +70,26 @@ public class JobTypeApplicationService {
         String code = generateJobTypeCode();
         dto.setCode(code);
 
+        // 生成排序号：当前最大值 + 1
+        Integer sortOrder = generateSortOrder();
+        dto.setSortOrder(sortOrder);
+
         return jobTypeManageService.createJobType(dto);
+    }
+
+    /**
+     * 生成排序号
+     * <p>
+     * 规则：查询当前最大排序号，新记录排序号 = 最大值 + 1
+     * 若表为空，则从 1 开始
+     *
+     * @return 生成的排序号
+     */
+    private Integer generateSortOrder() {
+        Integer maxSortOrder = aimJobTypeMapper.selectMaxSortOrder();
+        int sortOrder = (maxSortOrder != null) ? maxSortOrder + 1 : 1;
+        log.debug("生成排序号成功, sortOrder: {}", sortOrder);
+        return sortOrder;
     }
 
     /**

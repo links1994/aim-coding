@@ -1,9 +1,9 @@
 program: P-2026-001-REQ-038
 name: 岗位类型管理服务
-status: deployed      # not-started / active / blocked / deployed
+status: active      # not-started / active / blocked / deployed
 
 # 当前阶段（整个 Program 的执行状态）
-phase: done          # planning / in-progress / review / done
+phase: in-progress          # planning / in-progress / review / done
 
 # 任务列表（Spec 模式七阶段）
 tasks:
@@ -31,6 +31,10 @@ tasks:
     name: Phase 7: 功能归档
     status: done
     desc: 归档到 repowiki/features/ 和 repowiki/schemas/
+  - id: t7
+    name: 需求变更：sortOrder/status调整
+    status: done
+    desc: 创建/更新接口移除sortOrder传入，改为status；sortOrder后台自动生成（最大值+1）
 
 # 产出物跟踪
 artifacts:

@@ -30,9 +30,14 @@ public class JobTypeCreateDTO implements Serializable {
     private String description;
 
     /**
-     * 排序号
+     * 排序号（由应用层自动生成）
      */
     private Integer sortOrder;
+
+    /**
+     * 状态：0-禁用，1-启用
+     */
+    private Integer status;
 
     /**
      * 创建人ID

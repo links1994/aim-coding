@@ -31,9 +31,9 @@ public class JobTypeCreateApiRequest implements Serializable {
     private String description;
 
     /**
-     * 排序号，默认0
+     * 状态：0-禁用，1-启用，默认1
      */
-    private Integer sortOrder = 0;
+    private Integer status = 1;
 
     /**
      * 操作人ID

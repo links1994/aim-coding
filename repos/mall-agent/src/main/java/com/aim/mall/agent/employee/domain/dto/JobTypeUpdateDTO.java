@@ -30,9 +30,9 @@ public class JobTypeUpdateDTO implements Serializable {
     private String description;
 
     /**
-     * 排序号
+     * 状态：0-禁用，1-启用
      */
-    private Integer sortOrder;
+    private Integer status;
 
     /**
      * 更新人ID

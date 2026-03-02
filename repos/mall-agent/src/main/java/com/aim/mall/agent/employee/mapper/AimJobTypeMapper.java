@@ -42,4 +42,11 @@ public interface AimJobTypeMapper extends BaseMapper<AimJobTypeDO> {
      * @return 总数
      */
     Long countByKeyword(@Param("keyword") String keyword);
+
+    /**
+     * 查询当前最大排序号
+     *
+     * @return 最大排序号，如果没有记录则返回 null
+     */
+    Integer selectMaxSortOrder();
 }

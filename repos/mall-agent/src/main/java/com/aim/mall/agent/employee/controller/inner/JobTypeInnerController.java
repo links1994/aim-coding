@@ -84,9 +84,8 @@ public class JobTypeInnerController {
         // Request 转换为 DTO
         JobTypeCreateDTO dto = new JobTypeCreateDTO();
         dto.setName(request.getName());
-        dto.setCode(request.getCode());
         dto.setDescription(request.getDescription());
-        dto.setSortOrder(request.getSortOrder());
+        dto.setStatus(request.getStatus());
         dto.setCreatorId(request.getOperatorId());
 
         Long jobTypeId = jobTypeApplicationService.createJobType(dto);
@@ -111,7 +110,7 @@ public class JobTypeInnerController {
         dto.setId(request.getId());
         dto.setName(request.getName());
         dto.setDescription(request.getDescription());
-        dto.setSortOrder(request.getSortOrder());
+        dto.setStatus(request.getStatus());
         dto.setUpdaterId(request.getOperatorId());
 
         boolean result = jobTypeApplicationService.updateJobType(dto);

@@ -42,4 +42,11 @@
         </if>
     </select>
 
+    <!-- 查询当前最大排序号 -->
+    <select id="selectMaxSortOrder" resultType="java.lang.Integer">
+        SELECT MAX(sort_order)
+        FROM aim_agent_job_type
+        WHERE is_deleted = 0
+    </select>
+
 </mapper>
