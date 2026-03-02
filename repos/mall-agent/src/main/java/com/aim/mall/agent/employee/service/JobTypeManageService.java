@@ -4,8 +4,9 @@ import com.aim.mall.agent.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.domain.dto.JobTypeUpdateDTO;
 import com.aim.mall.agent.domain.entity.AimJobTypeDO;
-import com.aim.mall.agent.domain.enums.JobTypeStatusEnum;
 import com.aim.mall.agent.service.mp.AimJobTypeService;
+import com.aim.mall.common.enums.DeleteStatusEnum;
+import com.aim.mall.common.enums.StatusEnum;
 import com.aim.mall.common.exception.BusinessException;
 import com.aim.mall.common.exception.ErrorCodeEnum;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +52,10 @@ public class JobTypeManageService {
         entity.setCode(dto.getCode());
         entity.setDescription(dto.getDescription());
         entity.setSortOrder(dto.getSortOrder() != null ? dto.getSortOrder() : 0);
-        entity.setStatus(JobTypeStatusEnum.ENABLED.getCode()); // 默认启用
+        entity.setStatus(StatusEnum.ENABLE.getCode()); // 默认启用
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());
-        entity.setIsDeleted(0);
+        entity.setIsDeleted(DeleteStatusEnum.UNDELETE.getCode());
         entity.setCreatorId(dto.getCreatorId());
 
         aimJobTypeService.save(entity);
@@ -75,7 +76,7 @@ public class JobTypeManageService {
 
         // 查询记录是否存在
         AimJobTypeDO entity = aimJobTypeService.getById(dto.getId());
-        if (entity == null || entity.getIsDeleted() == 1) {
+        if (entity == null || DeleteStatusEnum.DELETE.getCode().equals(entity.getIsDeleted())) {
             log.warn("岗位类型不存在或已删除, id: {}", dto.getId());
             throw new BusinessException(ErrorCodeEnum.JOB_TYPE_NOT_FOUND, "岗位类型不存在");
         }
@@ -106,14 +107,14 @@ public class JobTypeManageService {
         log.debug("更新岗位类型状态开始, id: {}, status: {}", dto.getId(), dto.getStatus());
 
         // 校验状态值是否有效
-        if (!JobTypeStatusEnum.isValid(dto.getStatus())) {
+        if (!isValidStatus(dto.getStatus())) {
             log.warn("无效的状态值, status: {}", dto.getStatus());
             throw new BusinessException(ErrorCodeEnum.PARAM_ERROR, "无效的状态值");
         }
 
         // 查询记录是否存在
         AimJobTypeDO entity = aimJobTypeService.getById(dto.getId());
-        if (entity == null || entity.getIsDeleted() == 1) {
+        if (entity == null || DeleteStatusEnum.DELETE.getCode().equals(entity.getIsDeleted())) {
             log.warn("岗位类型不存在或已删除, id: {}", dto.getId());
             throw new BusinessException(ErrorCodeEnum.JOB_TYPE_NOT_FOUND, "岗位类型不存在");
         }
@@ -142,7 +143,7 @@ public class JobTypeManageService {
 
         // 查询记录是否存在
         AimJobTypeDO entity = aimJobTypeService.getById(id);
-        if (entity == null || entity.getIsDeleted() == 1) {
+        if (entity == null || DeleteStatusEnum.DELETE.getCode().equals(entity.getIsDeleted())) {
             log.warn("岗位类型不存在或已删除, id: {}", id);
             throw new BusinessException(ErrorCodeEnum.JOB_TYPE_NOT_FOUND, "岗位类型不存在");
         }
@@ -156,7 +157,7 @@ public class JobTypeManageService {
         log.warn("功能暂未实现: 岗位类型关联员工数量统计, jobTypeId: {}", id);
 
         // 执行逻辑删除
-        entity.setIsDeleted(1);
+        entity.setIsDeleted(DeleteStatusEnum.DELETE.getCode());
         entity.setUpdateTime(LocalDateTime.now());
         entity.setUpdaterId(operatorId);
 
@@ -164,5 +165,16 @@ public class JobTypeManageService {
 
         log.info("删除岗位类型成功, jobTypeId: {}", id);
         return result;
+    }
+
+    /**
+     * 校验状态值是否有效
+     *
+     * @param status 状态值
+     * @return 是否有效
+     */
+    private boolean isValidStatus(Integer status) {
+        return StatusEnum.ENABLE.getCode().equals(status)
+                || StatusEnum.DISABLE.getCode().equals(status);
     }
 }

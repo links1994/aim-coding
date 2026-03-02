@@ -391,7 +391,79 @@ public CommonResult<AgentApiResponse> getAgentById(@PathVariable("agentId") Long
 }
 ```
 
-### 3.4 Swagger 文档注解
+### 3.4 枚举使用规范
+
+#### 状态枚举（启用/停用）
+
+**统一使用 `com.aim.mall.common.enums.StatusEnum`**：
+
+| 枚举值 | code | desc |
+|--------|------|------|
+| DISABLE | 0 | 禁用 |
+| ENABLE | 1 | 启用 |
+
+**正确示例**：
+
+```java
+import com.aim.mall.common.enums.StatusEnum;
+
+// DO 实体类定义
+private Integer status;
+
+// 设置默认启用状态
+entity.setStatus(StatusEnum.ENABLE.getCode());
+
+// 校验状态有效性
+public void updateStatus(Integer newStatus) {
+    if (!isValidStatus(newStatus)) {
+        throw new BusinessException(ErrorCodeEnum.PARAM_ERROR, "状态值无效");
+    }
+    this.status = newStatus;
+}
+
+private boolean isValidStatus(Integer status) {
+    return StatusEnum.ENABLE.getCode().equals(status) 
+        || StatusEnum.DISABLE.getCode().equals(status);
+}
+```
+
+**禁止行为**：
+- 各业务模块自行定义状态枚举（如 `JobTypeStatusEnum`、`UserStatusEnum` 等）
+- 使用魔法数字（0、1）直接赋值，必须使用枚举
+
+#### 逻辑删除枚举
+
+**统一使用 `com.aim.mall.common.enums.DeleteStatusEnum`**：
+
+| 枚举值 | code | desc |
+|--------|------|------|
+| UNDELETE | 0 | 未删除 |
+| DELETE | 1 | 已删除 |
+
+**正确示例**：
+
+```java
+import com.aim.mall.common.enums.DeleteStatusEnum;
+
+// XML 查询条件中使用
+<sql id="Base_Where">
+    WHERE is_deleted = #{DeleteStatusEnum.UNDELETE.getCode()}
+</sql>
+
+// Service 层逻辑删除
+public void deleteById(Long id) {
+    AimJobTypeDO entity = new AimJobTypeDO();
+    entity.setId(id);
+    entity.setIsDeleted(DeleteStatusEnum.DELETE.getCode());
+    aimJobTypeService.updateById(entity);
+}
+```
+
+**禁止行为**：
+- 各业务模块自行定义删除状态枚举
+- 在 SQL 中直接使用魔法数字（0、1）
+
+### 3.5 Swagger 文档注解
 
 使用 OpenAPI 3.0 规范注解：
 
@@ -764,6 +836,13 @@ public CommonResult<Long> createJobType(
 **详细规范文档**: [操作人ID传递规范](../repowiki/specs/operator-id-spec.md)
 
 ---
+
+## 版本历史
+
+| 版本 | 日期 | 修改人 | 修改内容 |
+|------|------|--------|----------|
+| v1.0 | 2026-03-02 | AI Agent | 初始版本 |
+| v1.1 | 2026-03-02 | AI Agent | 新增枚举使用规范（StatusEnum、DeleteStatusEnum） |
 
 ## 相关文档
 

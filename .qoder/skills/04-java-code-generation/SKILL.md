@@ -411,6 +411,32 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 - **Feign 客户端模板**：跨服务调用
 - **Entity/DO 模板**：MyBatis-Plus 实体
 
+### 枚举使用规范
+
+生成代码时必须统一使用 `mall-common` 中的枚举：
+
+| 场景 | 使用枚举 | 示例 |
+|------|----------|------|
+| 状态（启用/停用） | `StatusEnum` | `entity.setStatus(StatusEnum.ENABLE.getCode())` |
+| 逻辑删除 | `DeleteStatusEnum` | `entity.setIsDeleted(DeleteStatusEnum.UNDELETE.getCode())` |
+
+**DO 实体类状态字段默认值**：
+```java
+// 默认启用
+private Integer status = StatusEnum.ENABLE.getCode();
+
+// 默认未删除
+private Integer isDeleted = DeleteStatusEnum.UNDELETE.getCode();
+```
+
+**XML 查询条件模板**：
+```xml
+<sql id="Base_Where">
+    WHERE is_deleted = 0
+</sql>
+```
+> 注：XML 中直接使用数值 0/1，代码中使用枚举
+
 ## SQL 编写规范
 
 ### XML Mapper 优先

@@ -5,8 +5,8 @@ import com.aim.mall.agent.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.domain.dto.JobTypeUpdateDTO;
 import com.aim.mall.agent.domain.entity.AimJobTypeDO;
-import com.aim.mall.agent.domain.enums.JobTypeStatusEnum;
 import com.aim.mall.common.api.CommonResult;
+import com.aim.mall.common.enums.DeleteStatusEnum;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -103,7 +103,7 @@ public class JobTypeApplicationService {
     public JobTypeResponse getById(Long id) {
         log.debug("业务域：根据ID查询岗位类型, id: {}", id);
         AimJobTypeDO entity = jobTypeQueryService.getById(id);
-        if (entity == null || entity.getIsDeleted() == 1) {
+        if (entity == null || DeleteStatusEnum.DELETE.getCode().equals(entity.getIsDeleted())) {
             return null;
         }
         return convertToResponse(entity);
