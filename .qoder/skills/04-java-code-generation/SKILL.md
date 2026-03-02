@@ -625,6 +625,126 @@ private Integer isDeleted = DeleteStatusEnum.UNDELETE.getCode();
 
 ---
 
+## 步骤 6：代码生成检查清单（强制）
+
+代码生成完成后，**必须**逐条检查以下清单，确保生成的代码符合所有规范：
+
+### 6.1 命名规范检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 实体类命名 | `Aim{Xxx}DO` 格式，大驼峰 + DO 后缀 | 检查 `domain/entity/` 目录下所有类 |
+| Service 命名 | `Aim{Xxx}Service`（MP Service）、`{Name}QueryService`、`{Name}ManageService`、`{Name}ApplicationService` | 检查 `service/` 目录下所有类 |
+| Mapper 命名 | `Aim{Xxx}Mapper`，继承 `BaseMapper<Aim{Xxx}DO>` | 检查 `mapper/` 目录下所有类 |
+| Controller 命名 | `{Name}Controller`、`{Name}InnerController` | 检查 `controller/` 目录下所有类 |
+| Request/Response 命名 | Controller 层：`{Name}Request`/`{Name}Response`；Service 层：`{Name}Query`/`{Name}DTO` | 检查 `dto/`、`domain/dto/` 目录 |
+| 远程对象命名 | API 模块：`{Name}ApiRequest`/`{Name}ApiResponse` | 检查 `api/dto/` 目录 |
+| Feign 客户端命名 | `{模块名}RemoteService` | 检查 `api/feign/` 目录 |
+| 表名命名 | `aim_{模块}_{业务名}`，小写下划线 | 检查 DO 类上的 `@TableName` 注解 |
+| 包路径 | 符合服务类型规范（门面/应用/支撑） | 检查 `package` 声明 |
+
+### 6.2 类结构检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| DO 实体类 | 继承 `BaseDO`，包含 `serialVersionUID = -1L` | 检查 DO 类定义 |
+| Request/Response | 实现 `Serializable`，`serialVersionUID = -1L` | 检查类实现 |
+| Lombok 注解 | `@Data` 用于实体/DTO，`@Slf4j` 用于需要日志的类 | 检查类注解 |
+| Mapper 注解 | 必须标注 `@Mapper` | 检查 Mapper 接口 |
+| Service 继承 | MP Service 继承 `ServiceImpl<XxxMapper, XxxDO>` | 检查 Service 类定义 |
+
+### 6.3 时间格式化检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| DO/DTO 时间字段 | **禁止**使用 `@JsonFormat` | 检查 `domain/entity/`、`domain/dto/` 下的类 |
+| Response/VO 时间字段 | **必须**使用 `@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")` | 检查 `dto/response/`、`domain/dto/response/` 下的类 |
+
+### 6.4 数据转换检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 禁止 BeanUtils | **禁止**使用 `BeanUtils.copyProperties` | 全局搜索 `BeanUtils` |
+| 手动转换 | Service 层必须提供 `convertToXXX` 方法 | 检查 Service 类中的转换方法 |
+| 分层转换 | Controller 负责 Request→Query/DTO，Service 负责 DO→Response | 检查 Controller 和 Service 代码 |
+
+### 6.5 数据库访问检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 禁止 QueryWrapper | **禁止**在 QueryService/ManageService 中使用 `QueryWrapper`/`LambdaQueryWrapper` | 全局搜索 `QueryWrapper` |
+| 禁止直接访问 Mapper | QueryService/ManageService **禁止**直接调用 `getBaseMapper()` | 检查 Service 类中的方法调用 |
+| 分层调用 | QueryService/ManageService 只能调用 XxxService，XxxService 封装 Mapper 访问 | 检查 Service 层调用关系 |
+| XML 规范 | 必须抽取 `Base_Column_List`，禁止 `SELECT *`，必须软删除过滤 | 检查 XML 文件 |
+| 批量操作 | 禁止循环单条 CRUD，必须使用批量操作 | 检查批量插入/更新逻辑 |
+
+### 6.6 异常处理检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 标准异常 | 仅使用 `MethodArgumentValidationException`、`RemoteApiCallException`、`BusinessException` | 检查异常使用 |
+| Controller 异常 | Controller 层**不捕获**异常，直接抛出 | 检查 Controller 方法 |
+| 异常构造 | 支持错误码、错误码+消息、错误码+原因等多种构造方式 | 检查异常抛出代码 |
+
+### 6.7 响应格式检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| Controller 返回 | 所有方法必须返回 `CommonResult<T>` | 检查 Controller 方法签名 |
+| 分页返回 | 使用 `CommonResult<CommonResult.PageData<XxxResponse>>` | 检查分页方法 |
+| 成功响应 | 使用 `CommonResult.success()` / `CommonResult.pageSuccess()` | 检查返回语句 |
+| 失败响应 | 使用 `CommonResult.failed()` | 检查全局异常处理器 |
+
+### 6.8 参数注解检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 门面服务参数 | GET 可使用多个 `@RequestParam`，POST 使用 `@RequestBody` | 检查门面服务 Controller |
+| 应用服务参数 | ≤2 个基础类型用 `@RequestParam`，否则 `@RequestBody` | 检查应用服务 InnerController |
+| 参数校验 | 使用 `@Valid` 进行参数校验 | 检查方法参数 |
+
+### 6.9 操作人 ID 检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 门面服务获取 | 使用 `@RequestHeader(AuthConstant.USER_TOKEN_HEADER)` + `UserInfoUtil.getUserInfo(user).getId()` | 检查门面服务 Controller |
+| ApiRequest 字段 | 必须包含 `operatorId` 字段 | 检查 API 模块 Request 类 |
+| 应用服务接收 | 从 ApiRequest 获取 `operatorId`，不直接解析 Header | 检查 InnerController |
+| 数据库记录 | 正确设置 `createBy` / `updateBy` 字段 | 检查 Service 层代码 |
+
+### 6.10 枚举使用检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 状态枚举 | 统一使用 `StatusEnum`（ENABLE=1, DISABLE=0） | 检查状态字段赋值 |
+| 删除枚举 | 统一使用 `DeleteStatusEnum`（UNDELETE=0, DELETE=1） | 检查删除逻辑 |
+| 禁止自定义 | 禁止各模块自行定义状态/删除枚举 | 全局搜索 `StatusEnum`、`DeleteStatusEnum` |
+
+### 6.11 日志规范检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 日志级别 | DEBUG 用于入口参数和关键步骤，INFO 用于重要操作，WARN 用于警告，ERROR 用于系统异常 | 检查日志语句 |
+| 日志内容 | 包含关键上下文信息（如 ID、数量等） | 检查日志参数 |
+
+### 6.12 错误码检查
+
+| 检查项 | 规范要求 | 检查方法 |
+|--------|----------|----------|
+| 错误码格式 | 符合 `SSMMTNNN` 格式（8位数字） | 检查 ErrorCodeEnum |
+| 系统代码 | 20=Common, 30=Admin, 40=Agent, 50=User | 检查错误码前缀 |
+| 模块代码 | 符合模块映射表 | 检查错误码第3-4位 |
+| 错误类型 | 0=Success, 1=Client, 2=Server, 3=Business | 检查错误码第5位 |
+
+### 检查清单使用方式
+
+1. **生成代码后立即检查**：每生成一个文件，对照清单逐项检查
+2. **标记检查结果**：在代码生成报告中记录每项检查结果（通过/不通过）
+3. **修复问题**：对不通过的项立即修复，不得跳过
+4. **最终确认**：所有检查项通过后，方可提交代码
+
+---
+
 ## 返回格式
 
 ```
