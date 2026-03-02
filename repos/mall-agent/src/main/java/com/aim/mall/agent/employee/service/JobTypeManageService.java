@@ -4,7 +4,7 @@ import com.aim.mall.agent.employee.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
 import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
-import com.aim.mall.agent.service.mp.AimJobTypeService;
+import com.aim.mall.agent.employee.service.mp.AimJobTypeService;
 import com.aim.mall.common.enums.DeleteStatusEnum;
 import com.aim.mall.common.enums.StatusEnum;
 import com.aim.mall.common.exception.BusinessException;

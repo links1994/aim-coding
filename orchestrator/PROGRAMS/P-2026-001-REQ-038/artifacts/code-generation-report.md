@@ -103,7 +103,15 @@
 
 ## 问题
 
-- 无
+- 已修复：`JobTypeQueryService` 直接使用 `getBaseMapper()` 违反 Service 层封装原则
+  - 修复内容：在 `AimJobTypeService` 中封装 `pageByKeyword()` 方法
+  - `JobTypeQueryService` 改为调用封装方法
+
+## 代码规范更新
+
+本次修复遵循最新制定的 **Service 层封装原则（Mapper 访问隔离）**：
+- 上层服务（QueryService/ManageService）禁止直接使用 `AimXxxService.getBaseMapper()`
+- 必须在 `AimXxxService` 中封装方法，上层通过封装方法间接访问 Mapper
 
 ## 下一步
 

@@ -314,11 +314,13 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 | **小表**（< 100万） | MyBatis-Plus 分页 | `aimXxxService.page()` | MP `page()` 方法 | 简单高效 |
 | **大表**（>= 100万） | 索引覆盖分页 | `aimXxxService.pageByCoveringIndex()` | 调用 `AimXxxMapper.selectIdsByPage()` + `selectBatchByIds()` | 避免回表，有 total |
 
-**分层调用原则**：
+**分层调用原则（Service 层封装原则）**：
 
-- **XxxQueryService** 只能调用 `AimXxxService` 方法
+- **XxxQueryService** 只能调用 `AimXxxService` 方法，**禁止**使用 `aimXxxService.getBaseMapper()`
 - **AimXxxService** 封装分页逻辑，内部可以调用 `AimXxxMapper`
 - **AimXxxMapper** 只对 `AimXxxService` 暴露
+
+**重要约束**：上层服务（QueryService/ManageService）**禁止**直接访问 `getBaseMapper()`，必须在 `AimXxxService` 中封装方法提供间接访问。详见 `common-architecture-standards.md` → "Service 层封装原则（Mapper 访问隔离）"。
 
 **示例**：
 

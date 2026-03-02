@@ -2,18 +2,19 @@ package com.aim.mall.agent.service;
 
 import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
-import com.aim.mall.agent.service.mp.AimJobTypeService;
+import com.aim.mall.agent.employee.service.mp.AimJobTypeService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * 岗位类型查询服务
  * <p>
  * 只读查询，封装查询逻辑
+ * <p>
+ * 规范：禁止直接使用 aimJobTypeService.getBaseMapper()，
+ * 必须通过 AimJobTypeService 封装的方法间接访问 Mapper
  *
  * @author AI Agent
  */
@@ -37,19 +38,13 @@ public class JobTypeQueryService {
         log.debug("分页查询岗位类型列表, keyword: {}, pageNum: {}, pageSize: {}",
                 query.getKeyword(), query.getPageNum(), query.getPageSize());
 
-        int offset = (query.getPageNum() - 1) * query.getPageSize();
+        // ✅ 正确：调用 AimJobTypeService 封装的分页方法
+        // 禁止：aimJobTypeService.getBaseMapper().countByKeyword() / selectPageByKeyword()
+        Page<AimJobTypeDO> page = aimJobTypeService.pageByKeyword(
+                query.getKeyword(), query.getPageNum(), query.getPageSize());
 
-        // 查询总数
-        Long total = aimJobTypeService.getBaseMapper().countByKeyword(query.getKeyword());
-
-        // 查询列表
-        List<AimJobTypeDO> records = aimJobTypeService.getBaseMapper()
-                .selectPageByKeyword(query.getKeyword(), offset, query.getPageSize());
-
-        Page<AimJobTypeDO> page = new Page<>(query.getPageNum(), query.getPageSize(), total);
-        page.setRecords(records);
-
-        log.debug("分页查询岗位类型列表完成, 总数: {}, 当前页: {}", total, records.size());
+        log.debug("分页查询岗位类型列表完成, 总数: {}, 当前页: {}",
+                page.getTotal(), page.getRecords().size());
         return page;
     }
 

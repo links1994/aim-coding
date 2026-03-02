@@ -62,6 +62,82 @@ XxxApplicationService
 - **XxxService** 封装所有数据访问逻辑，包括 MP 分页和原生 Mapper 查询
 - **XxxMapper** 只对 `XxxService` 暴露
 
+#### 1.2.1 Service 层封装原则（Mapper 访问隔离）
+
+**核心规范**：上层服务（QueryService/ManageService）**禁止**直接使用 `AimXxxService.getBaseMapper()` 方法访问 Mapper，必须在 `AimXxxService` 中封装方法提供间接访问。
+
+**规范说明**：
+
+| 层级 | 允许的操作 | 禁止的操作 |
+|------|------------|------------|
+| **AimXxxService** | 调用 `baseMapper.xxx()` 进行原生查询 | - |
+| **XxxQueryService** | 调用 `aimXxxService.xxx()` 封装方法 | **禁止** `aimXxxService.getBaseMapper().xxx()` |
+| **XxxManageService** | 调用 `aimXxxService.xxx()` 封装方法 | **禁止** `aimXxxService.getBaseMapper().xxx()` |
+
+**正确示例**：
+
+```java
+@Service
+public class AimJobTypeService extends ServiceImpl<AimJobTypeMapper, AimJobTypeDO> {
+
+    /**
+     * 根据编码查询 - 封装 baseMapper 调用
+     */
+    public AimJobTypeDO getByCode(String code) {
+        return baseMapper.selectByCode(code);
+    }
+
+    /**
+     * 索引覆盖分页 - 封装复杂查询逻辑
+     */
+    public Page<AimJobTypeDO> pageByCoveringIndex(Integer pageNum, Integer pageSize) {
+        int offset = (pageNum - 1) * pageSize;
+        List<Long> ids = baseMapper.selectIdsByPage(offset, pageSize);
+        // ... 批量查询并组装 Page
+    }
+}
+
+@Service
+@RequiredArgsConstructor
+public class JobTypeQueryService {
+
+    private final AimJobTypeService aimJobTypeService;
+
+    public AimJobTypeDO getByCode(String code) {
+        // ✅ 正确：调用 AimJobTypeService 封装的方法
+        return aimJobTypeService.getByCode(code);
+    }
+
+    public Page<AimJobTypeDO> pageJobType(JobTypePageQuery query) {
+        // ✅ 正确：调用 AimJobTypeService 封装的分页方法
+        return aimJobTypeService.pageByCoveringIndex(query.getPageNum(), query.getPageSize());
+    }
+}
+```
+
+**错误示例**：
+
+```java
+@Service
+@RequiredArgsConstructor
+public class JobTypeQueryService {
+
+    private final AimJobTypeService aimJobTypeService;
+
+    public AimJobTypeDO getByCode(String code) {
+        // ❌ 错误：直接访问 getBaseMapper()
+        return aimJobTypeService.getBaseMapper().selectByCode(code);
+    }
+}
+```
+
+**规范目的**：
+
+1. **封装数据访问细节**：上层服务不关心数据是如何从数据库获取的
+2. **统一查询逻辑**：相同查询逻辑在 Service 层统一实现，避免重复代码
+3. **便于维护和优化**：数据访问逻辑变更只需修改 Service 层，不影响上层
+4. **明确分层边界**：强化分层架构，避免跨层直接访问基础设施
+
 ### 1.3 模块类型设计规范
 
 | 模块类型 | 路径前缀 | 说明 |
@@ -398,19 +474,20 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderDO> {
 @RequiredArgsConstructor
 public class JobTypeQueryService {
 
-    private final JobTypeService jobTypeService;
+    private final AimJobTypeService aimJobTypeService;
 
-    // ✅ 使用 JobTypeService 封装的原生查询
-    public JobTypeDO getByCode(String code) {
-        return jobTypeService.getByCode(code);
+    // ✅ 正确：使用 AimJobTypeService 封装的原生查询
+    // 禁止：aimJobTypeService.getBaseMapper().selectByCode(code)
+    public AimJobTypeDO getByCode(String code) {
+        return aimJobTypeService.getByCode(code);
     }
 }
 
 @Service
-public class JobTypeService extends ServiceImpl<JobTypeMapper, JobTypeDO> {
+public class AimJobTypeService extends ServiceImpl<AimJobTypeMapper, AimJobTypeDO> {
 
-    // JobTypeService 内部调用 JobTypeMapper
-    public JobTypeDO getByCode(String code) {
+    // AimJobTypeService 内部调用 AimJobTypeMapper
+    public AimJobTypeDO getByCode(String code) {
         return baseMapper.selectByCode(code);
     }
 }
@@ -832,6 +909,7 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 - [ ] 服务调用关系符合规范
 - [ ] 远程服务调用位置选择正确（强依赖在应用层，弱依赖在门面层）
 - [ ] 基础业务服务不调用其他业务服务
+- [ ] **Service 层封装原则**：QueryService/ManageService 禁止直接使用 `getBaseMapper()`，必须通过 AimXxxService 封装方法间接访问
 
 ### 接口设计检查
 
