@@ -185,8 +185,9 @@
 **✅ 代码质量检查通过**
 
 所有生成的代码符合以下规范：
-- [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) - Java 编码规范
-- [05-architecture-standards.md](../../../../.qoder/rules/05-architecture-standards.md) - 架构规范
+- [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) - Java 编码规范
+- [common-architecture-standards.md](../../../../.qoder/rules/common-architecture-standards.md) - 架构规范
+- [project-naming-standards.md](../../../../.qoder/rules/project-naming-standards.md) - 项目命名规范
 
 **设计原则评估**：代码遵循KISS原则，简单场景使用简单方案，无过度设计。
 **设计模式评估**：CRUD场景无需额外设计模式，当前实现简洁清晰。

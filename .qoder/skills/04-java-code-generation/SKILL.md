@@ -8,10 +8,12 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 基于技术规格书生成符合项目规范的 Java 微服务代码。
 
 > **强制规范**：此 Skill 生成的代码必须严格遵循以下规范（按优先级排序）：
-> 1. **编码规范**：`.qoder/rules/coding-standards.md` - 命名约定、响应格式、异常处理等
-> 2. **架构规范**：`.qoder/rules/architecture-standards.md` - 分层架构、服务职责、接口风格等
-> 3. **响应格式规范**：`.qoder/rules/common-result-standards.md` - CommonResult 统一响应格式
-> 4. **操作人ID规范**：`.qoder/rules/operator-id-standards.md` - 操作人ID获取与传递标准
+> 1. **通用编码规范**：`.qoder/rules/common-coding-standards.md` - 代码质量、异常处理、日志规范等
+> 2. **通用架构规范**：`.qoder/rules/common-architecture-standards.md` - 分层架构、服务职责、接口风格等
+> 3. **项目命名规范**：`.qoder/rules/project-naming-standards.md` - 包路径、服务名、表前缀、类命名模式
+> 4. **项目错误码规范**：`.qoder/rules/project-error-code-standards.md` - 错误码格式、系统/模块映射、生成规则
+> 5. **项目响应格式规范**：`.qoder/rules/project-common-result-standards.md` - CommonResult 统一响应格式
+> 6. **项目操作人ID规范**：`.qoder/rules/project-operator-id-standards.md` - 操作人ID获取与传递标准
 >
 > **生成代码前必须先读取上述规范文件**，确保代码符合项目标准。
 
@@ -31,10 +33,12 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 - `orchestrator/PROGRAMS/{program_id}/artifacts/openapi.yaml` — API 定义
 - `orchestrator/ALWAYS/RESOURCE-MAP.yml` — 项目资源映射
 - `orchestrator/PROGRAMS/{program_id}/SCOPE.yml` — 写入范围控制
-- `.qoder/rules/coding-standards.md` — 编码规范
-- `.qoder/rules/architecture-standards.md` — 架构规范
-- `.qoder/rules/common-result-standards.md` — 响应格式规范
-- `.qoder/rules/operator-id-standards.md` — 操作人ID传递规范
+- `.qoder/rules/common-coding-standards.md` — 通用编码规范
+- `.qoder/rules/common-architecture-standards.md` — 通用架构规范
+- `.qoder/rules/project-naming-standards.md` — 项目命名规范
+- `.qoder/rules/project-error-code-standards.md` — 项目错误码规范
+- `.qoder/rules/project-common-result-standards.md` — 项目响应格式规范
+- `.qoder/rules/project-operator-id-standards.md` — 项目操作人ID规范
 
 ---
 
@@ -54,7 +58,7 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
    - 读取 API 定义（openapi.yaml）
    - 读取项目资源映射（RESOURCE-MAP.yml）
    - 读取写入范围（SCOPE.yml）
-   - **必须先读取** 编码规范、架构规范、响应格式规范和操作人ID规范
+   - **必须先读取** 通用编码规范、通用架构规范、项目命名规范、项目错误码规范、项目响应格式规范和项目操作人ID规范
 
 2. **知识库查询（自动复用现有代码）**
 
@@ -410,6 +414,8 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 - **DTO/Request/Response 模板**：创建/更新/VO
 - **Feign 客户端模板**：跨服务调用
 - **Entity/DO 模板**：MyBatis-Plus 实体
+
+**命名约定**：具体命名模式（如 `AimXxxDO`、`mall-admin` 等）参考 `project-naming-standards.md`
 
 ### 枚举使用规范
 

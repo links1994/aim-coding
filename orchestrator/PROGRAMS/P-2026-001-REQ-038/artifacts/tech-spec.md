@@ -23,7 +23,7 @@
 
 - **数据访问**: MyBatis-Plus（小表，数据量 < 1000 条，使用 MP 分页）
 - **服务分层**: 遵循五层架构（Controller → DomainService → Query/Manage Service → AimXxxService → AimXxxMapper）
-- **编码规范**: 遵循 [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) Java 编码规范
+- **编码规范**: 遵循 [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) Java 编码规范
   - 使用 Lombok 注解（`@Data`, `@Slf4j` 等）
   - DO/DTO 转换使用手动 convert 方法，禁止使用 `BeanUtils.copyProperties`
   - SQL 统一放在 XML Mapper 中
@@ -295,7 +295,7 @@ public class JobTypeListApiRequest implements Serializable {
 
 ### 3.4 错误码规范
 
-遵循 [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) 异常处理规范，仅使用三种标准异常类型：
+遵循 [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) 异常处理规范，仅使用三种标准异常类型：
 
 | 异常类型 | 使用场景 | 示例 |
 |---------|---------|------|
@@ -391,7 +391,7 @@ mall-admin    JobTypeInnerController    JobTypeDomainService    JobTypeManageSer
 
 ### 4.3 代码结构
 
-遵循 [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) 包结构规范：
+遵循 [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) 和 [project-naming-standards.md](../../../../.qoder/rules/project-naming-standards.md) 包结构规范：
 
 ```
 mall-agent/src/main/java/com/aim/mall/agent/
@@ -483,7 +483,7 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 ### 5.3 业务逻辑流程
 
-遵循 [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) 分层调用规范：
+遵循 [common-architecture-standards.md](../../../../.qoder/rules/common-architecture-standards.md) 分层调用规范：
 - `JobTypeQueryService` / `JobTypeManageService` 只能调用 `AimJobTypeService`
 - `AimJobTypeService` 封装所有数据访问
 - 禁止 `QueryWrapper` / `LambdaQueryWrapper`，SQL 统一放在 XML 中
@@ -537,8 +537,9 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 - [PROGRAM.md](../PROGRAM.md) - 任务定义
 - [decomposition.md](../../P-2026-001-decomposition/workspace/decomposition.md) - 需求分解
-- [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) - Java 编码规范
-- [05-architecture-standards.md](../../../../.qoder/rules/05-architecture-standards.md) - 架构规范
+- [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) - Java 编码规范
+- [common-architecture-standards.md](../../../../.qoder/rules/common-architecture-standards.md) - 架构规范
+- [project-naming-standards.md](../../../../.qoder/rules/project-naming-standards.md) - 项目命名规范
 
 ### 7.2 需求追溯矩阵
 
@@ -571,7 +572,7 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 **TODO 代码标记示例**:
 
-遵循 [04-coding-standards.md](../../../../.qoder/rules/04-coding-standards.md) 日志规范，使用 `WARN` 级别记录待实现功能：
+遵循 [common-coding-standards.md](../../../../.qoder/rules/common-coding-standards.md) 日志规范，使用 `WARN` 级别记录待实现功能：
 
 ```java
 // TODO: REQ-038 待智能员工需求完成后实现

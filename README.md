@@ -22,8 +22,11 @@ aim-coding/
 │   │   ├── prd-decomposition-standards.md   # 需求拆分规范
 │   │   ├── requirement-clarification-standards.md # 需求澄清规范
 │   │   ├── tech-spec-generation-standards.md     # 技术规格书规范
-│   │   ├── coding-standards.md         # Java 编码规范
-│   │   └── architecture-standards.md   # 架构规范
+│   │   ├── common-coding-standards.md         # 通用 Java 编码规范
+│   │   ├── common-architecture-standards.md   # 通用架构规范
+│   │   ├── project-naming-standards.md        # 项目命名规范（包路径、服务名、表前缀）
+│   │   ├── project-common-result-standards.md # 项目响应格式规范
+│   │   └── project-operator-id-standards.md   # 项目操作人ID规范
 │   └── skills/                    # Skill 能力模块
 │       ├── README-SKILLS.md       # Skill 使用指南
 │       ├── 01-prd-decomposition/  # 需求分解 Skill (Phase 1)
@@ -87,7 +90,7 @@ PRD → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → 
 | Phase 1 | 需求拆分 | 将 PRD 拆分为可独立实现的子需求   | `prd-decomposition-standards.md`                         | `01-prd-decomposition/`      |
 | Phase 2 | 需求澄清 | 使用 ReAct 模式进行交互式需求澄清 | `requirement-clarification-standards.md`                 | `02-requirement-clarification/` |
 | Phase 3 | 技术规格 | 生成技术规格书              | `tech-spec-generation-standards.md`                      | `03-tech-spec-generation/`   |
-| Phase 4 | 代码生成 | 生成 Java 微服务代码        | `coding-standards.md`, `architecture-standards.md`       | `04-java-code-generation/`   |
+| Phase 4 | 代码生成 | 生成 Java 微服务代码        | `common-coding-standards.md`, `common-architecture-standards.md`, `project-naming-standards.md` | `04-java-code-generation/`   |
 | Phase 5 | 测试验证 | 生成 HTTP 测试文件         | -                                                        | `05-http-test-generation/`   |
 | Phase 6 | 代码质量 | 代码质量分析和优化            | -                                                        | `06-code-quality-analysis/`  |
 | Phase 7 | 功能归档 | 功能归档到知识库             | -                                                        | `07-feature-archiving/`      |
@@ -257,8 +260,11 @@ AI Coding Agent 的工作指导文件，包含：
 | `prd-decomposition-standards.md`         | 需求拆分规范：服务归属规则、REQ 编号规则、依赖分析 |
 | `requirement-clarification-standards.md` | 需求澄清规范：问题优先级、ADR 格式、确认流程    |
 | `tech-spec-generation-standards.md`      | 技术规格规范：规格书结构、错误码规范、接口定义     |
-| `coding-standards.md`          | Java 编码规范：命名规范、注释规范、代码风格    |
-| `architecture-standards.md`    | 架构规范：分层架构、服务职责、数据库设计        |
+| `common-coding-standards.md`          | 通用 Java 编码规范：代码质量、异常处理、日志规范 |
+| `common-architecture-standards.md`    | 通用架构规范：分层架构、服务职责、接口风格      |
+| `project-naming-standards.md`         | 项目命名规范：包路径、服务名、表前缀、类命名模式 |
+| `project-common-result-standards.md`  | 项目响应格式规范：CommonResult 使用规范        |
+| `project-operator-id-standards.md`    | 项目操作人ID规范：操作人ID获取与传递标准       |
 
 #### skills/ 能力模块
 

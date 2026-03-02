@@ -21,10 +21,12 @@ Analyze generated code for quality issues, standard compliance, design principle
 ## Inputs
 
 - Generated source code in `repos/`
-- `.qoder/rules/coding-standards.md` — 编码规范
-- `.qoder/rules/architecture-standards.md` — 架构规范
-- `.qoder/rules/common-result-standards.md` — 响应格式规范
-- `.qoder/rules/operator-id-standards.md` — 操作人ID传递规范
+- `.qoder/rules/common-coding-standards.md` — 通用编码规范
+- `.qoder/rules/common-architecture-standards.md` — 通用架构规范
+- `.qoder/rules/project-naming-standards.md` — 项目命名规范
+- `.qoder/rules/project-error-code-standards.md` — 项目错误码规范
+- `.qoder/rules/project-common-result-standards.md` — 项目响应格式规范
+- `.qoder/rules/project-operator-id-standards.md` — 项目操作人ID规范
 - Pitfall archives from `.qoder/repowiki/pitfalls/`
 
 ---
@@ -462,9 +464,10 @@ public void processRefund(Refund refund) {
 
 ### Step 1: Read Standards and Pitfalls
 
-1. Read coding standards
-2. Read architecture standards
-3. Query pitfall archives using knowledge-base-query Skill
+1. Read common coding standards (`.qoder/rules/common-coding-standards.md`)
+2. Read common architecture standards (`.qoder/rules/common-architecture-standards.md`)
+3. Read project naming standards (`.qoder/rules/project-naming-standards.md`)
+4. Query pitfall archives using knowledge-base-query Skill
 
 ### Step 2: Scan Source Code
 
