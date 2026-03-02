@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER}
+      config:
+        server-addr: ${NACOS_SERVER}
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD}
+    database: ${REDIS_DATABASE:0}
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8085
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-aliases-package: com.aim.mall.basic.idgen.domain.entity

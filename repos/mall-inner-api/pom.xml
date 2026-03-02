@@ -12,6 +12,7 @@
     <description>mall-inner-api</description>
     <modules>
         <module>mall-agent-api</module>
+        <module>mall-basic-api</module>
     </modules>
 
 </project>

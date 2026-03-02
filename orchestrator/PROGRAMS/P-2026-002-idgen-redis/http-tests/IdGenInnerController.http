@@ -1,0 +1,100 @@
+### ID生成服务测试（号段模式）
+
+### 生成编码 - 按日（yyyyMMdd）- 首次调用自动初始化
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "OR",
+  "datePattern": "yyyyMMdd"
+}
+
+### 生成编码 - 按日（yyyyMMdd）- 第二次调用
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "OR",
+  "datePattern": "yyyyMMdd"
+}
+
+### 生成编码 - 按年月日时分秒（yyyyMMddHHmmss）- 高并发推荐
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "OR",
+  "datePattern": "yyyyMMddHHmmss"
+}
+
+### 生成编码 - 按月（yyyyMM）- 低频次业务
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "EM",
+  "datePattern": "yyyyMM"
+}
+
+### 生成编码 - 按年（yyyy）- 极低频次业务（谨慎使用）
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "AG",
+  "datePattern": "yyyy"
+}
+
+### 错误测试 - 前缀为空
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "",
+  "datePattern": "yyyyMMdd"
+}
+
+### 错误测试 - 前缀格式错误
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "ord",
+  "datePattern": "yyyyMMdd"
+}
+
+### 错误测试 - 不支持的日期格式
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "OR",
+  "datePattern": "MMdd"
+}
+
+### 并发测试 - 快速生成多个编码（验证号段模式）
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "TS",
+  "datePattern": "yyyyMMdd"
+}
+
+### 不同业务前缀隔离测试
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "OD",
+  "datePattern": "yyyyMMdd"
+}
+
+###
+POST http://localhost:8085/inner/api/v1/idgen/generate
+Content-Type: application/json
+
+{
+  "prefix": "PY",
+  "datePattern": "yyyyMMdd"
+}

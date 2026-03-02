@@ -417,6 +417,132 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 - **Feign 客户端模板**：跨服务调用
 - **Entity/DO 模板**：MyBatis-Plus 实体
 
+---
+
+### Mapper 模板
+
+#### Java Mapper 接口模板
+
+```java
+package com.aim.mall.{module}.{domain}.mapper;
+
+import com.aim.mall.{module}.{domain}.domain.entity.Aim{Xxx}DO;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * {业务描述}Mapper接口
+ *
+ * @author AI Agent
+ */
+@Mapper
+public interface Aim{Xxx}Mapper extends BaseMapper<Aim{Xxx}DO> {
+
+    /**
+     * 根据{唯一字段}查询（排除已删除）
+     *
+     * @param {field} {字段描述}
+     * @return {业务描述}实体
+     */
+    Aim{Xxx}DO selectBy{Field}(@Param("{field}") String {field});
+
+    /**
+     * 分页查询{业务描述}列表
+     *
+     * @param keyword  关键词
+     * @param offset   偏移量
+     * @param limit    每页大小
+     * @return {业务描述}列表
+     */
+    List<Aim{Xxx}DO> selectPageByKeyword(@Param("keyword") String keyword,
+                                         @Param("offset") Integer offset,
+                                         @Param("limit") Integer limit);
+
+    /**
+     * 统计总数（根据关键词）
+     *
+     * @param keyword 关键词
+     * @return 总数
+     */
+    Long countByKeyword(@Param("keyword") String keyword);
+}
+```
+
+#### XML Mapper 映射文件模板
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aim.mall.{module}.{domain}.mapper.Aim{Xxx}Mapper">
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        id, {field1}, {field2}, status, sort_order,
+        create_time, update_time, is_deleted, creator_id, updater_id
+    </sql>
+
+    <!-- 根据{唯一字段}查询 -->
+    <select id="selectBy{Field}" resultType="com.aim.mall.{module}.{domain}.domain.entity.Aim{Xxx}DO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM aim_{module}_{table_name}
+        WHERE is_deleted = 0
+        AND {field} = #{field}
+        LIMIT 1
+    </select>
+
+    <!-- 分页查询列表 -->
+    <select id="selectPageByKeyword" resultType="com.aim.mall.{module}.{domain}.domain.entity.Aim{Xxx}DO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM aim_{module}_{table_name}
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND ({field1} LIKE CONCAT('%', #{keyword}, '%') OR {field2} LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY sort_order ASC, create_time DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 统计总数 -->
+    <select id="countByKeyword" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM aim_{module}_{table_name}
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND ({field1} LIKE CONCAT('%', #{keyword}, '%') OR {field2} LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+</mapper>
+```
+
+**Mapper 规范要点**：
+
+1. **命名规范**：
+   - Java 接口：`Aim{Xxx}Mapper`，继承 `BaseMapper<Aim{Xxx}DO>`
+   - XML 文件：`Aim{Xxx}Mapper.xml`，放在 `src/main/resources/mapper/` 目录
+
+2. **注解要求**：
+   - 接口必须标注 `@Mapper` 注解
+   - 方法参数使用 `@Param` 注解指定参数名
+
+3. **XML 规范**：
+   - **必须抽取重复字段**：使用 `<sql id="Base_Column_List">` 定义字段列表
+   - **禁止抽取表名**：每个 SQL 必须直接写明完整表名（如 `aim_agent_job_type`）
+   - **软删除过滤**：所有查询必须包含 `WHERE is_deleted = 0`
+   - **禁止 SELECT ***：必须显式列出所有字段
+
+4. **常用方法**：
+   - `selectBy{Field}`：根据唯一字段查询单条记录
+   - `selectPageByKeyword`：分页查询（配合关键词搜索）
+   - `countByKeyword`：统计总数（配合关键词搜索）
+   - 基础 CRUD：继承自 `BaseMapper`（`insert`, `selectById`, `updateById`, `deleteById` 等）
+
 **命名约定**：具体命名模式（如 `AimXxxDO`、`mall-admin` 等）参考 `project-naming-standards.md`
 
 ### 枚举使用规范

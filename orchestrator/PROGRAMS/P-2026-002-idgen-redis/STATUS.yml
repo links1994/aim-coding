@@ -1,45 +1,45 @@
 program: P-2026-002
 name: 基于 Redis 的分布式 ID 生成服务
-status: active      # not-started / active / blocked / deployed
+status: deployed      # not-started / active / blocked / deployed
 
 # 当前阶段（整个 Program 的执行状态）
-phase: in-progress          # planning / in-progress / review / done
+phase: done          # planning / in-progress / review / done
 
 # 任务列表
 tasks:
   - id: t1
     name: 需求澄清 - 确认 ID 生成规则细节
-    status: in-progress
+    status: done
   - id: t2
     name: 技术规格 - 编写详细技术设计文档
-    status: pending
+    status: done
   - id: t3
     name: 创建 mall-basic-api API 模块
-    status: pending
+    status: done
   - id: t4
     name: 创建 mall-basic 服务模块
-    status: pending
+    status: done
   - id: t5
     name: 实现 ID 生成核心逻辑
-    status: pending
+    status: done
   - id: t6
     name: 编写 HTTP 测试文件
-    status: pending
+    status: done
   - id: t7
     name: 代码质量检查
-    status: pending
+    status: done
   - id: t8
     name: 功能归档
-    status: pending
+    status: done
 
 # 产出物跟踪
 artifacts:
   - path: artifacts/
-    status: pending
+    status: done
     desc: 技术规格书、代码生成报告、质量报告等
   - path: http-tests/
-    status: pending
+    status: done
     desc: HTTP 测试文件和 SQL 初始化脚本
   - path: workspace/RESULT.md
-    status: pending
+    status: done
     desc: 完结报告
