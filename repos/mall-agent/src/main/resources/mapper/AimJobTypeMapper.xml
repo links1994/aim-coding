@@ -20,7 +20,7 @@
     </sql>
 
     <!-- 根据编码查询 -->
-    <select id="selectByCode" resultType="com.aim.mall.agent.domain.entity.AimJobTypeDO">
+    <select id="selectByCode" resultType="com.aim.mall.agent.employee.domain.entity.AimJobTypeDO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
@@ -31,7 +31,7 @@
     </select>
 
     <!-- 分页查询列表 -->
-    <select id="selectPageByKeyword" resultType="com.aim.mall.agent.domain.entity.AimJobTypeDO">
+    <select id="selectPageByKeyword" resultType="com.aim.mall.agent.employee.domain.entity.AimJobTypeDO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM

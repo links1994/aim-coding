@@ -1,6 +1,6 @@
 package com.aim.mall.agent.service.mp;
 
-import com.aim.mall.agent.domain.entity.AimJobTypeDO;
+import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
 import com.aim.mall.agent.mapper.AimJobTypeMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;

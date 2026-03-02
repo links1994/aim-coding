@@ -1,4 +1,4 @@
-package com.aim.mall.agent.domain.entity;
+package com.aim.mall.agent.employee.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

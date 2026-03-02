@@ -1,6 +1,6 @@
 package com.aim.mall.agent.mapper;
 
-import com.aim.mall.agent.domain.entity.AimJobTypeDO;
+import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

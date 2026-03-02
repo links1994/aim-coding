@@ -1,4 +1,4 @@
-package com.aim.mall.agent.domain.dto;
+package com.aim.mall.agent.employee.domain.dto;
 
 import lombok.Data;
 

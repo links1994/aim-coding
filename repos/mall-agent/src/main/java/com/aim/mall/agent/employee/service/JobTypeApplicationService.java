@@ -1,10 +1,10 @@
 package com.aim.mall.agent.service;
 
-import com.aim.mall.agent.domain.dto.JobTypeCreateDTO;
-import com.aim.mall.agent.domain.dto.JobTypePageQuery;
-import com.aim.mall.agent.domain.dto.JobTypeStatusDTO;
-import com.aim.mall.agent.domain.dto.JobTypeUpdateDTO;
-import com.aim.mall.agent.domain.entity.AimJobTypeDO;
+import com.aim.mall.agent.employee.domain.dto.JobTypeCreateDTO;
+import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
+import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
+import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
+import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
 import com.aim.mall.common.api.CommonResult;
 import com.aim.mall.common.enums.DeleteStatusEnum;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

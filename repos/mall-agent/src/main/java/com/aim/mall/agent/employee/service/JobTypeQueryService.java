@@ -1,7 +1,7 @@
 package com.aim.mall.agent.service;
 
-import com.aim.mall.agent.domain.dto.JobTypePageQuery;
-import com.aim.mall.agent.domain.entity.AimJobTypeDO;
+import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
+import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
 import com.aim.mall.agent.service.mp.AimJobTypeService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;

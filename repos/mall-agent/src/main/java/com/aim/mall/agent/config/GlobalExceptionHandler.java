@@ -1,9 +1,9 @@
 package com.aim.mall.agent.config;
 
-import com.aim.mall.agent.domain.exception.BusinessException;
-import com.aim.mall.agent.domain.exception.MethodArgumentValidationException;
-import com.aim.mall.agent.domain.exception.RemoteApiCallException;
-import com.aim.mall.agent.domain.enums.ErrorCodeEnum;
+import com.aim.mall.agent.employee.domain.exception.BusinessException;
+import com.aim.mall.agent.employee.domain.exception.MethodArgumentValidationException;
+import com.aim.mall.agent.employee.domain.exception.RemoteApiCallException;
+import com.aim.mall.agent.employee.domain.enums.ErrorCodeEnum;
 import com.aim.mall.common.api.CommonResult;
 import com.aim.mall.common.api.IErrorCode;
 import jakarta.servlet.http.HttpServletRequest;

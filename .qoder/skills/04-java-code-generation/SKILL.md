@@ -473,7 +473,7 @@ private Integer isDeleted = DeleteStatusEnum.UNDELETE.getCode();
     </sql>
 
     <!-- 分页查询 -->
-    <select id="selectPageByKeyword" resultType="com.aim.mall.agent.domain.entity.AimJobTypeDO">
+    <select id="selectPageByKeyword" resultType="com.aim.mall.agent.employee.domain.entity.AimJobTypeDO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM
