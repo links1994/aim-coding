@@ -211,8 +211,8 @@ related_rules:
 
 - **修复Commit**: `{commit-hash}`
 - **相关PR**: #{PR编号}
-- **代码质量报告**: `orchestrator/PROGRAMS/{program_id}/workspace/code-quality-report.md`
-- **技术规格书**: `orchestrator/PROGRAMS/{program_id}/workspace/tech-spec.md`
+- **代码质量报告**: `orchestrator/PROGRAMS/{program_id}/artifacts/quality-report.md`
+- **技术规格书**: `orchestrator/PROGRAMS/{program_id}/artifacts/tech-spec.md`
 - **相关Issue**: #{Issue编号}
 
 ---

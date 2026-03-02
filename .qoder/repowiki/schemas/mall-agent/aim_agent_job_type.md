@@ -138,4 +138,4 @@ ORDER BY sort_order ASC, create_time DESC;
 ## 功能引用
 
 - 功能档案: [F-001 岗位类型管理](../../features/F-001-job-type-management/archive.md)
-- 技术规格书: [workspace/tech-spec.md](../../../orchestrator/PROGRAMS/P-2026-001-REQ-038/workspace/tech-spec.md)
+- 技术规格书: [artifacts/tech-spec.md](../../../orchestrator/PROGRAMS/P-2026-001-REQ-038/artifacts/tech-spec.md)

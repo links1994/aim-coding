@@ -35,3 +35,6 @@ artifacts:
   - path: http-tests/
     status: pending
     desc: HTTP 测试文件和 SQL 初始化脚本
+  - path: workspace/RESULT.md
+    status: pending
+    desc: 完结报告

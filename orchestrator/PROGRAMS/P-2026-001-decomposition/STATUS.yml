@@ -9,9 +9,15 @@ tasks:
     status: done
 
 artifacts:
-  - path: workspace/decomposition.md
+  - path: artifacts/decomposition.md
     status: done
     desc: 需求拆分文档（46个子需求）
+
+# 状态/结果文件（放在 workspace/ 下）
+results:
+  - path: workspace/RESULT.md
+    status: done
+    desc: 完成总结
 
 completed_at: 2026-02-28
 

@@ -34,21 +34,27 @@ tasks:
 
 # 产出物跟踪
 artifacts:
-  - path: workspace/answers.md
-    status: done
-    desc: 需求澄清记录（内嵌在tech-spec.md中）
-  - path: workspace/tech-spec.md
+  - path: artifacts/tech-spec.md
     status: done
     desc: 技术规格书
-  - path: workspace/checklist.md
+  - path: artifacts/checklist.md
     status: done
     desc: 验收清单
-  - path: workspace/quality-report.md
+  - path: artifacts/quality-report.md
     status: done
     desc: 代码质量报告（63项检查通过）
-  - path: workspace/http-tests/
+  - path: artifacts/code-generation-report.md
+    status: done
+    desc: 代码生成报告
+  - path: artifacts/openapi.yaml
+    status: done
+    desc: OpenAPI 接口定义
+  - path: http-tests/
     status: done
     desc: HTTP接口测试文件
+
+# 状态/结果文件（放在 workspace/ 下）
+results:
   - path: workspace/RESULT.md
     status: done
     desc: 完成总结
