@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aim.mall.agent.mapper.AimJobTypeMapper">
+<mapper namespace="com.aim.mall.agent.employee.mapper.AimJobTypeMapper">
 
     <!-- 基础字段列表 -->
     <sql id="Base_Column_List">
@@ -9,23 +9,12 @@
         create_time, update_time, is_deleted, creator_id, updater_id
     </sql>
 
-    <!-- 基础表名 -->
-    <sql id="Base_Table">
-        aim_agent_job_type
-    </sql>
-
-    <!-- 基础查询条件（未删除） -->
-    <sql id="Base_Where">
-        WHERE is_deleted = 0
-    </sql>
-
     <!-- 根据编码查询 -->
     <select id="selectByCode" resultType="com.aim.mall.agent.employee.domain.entity.AimJobTypeDO">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM
-        <include refid="Base_Table"/>
-        <include refid="Base_Where"/>
+        FROM aim_agent_job_type
+        WHERE is_deleted = 0
         AND code = #{code}
         LIMIT 1
     </select>
@@ -34,9 +23,8 @@
     <select id="selectPageByKeyword" resultType="com.aim.mall.agent.employee.domain.entity.AimJobTypeDO">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM
-        <include refid="Base_Table"/>
-        <include refid="Base_Where"/>
+        FROM aim_agent_job_type
+        WHERE is_deleted = 0
         <if test="keyword != null and keyword != ''">
             AND (name LIKE CONCAT('%', #{keyword}, '%') OR code LIKE CONCAT('%', #{keyword}, '%'))
         </if>
@@ -47,9 +35,8 @@
     <!-- 统计总数 -->
     <select id="countByKeyword" resultType="java.lang.Long">
         SELECT COUNT(*)
-        FROM
-        <include refid="Base_Table"/>
-        <include refid="Base_Where"/>
+        FROM aim_agent_job_type
+        WHERE is_deleted = 0
         <if test="keyword != null and keyword != ''">
             AND (name LIKE CONCAT('%', #{keyword}, '%') OR code LIKE CONCAT('%', #{keyword}, '%'))
         </if>

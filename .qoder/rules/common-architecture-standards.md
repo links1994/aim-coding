@@ -455,8 +455,7 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderDO> {
 <select id="selectBatchByIds" resultType="com.example.OrderDO">
     SELECT
     <include refid="Base_Column_List"/>
-    FROM
-    <include refid="Base_Table"/>
+    FROM order_table
     WHERE id IN
     <foreach collection="ids" item="id" open="(" separator="," close=")">
         #{id}
@@ -466,6 +465,33 @@ public class OrderService extends ServiceImpl<OrderMapper, OrderDO> {
     )
 </select>
 ```
+
+#### 4.1.1 Mapper XML 表名规范
+
+**禁止抽取表名为公共 SQL 片段**，每个 SQL 语句必须直接写完整表名。
+
+**❌ 错误示例（禁止）**：
+```xml
+<!-- 禁止定义 Base_Table 片段 -->
+<sql id="Base_Table">order_table</sql>
+
+<!-- 禁止引用表名片段 -->
+<select id="selectById" resultType="OrderDO">
+    SELECT * FROM <include refid="Base_Table"/> WHERE id = #{id}
+</select>
+```
+
+**✅ 正确示例**：
+```xml
+<select id="selectById" resultType="OrderDO">
+    SELECT * FROM order_table WHERE id = #{id}
+</select>
+```
+
+**规范说明**：
+- 表名必须直接在 SQL 语句中写完整，提高可读性
+- 禁止定义 `<sql id="Base_Table">` 之类的表名片段
+- 字段列表 `<sql id="Base_Column_List">` 可以继续使用
 
 **非分页查询**：
 

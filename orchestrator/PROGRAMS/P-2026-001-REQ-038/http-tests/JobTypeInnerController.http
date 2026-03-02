@@ -1,6 +1,9 @@
 ### 岗位类型管理 Inner API 测试
-### mall-agent 服务内部接口（供 Feign 调用）
-### 基础URL: {{baseUrl}}/inner/api/v1
+### JobTypeInnerController - mall-agent 服务内部接口（供 Feign 调用）
+
+# 环境变量定义
+@baseUrl = http://localhost:8080
+@token = your-token-here
 
 # ============================================
 # 1. 岗位类型列表查询
@@ -39,7 +42,7 @@ Content-Type: application/json
 # ============================================
 
 ### 2.1 创建销售岗位类型
-# @sql: sql/fixtures/job-type/init.sql
+# @sql: sql/init-schema.sql
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
@@ -197,7 +200,7 @@ Content-Type: application/json
 # ============================================
 
 ### 5.1 删除岗位类型
-# @sql-cleanup: sql/fixtures/job-type/cleanup.sql
+# @sql: sql/init-schema.sql
 DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=3&operatorId=1
 
 ### 5.2 删除岗位类型（ID不存在-预期失败）
