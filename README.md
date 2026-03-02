@@ -19,25 +19,24 @@ aim-coding/
 │   ├── repowiki/                  # 知识库归档目录
 │   ├── rules/                     # 规则文件（规范定义）
 │   │   ├── README-RULES.md        # 规则说明与索引
-│   │   ├── 01-prd-decomposition.md        # Phase 1: 需求拆分规则
-│   │   ├── 02-requirement-clarification.md # Phase 2: 需求澄清规则
-│   │   ├── 03-tech-spec-generation.md     # Phase 3: 技术规格书规则
-│   │   ├── 04-coding-standards.md         # Java 编码规范
-│   │   └── 05-architecture-standards.md   # 架构规范
+│   │   ├── prd-decomposition-standards.md   # 需求拆分规范
+│   │   ├── requirement-clarification-standards.md # 需求澄清规范
+│   │   ├── tech-spec-generation-standards.md     # 技术规格书规范
+│   │   ├── coding-standards.md         # Java 编码规范
+│   │   └── architecture-standards.md   # 架构规范
 │   └── skills/                    # Skill 能力模块
 │       ├── README-SKILLS.md       # Skill 使用指南
-│       ├── api-archiving/         # API 归档 Skill (skill.md)
-│       ├── code-quality-analysis/ # 代码质量分析 Skill (skill.md)
-│       ├── database-schema-archiving/ # 数据库归档 Skill (skill.md)
-│       ├── feature-archiving/     # 功能归档 Skill (skill.md)
-│       ├── http-test-generation/  # HTTP 测试生成 Skill (skill.md)
-│       ├── java-code-generation/  # Java 代码生成 Skill (skill.md)
-│       ├── knowledge-base-query/  # 知识库查询 Skill (skill.md)
-│       ├── pitfalls-archiving/    # 代码陷阱归档 Skill (skill.md)
-│       ├── prd-decomposition/     # 需求分解 Skill (skill.md)
-│       ├── requirement-clarification/ # 需求澄清 Skill (skill.md)
-│       ├── spec-archiving/        # 规格书归档 Skill (skill.md)
-│       └── tech-spec-generation/  # 技术规格生成 Skill (skill.md)
+│       ├── 01-prd-decomposition/  # 需求分解 Skill (Phase 1)
+│       ├── 02-requirement-clarification/ # 需求澄清 Skill (Phase 2)
+│       ├── 03-tech-spec-generation/      # 技术规格生成 Skill (Phase 3)
+│       ├── 04-java-code-generation/      # Java 代码生成 Skill (Phase 4)
+│       ├── 05-http-test-generation/      # HTTP 测试生成 Skill (Phase 5)
+│       ├── 06-code-quality-analysis/     # 代码质量分析 Skill (Phase 6)
+│       ├── 07-feature-archiving/         # 功能归档 Skill (Phase 7)
+│       ├── api-archiving/         # API 归档 Skill
+│       ├── database-schema-archiving/ # 数据库归档 Skill
+│       ├── pitfalls-archiving/    # 代码陷阱归档 Skill
+│       └── knowledge-base-query/  # 知识库查询 Skill
 │
 ├── inputs/                        # 输入文件目录
 │   ├── README-INPUTS.md           # 输入文件说明
@@ -60,14 +59,16 @@ aim-coding/
         │   ├── PROGRAM.md         # 任务定义模板
         │   ├── SCOPE.yml          # 写入范围模板
         │   ├── STATUS.yml         # 状态跟踪模板
-        │   └── workspace/         # 工作文档目录
+        │   ├── workspace/         # 工作文档目录
+        │   ├── artifacts/         # 产出物目录
+        │   └── http-tests/        # HTTP 测试目录
         └── P-2026-001-decomposition/  # 具体 Program 示例
             ├── PROGRAM.md         # 任务定义
             ├── SCOPE.yml          # 写入范围
             ├── STATUS.yml         # 状态跟踪
-            └── workspace/         # 工作文档
-                ├── decomposition.md   # 需求拆分结果
-                └── RESULT.md          # 最终成果
+            ├── workspace/         # 工作文档
+            ├── artifacts/         # 产出物（技术规格书、报告等）
+            └── http-tests/        # HTTP 测试文件
 ```
 
 ---
@@ -83,13 +84,13 @@ PRD → Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → 
 
 | 阶段      | 名称   | 说明                   | 规则文件                                                     | Skill                        |
 |---------|------|----------------------|----------------------------------------------------------|------------------------------|
-| Phase 1 | 需求拆分 | 将 PRD 拆分为可独立实现的子需求   | `01-prd-decomposition.md`                                | `prd-decomposition/`         |
-| Phase 2 | 需求澄清 | 使用 ReAct 模式进行交互式需求澄清 | `02-requirement-clarification.md`                        | `requirement-clarification/` |
-| Phase 3 | 技术规格 | 生成技术规格书              | `03-tech-spec-generation.md`                             | `tech-spec-generation/`      |
-| Phase 4 | 代码生成 | 生成 Java 微服务代码        | `04-coding-standards.md`, `05-architecture-standards.md` | `java-code-generation/`      |
-| Phase 5 | 测试验证 | 生成 HTTP 测试文件         | -                                                        | `http-test-generation/`      |
-| Phase 6 | 代码质量 | 代码质量分析和优化            | -                                                        | `code-quality-analysis/`     |
-| Phase 7 | 功能归档 | 功能归档到知识库             | -                                                        | `feature-archiving/`         |
+| Phase 1 | 需求拆分 | 将 PRD 拆分为可独立实现的子需求   | `prd-decomposition-standards.md`                         | `01-prd-decomposition/`      |
+| Phase 2 | 需求澄清 | 使用 ReAct 模式进行交互式需求澄清 | `requirement-clarification-standards.md`                 | `02-requirement-clarification/` |
+| Phase 3 | 技术规格 | 生成技术规格书              | `tech-spec-generation-standards.md`                      | `03-tech-spec-generation/`   |
+| Phase 4 | 代码生成 | 生成 Java 微服务代码        | `coding-standards.md`, `architecture-standards.md`       | `04-java-code-generation/`   |
+| Phase 5 | 测试验证 | 生成 HTTP 测试文件         | -                                                        | `05-http-test-generation/`   |
+| Phase 6 | 代码质量 | 代码质量分析和优化            | -                                                        | `06-code-quality-analysis/`  |
+| Phase 7 | 功能归档 | 功能归档到知识库             | -                                                        | `07-feature-archiving/`      |
 
 ### 2. Program（开发任务）
 
@@ -253,11 +254,11 @@ AI Coding Agent 的工作指导文件，包含：
 
 | 文件                                | 说明                          |
 |-----------------------------------|-----------------------------|
-| `01-prd-decomposition.md`         | 需求拆分规范：服务归属规则、REQ 编号规则、依赖分析 |
-| `02-requirement-clarification.md` | 需求澄清规范：问题优先级、ADR 格式、确认流程    |
-| `03-tech-spec-generation.md`      | 技术规格规范：规格书结构、错误码规范、接口定义     |
-| `04-coding-standards.md`          | Java 编码规范：命名规范、注释规范、代码风格    |
-| `05-architecture-standards.md`    | 架构规范：分层架构、服务职责、数据库设计        |
+| `prd-decomposition-standards.md`         | 需求拆分规范：服务归属规则、REQ 编号规则、依赖分析 |
+| `requirement-clarification-standards.md` | 需求澄清规范：问题优先级、ADR 格式、确认流程    |
+| `tech-spec-generation-standards.md`      | 技术规格规范：规格书结构、错误码规范、接口定义     |
+| `coding-standards.md`          | Java 编码规范：命名规范、注释规范、代码风格    |
+| `architecture-standards.md`    | 架构规范：分层架构、服务职责、数据库设计        |
 
 #### skills/ 能力模块
 
@@ -265,16 +266,15 @@ AI Coding Agent 的工作指导文件，包含：
 
 | Skill                        | 说明                         |
 |------------------------------|----------------------------|
-| `prd-decomposition/`         | 需求分解：将 PRD 拆分为 REQ         |
-| `requirement-clarification/` | 需求澄清：交互式确认需求               |
-| `tech-spec-generation/`      | 技术规格生成：生成技术规格书             |
-| `java-code-generation/`      | Java 代码生成：生成微服务代码          |
-| `http-test-generation/`      | HTTP 测试生成：生成接口测试           |
-| `code-quality-analysis/`     | 代码质量分析：优化代码质量              |
-| `feature-archiving/`         | 功能归档：功能归档到知识库（Phase 7）     |
+| `01-prd-decomposition/`      | 需求分解：将 PRD 拆分为 REQ (Phase 1)  |
+| `02-requirement-clarification/` | 需求澄清：交互式确认需求 (Phase 2)      |
+| `03-tech-spec-generation/`   | 技术规格生成：生成技术规格书 (Phase 3)   |
+| `04-java-code-generation/`   | Java 代码生成：生成微服务代码 (Phase 4)  |
+| `05-http-test-generation/`   | HTTP 测试生成：生成接口测试 (Phase 5)    |
+| `06-code-quality-analysis/`  | 代码质量分析：优化代码质量 (Phase 6)     |
+| `07-feature-archiving/`      | 功能归档：功能归档到知识库 (Phase 7)     |
 | `api-archiving/`             | API 归档：归档 API 定义到 repowiki |
 | `database-schema-archiving/` | 数据库归档：归档数据库表结构到 repowiki   |
-| `spec-archiving/`            | 规格书归档：归档技术规格书到 repowiki    |
 | `pitfalls-archiving/`        | 陷阱归档：归档代码陷阱和反模式到 repowiki  |
 | `knowledge-base-query/`      | 知识库查询：查询历史功能               |
 
@@ -414,13 +414,13 @@ mall-agent  →  mall-user
 
 Agent 的上下文窗口有限，以下机制保证跨会话零信息损失：
 
-| 文件              | 时机          | 内容        |
-|-----------------|-------------|-----------|
-| `STATUS.yml`    | 持续更新        | 阶段进度、任务状态 |
-| `plan.md`       | task 执行前    | 当前执行计划    |
-| `HANDOFF.md`    | 会话结束未完成时    | 交接信息      |
-| `CHECKPOINT.md` | 上下文紧张时      | 状态快照      |
-| `RESULT.md`     | Program 完成时 | 最终成果总结    |
+| 文件                  | 时机          | 内容        |
+|---------------------|-------------|-----------|
+| `STATUS.yml`        | 持续更新        | 阶段进度、任务状态 |
+| `HANDOFF.md`        | 会话结束未完成时    | 交接信息      |
+| `CHECKPOINT.md`     | 上下文紧张时      | 状态快照      |
+| `RESULT.md`         | Program 完成时 | 最终成果总结    |
+| `artifacts/`        | 任务执行过程中     | 生成的产出物目录 |
 
 ---
 
@@ -438,7 +438,7 @@ Agent 的上下文窗口有限，以下机制保证跨会话零信息损失：
 
 ### 新增规则
 
-1. 在 `.qoder/rules/` 目录创建 `{序号}-{name}.md`
+1. 在 `.qoder/rules/` 目录创建 `{name}-standards.md`
 2. 添加 YAML frontmatter
 3. 更新 `rules/README-RULES.md`
 4. 更新 `README-QODER.md`

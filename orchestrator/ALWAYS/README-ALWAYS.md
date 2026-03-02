@@ -52,7 +52,7 @@ Agent 启动
 - 工作节奏
 
 **注意**：CORE.md 只包含流程控制，不包含编码规范。
-编码规范在 `.qoder/rules/04-coding-standards.md` 中定义。
+编码规范在 `.qoder/rules/coding-standards.md` 中定义。
 
 ### DEV-FLOW.md
 

@@ -29,9 +29,9 @@ tasks:
 
 # 产出物跟踪（由流程控制动态更新）
 artifacts:
-  - path: workspace/plan.md
+  - path: artifacts/
     status: pending
-    desc: 执行计划
-  - path: workspace/RESULT.md
+    desc: 产出物目录（技术规格书、代码生成报告、质量报告等）
+  - path: http-tests/
     status: pending
-    desc: 完成总结
+    desc: HTTP 测试文件和 SQL 初始化脚本

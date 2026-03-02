@@ -16,16 +16,23 @@ alwaysApply: false
 
 | 文件 | 阶段 | 说明 | 内容 |
 |------|------|------|------|
-| `01-prd-decomposition.md` | Phase 1 | 需求拆分规范 | 服务归属规则、输出格式标准 |
-| `02-requirement-clarification.md` | Phase 2 | 需求澄清规范 | 问题优先级、ADR格式标准 |
-| `03-tech-spec-generation.md` | Phase 3 | 技术规格规范 | 规格书结构、错误码规范 |
+| `prd-decomposition-standards.md` | Phase 1 | 需求拆分规范 | 服务归属规则、输出格式标准 |
+| `requirement-clarification-standards.md` | Phase 2 | 需求澄清规范 | 问题优先级、ADR格式标准 |
+| `tech-spec-generation-standards.md` | Phase 3 | 技术规格规范 | 规格书结构、错误码规范 |
 
 ### 编码与架构规范
 
 | 文件 | 说明 |
 |------|------|
-| `04-coding-standards.md` | Java 编码规范、命名规范、注释规范等 |
-| `05-architecture-standards.md` | 分层架构、服务职责、接口风格、数据库设计规范等 |
+| `coding-standards.md` | Java 编码规范、命名规范、注释规范等 |
+| `architecture-standards.md` | 分层架构、服务职责、接口风格、数据库设计规范等 |
+
+### 通用规范
+
+| 文件 | 说明 |
+|------|------|
+| `common-result-standards.md` | 统一响应格式 CommonResult 规范 |
+| `operator-id-standards.md` | 操作人 ID 传递规范 |
 
 ---
 

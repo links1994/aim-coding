@@ -23,7 +23,9 @@ orchestrator/
 │       ├── PROGRAM.md         # 任务定义
 │       ├── STATUS.yml         # 状态跟踪
 │       ├── SCOPE.yml          # 写入范围
-│       └── workspace/         # 工作文档
+│       ├── workspace/         # 工作文档
+│       ├── artifacts/         # 产出物（技术规格书、代码生成报告等）
+│       └── http-tests/        # HTTP 测试文件和 SQL 脚本
 │
 └── README-ORCHESTRATOR.md     # 本文件
 ```
@@ -39,7 +41,9 @@ orchestrator/
 - **PROGRAM.md**：任务定义（目标、背景、方案、验收标准）
 - **STATUS.yml**：当前状态和进度
 - **SCOPE.yml**：写入范围控制
-- **workspace/**：工作文档（产出物、报告等）
+- **workspace/**：工作文档（中间文档、草稿等）
+- **artifacts/**：产出物（技术规格书、代码生成报告、质量报告等）
+- **http-tests/**：HTTP 测试文件和 SQL 初始化脚本
 
 ### ALWAYS 目录
 

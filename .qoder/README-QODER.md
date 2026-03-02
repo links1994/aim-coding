@@ -11,18 +11,31 @@
 ├── README-QODER.md                    # 本文件
 ├── rules/                             # 规则文件
 │   ├── README-RULES.md                # 规则说明与索引
-│   ├── 01-prd-decomposition.md        # Phase 1: 需求拆分规则
-│   ├── 02-requirement-clarification.md # Phase 2: 需求澄清规则
-│   ├── 03-tech-spec-generation.md     # Phase 3: 技术规格书规则
-│   ├── 04-coding-standards.md         # 编码规范
-│   └── 05-architecture-standards.md   # 架构规范
-├── agents/                            # Agent 定义（当前不使用）
-│   └── README-AGENTS.md               # Agent 说明
+│   ├── prd-decomposition-standards.md       # 需求拆分规范
+│   ├── requirement-clarification-standards.md # 需求澄清规范
+│   ├── tech-spec-generation-standards.md    # 技术规格书规范
+│   ├── coding-standards.md            # 编码规范
+│   ├── architecture-standards.md      # 架构规范
+│   ├── common-result-standards.md     # 响应格式规范
+│   └── operator-id-standards.md       # 操作人ID传递规范
+├── repowiki/                          # 知识库归档
+│   ├── features/                      # 功能归档
+│   ├── schemas/                       # 数据库表结构归档
+│   ├── apis/                          # API 归档
+│   └── pitfalls/                      # 代码陷阱归档
 └── skills/                            # Skill 能力模块
     ├── README-SKILLS.md               # Skill 使用指南
-    ├── java-code-generation/skill.md  # Java 代码生成
-    ├── http-test-generation/skill.md  # HTTP 测试生成
-    └── code-quality-analysis/skill.md # 代码质量分析
+    ├── 01-prd-decomposition/SKILL.md  # 需求分解 (Phase 1)
+    ├── 02-requirement-clarification/SKILL.md # 需求澄清 (Phase 2)
+    ├── 03-tech-spec-generation/SKILL.md # 技术规格生成 (Phase 3)
+    ├── 04-java-code-generation/SKILL.md # Java 代码生成 (Phase 4)
+    ├── 05-http-test-generation/SKILL.md # HTTP 测试生成 (Phase 5)
+    ├── 06-code-quality-analysis/SKILL.md # 代码质量分析 (Phase 6)
+    ├── 07-feature-archiving/SKILL.md  # 功能归档 (Phase 7)
+    ├── api-archiving/SKILL.md         # API 归档
+    ├── database-schema-archiving/SKILL.md # 数据库归档
+    ├── pitfalls-archiving/SKILL.md    # 陷阱归档
+    └── knowledge-base-query/SKILL.md  # 知识库查询
 ```
 
 ---
@@ -33,18 +46,25 @@
 
 ### 阶段规则（Spec 模式）
 
-| 文件                                | 阶段      | 说明              |
-|-----------------------------------|---------|-----------------|
-| `01-prd-decomposition.md`         | Phase 1 | PRD 需求拆分与依赖分析规范 |
-| `02-requirement-clarification.md` | Phase 2 | 需求澄清与确认规范       |
-| `03-tech-spec-generation.md`      | Phase 3 | 技术规格书生成规范       |
+| 文件                                       | 阶段      | 说明              |
+|------------------------------------------|---------|-----------------|
+| `prd-decomposition-standards.md`         | Phase 1 | PRD 需求拆分与依赖分析规范 |
+| `requirement-clarification-standards.md` | Phase 2 | 需求澄清与确认规范       |
+| `tech-spec-generation-standards.md`      | Phase 3 | 技术规格书生成规范       |
 
 ### 编码与架构规范
 
-| 文件                             | 说明                      |
-|--------------------------------|-------------------------|
-| `04-coding-standards.md`       | Java 编码规范、命名规范、注释规范等    |
-| `05-architecture-standards.md` | 分层架构、服务职责、接口风格、数据库设计规范等 |
+| 文件                           | 说明                      |
+|------------------------------|-------------------------|
+| `coding-standards.md`        | Java 编码规范、命名规范、注释规范等    |
+| `architecture-standards.md`  | 分层架构、服务职责、接口风格、数据库设计规范等 |
+
+### 通用规范
+
+| 文件                        | 说明                      |
+|---------------------------|-------------------------|
+| `common-result-standards.md` | 统一响应格式 CommonResult 规范 |
+| `operator-id-standards.md`   | 操作人 ID 传递规范 |
 
 ---
 
@@ -52,12 +72,19 @@
 
 Skills 是可复用的能力模块，定义了"具体怎么做"：
 
-| Skill     | 文件                           | 说明                        | 使用时机    |
-|-----------|------------------------------|---------------------------|---------|
-| Java 代码生成 | `java-code-generation/skill.md`  | 根据技术规格书生成 Java 微服务代码      | Phase 4 |
-| HTTP 测试生成 | `http-test-generation/skill.md`  | 为 Controller 生成 HTTP 测试文件 | Phase 5 |
-| 代码质量分析    | `code-quality-analysis/skill.md` | 对生成的代码进行质量分析和优化           | Phase 6 |
-| 功能归档      | `feature-archiving/skill.md`     | 功能归档到 repowiki 知识库            | Phase 7 |
+| Skill     | 文件                                  | 说明                        | 使用时机    |
+|-----------|-------------------------------------|---------------------------|---------|
+| 需求分解      | `01-prd-decomposition/SKILL.md`     | 根据 PRD 进行需求拆解            | Phase 1 |
+| 需求澄清      | `02-requirement-clarification/SKILL.md` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 |
+| 技术规格生成    | `03-tech-spec-generation/SKILL.md`  | 生成技术规格书                   | Phase 3 |
+| Java 代码生成 | `04-java-code-generation/SKILL.md`  | 根据技术规格书生成 Java 微服务代码      | Phase 4 |
+| HTTP 测试生成 | `05-http-test-generation/SKILL.md`  | 为 Controller 生成 HTTP 测试文件 | Phase 5 |
+| 代码质量分析    | `06-code-quality-analysis/SKILL.md` | 对生成的代码进行质量分析和优化           | Phase 6 |
+| 功能归档      | `07-feature-archiving/SKILL.md`     | 功能归档到 repowiki 知识库            | Phase 7 |
+| API 归档     | `api-archiving/SKILL.md`            | 归档 API 定义到 repowiki           | 按需      |
+| 数据库归档     | `database-schema-archiving/SKILL.md` | 归档数据库表结构到 repowiki          | 按需      |
+| 陷阱归档      | `pitfalls-archiving/SKILL.md`       | 归档代码陷阱和反模式到 repowiki        | 按需      |
+| 知识库查询     | `knowledge-base-query/SKILL.md`     | 查询 repowiki 知识库              | 按需      |
 
 ---
 
@@ -80,19 +107,19 @@ Skills 是可复用的能力模块，定义了"具体怎么做"：
 ## 工作流程
 
 ```
-PRD → Phase 1: 需求拆分 (01-prd-decomposition.md)
+PRD → Phase 1: 需求拆分 (prd-decomposition-standards.md)
   ↓
-Phase 2: 需求澄清 (02-requirement-clarification.md)
+Phase 2: 需求澄清 (requirement-clarification-standards.md)
   ↓
-Phase 3: 技术规格书 (03-tech-spec-generation.md + 05-architecture-standards.md)
+Phase 3: 技术规格书 (tech-spec-generation-standards.md + architecture-standards.md)
   ↓
-Phase 4: 代码生成 (java-code-generation/skill.md + 04-coding-standards.md)
+Phase 4: 代码生成 (04-java-code-generation/SKILL.md + coding-standards.md)
   ↓
-Phase 5: HTTP 测试生成 (http-test-generation/skill.md)
+Phase 5: HTTP 测试生成 (05-http-test-generation/SKILL.md)
   ↓
-Phase 6: 代码质量优化 (code-quality-analysis/skill.md)
+Phase 6: 代码质量优化 (06-code-quality-analysis/SKILL.md)
   ↓
-Phase 7: 功能归档 (feature-archiving/skill.md)
+Phase 7: 功能归档 (07-feature-archiving/SKILL.md)
 ```
 
 ---
@@ -109,14 +136,14 @@ Phase 7: 功能归档 (feature-archiving/skill.md)
 
 ### 新增规则
 
-1. 在 `rules/` 目录创建 `{序号}-{name}.md`
+1. 在 `rules/` 目录创建 `{name}-standards.md`
 2. 添加 YAML frontmatter
 3. 更新 `rules/README-RULES.md`
 4. 更新本文件
 
 ### 新增 Skill
 
-1. 在 `skills/` 目录创建 `{name}/skill.md`
+1. 在 `skills/` 目录创建 `{name}/SKILL.md`（流程中的 skill 使用 `01-xxx` 前缀）
 2. 遵循 Skill 文件格式
 3. 更新 `skills/README-SKILLS.md`
 4. 更新本文件

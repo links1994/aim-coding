@@ -399,8 +399,8 @@ public class AgentController {
 
 ### 依赖规范
 
-- [Java 编码规范](./04-coding-standards.md) - 详细编码规范
-- [架构规范](./05-architecture-standards.md) - 系统架构规范
+- [Java 编码规范](./coding-standards.md) - 详细编码规范
+- [架构规范](./architecture-standards.md) - 系统架构规范
 
 ### 引用规范
 
@@ -436,7 +436,7 @@ public class AgentController {
 ### 参考资料
 
 - [mall-common/CommonResult.java](../../repos/mall-common/src/main/java/com/aim/mall/common/api/CommonResult.java) - 源代码
-- [Java 编码规范](./04-coding-standards.md) - 项目编码规范
+- [Java 编码规范](./coding-standards.md) - 项目编码规范
 
 ### 规范维护
 

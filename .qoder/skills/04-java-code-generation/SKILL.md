@@ -8,8 +8,8 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 基于技术规格书生成符合项目规范的 Java 微服务代码。
 
 > **强制规范**：此 Skill 生成的代码必须严格遵循以下规范（按优先级排序）：
-> 1. **编码规范**：`.qoder/rules/04-coding-standards.md` - 命名约定、响应格式、异常处理等
-> 2. **架构规范**：`.qoder/rules/05-architecture-standards.md` - 分层架构、服务职责、接口风格等
+> 1. **编码规范**：`.qoder/rules/coding-standards.md` - 命名约定、响应格式、异常处理等
+> 2. **架构规范**：`.qoder/rules/architecture-standards.md` - 分层架构、服务职责、接口风格等
 >
 > **生成代码前必须先读取上述规范文件**，确保代码符合项目标准。
 
@@ -29,8 +29,8 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 - `orchestrator/PROGRAMS/{program_id}/workspace/openapi.yaml` — API 定义
 - `orchestrator/ALWAYS/RESOURCE-MAP.yml` — 项目资源映射
 - `orchestrator/PROGRAMS/{program_id}/SCOPE.yml` — 写入范围控制
-- `.qoder/rules/04-coding-standards.md` — 编码规范
-- `.qoder/rules/05-architecture-standards.md` — 架构规范
+- `.qoder/rules/coding-standards.md` — 编码规范
+- `.qoder/rules/architecture-standards.md` — 架构规范
 
 ---
 
@@ -100,7 +100,7 @@ mall-agent/src/main/java/com/aim/mall/
 │   ├── controller/      # 接口层
 │   │   └── inner/       # 内部接口（用于 Feign 调用）
 │   ├── service/         # 应用层
-│   │   ├── XxxDomainService.java    # 业务域服务（业务编排）
+│   │   ├── XxxApplicationService.java    # 应用服务（业务编排）
 │   │   ├── XxxQueryService.java     # 查询服务（只读）
 │   │   ├── XxxManageService.java    # 管理服务（增删改）
 │   │   └── mp/                      # MyBatis-Plus 数据服务
@@ -313,7 +313,7 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 public CommonResult<CommonResult.PageData<OrderResponse>> pageOrder(
         @RequestParam(defaultValue = "1") Integer pageNum,
         @RequestParam(defaultValue = "20") Integer pageSize) {
-    return orderDomainService.pageOrder(pageNum, pageSize);
+    return orderApplicationService.pageOrder(pageNum, pageSize);
 }
 
 // OrderQueryService
@@ -384,7 +384,7 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 
 ## 代码模板
 
-代码模板统一维护在：`.qoder/skills/java-code-generation/SKILL.md`（此文件包含代码模板）
+代码模板统一维护在：`.qoder/skills/04-java-code-generation/SKILL.md`（此文件包含代码模板）
 
 模板包括：
 

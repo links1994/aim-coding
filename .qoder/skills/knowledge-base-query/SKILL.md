@@ -549,11 +549,11 @@ Agent：
 
 ## 相关文档
 
-- **功能归档 Skill**：`.qoder/skills/feature-archiving/skill.md`
-- **陷阱归档 Skill**：`.qoder/skills/pitfalls-archiving/skill.md`
-- **规格书归档 Skill**：`.qoder/skills/spec-archiving/skill.md`
-- **数据库归档 Skill**：`.qoder/skills/database-schema-archiving/skill.md`
-- **API 归档 Skill**：`.qoder/skills/api-archiving/skill.md`
-- **需求澄清 Skill**：`.qoder/skills/requirement-clarification/skill.md`
-- **技术规格书生成 Skill**：`.qoder/skills/tech-spec-generation/skill.md`
-- **代码生成 Skill**：`.qoder/skills/java-code-generation/skill.md`
+- **功能归档 Skill**：`.qoder/skills/07-feature-archiving/SKILL.md`
+- **陷阱归档 Skill**：`.qoder/skills/pitfalls-archiving/SKILL.md`
+- **规格书归档 Skill**：`.qoder/skills/spec-archiving/SKILL.md`
+- **数据库归档 Skill**：`.qoder/skills/database-schema-archiving/SKILL.md`
+- **API 归档 Skill**：`.qoder/skills/api-archiving/SKILL.md`
+- **需求澄清 Skill**：`.qoder/skills/02-requirement-clarification/SKILL.md`
+- **技术规格书生成 Skill**：`.qoder/skills/03-tech-spec-generation/SKILL.md`
+- **代码生成 Skill**：`.qoder/skills/04-java-code-generation/SKILL.md`

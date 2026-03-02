@@ -358,8 +358,8 @@ Service 层
 
 ### 依赖规范
 
-- [Java 编码规范](./04-coding-standards.md) - 详细编码规范
-- [架构规范](./05-architecture-standards.md) - 系统架构规范
+- [Java 编码规范](./coding-standards.md) - 详细编码规范
+- [架构规范](./architecture-standards.md) - 系统架构规范
 - [CommonResult 响应格式规范](./common-result-spec.md) - 响应格式规范
 
 ### 引用代码

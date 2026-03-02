@@ -37,8 +37,8 @@ description: 架构规范
 
 | 层级             | 服务类型  | 命名规范                              | 职责                                | 调用规则                                       |
 |----------------|-------|-----------------------------------|-----------------------------------|--------------------------------------------|
-| **Controller** | 控制器   | `XxxController`                   | 接收请求，参数校验，调用业务域服务                 | 只能调用 XxxDomainService / XxxService         |
-| **Domain**     | 业务域服务 | `XxxDomainService` / `XxxService` | 业务编排，协调查询和管理服务                    | 可调用 QueryService、ManageService             |
+| **Controller** | 控制器   | `XxxController`                   | 接收请求，参数校验，调用应用服务                 | 只能调用 XxxApplicationService / XxxService         |
+| **Application**| 应用服务 | `XxxApplicationService` / `XxxService` | 业务编排，协调查询和管理服务                    | 可调用 QueryService、ManageService             |
 | **Query**      | 查询服务  | `XxxQueryService`                 | 只读查询，封装查询逻辑                       | **只能调用 AimXxxService**，禁止直接调用 AimXxxMapper |
 | **Manage**     | 管理服务  | `XxxManageService`                | 增删改操作，封装写逻辑                       | **只能调用 AimXxxService**，禁止直接调用 AimXxxMapper |
 | **Data**       | 数据服务  | `AimXxxService`                   | 继承 MyBatis-Plus IService，封装所有数据访问 | 可调用 AimXxxMapper 进行原生查询                    |
@@ -49,7 +49,7 @@ description: 架构规范
 ```
 Controller
     ↓
-XxxDomainService
+XxxApplicationService
     ↓
     ├── XxxQueryService ──→ AimXxxService ──→ AimXxxMapper (如需原生SQL)
     ↓
@@ -67,7 +67,7 @@ XxxDomainService
 | 模块类型         | 路径前缀             | 说明           |
 |--------------|------------------|--------------|
 | **门面模块-管理端** | `/admin/api/v1/` | 供管理后台调用      |
-| **门面模块-客户端** | `/app/api/v1/`   | 供 APP/商家端调用  |
+| **门面模块-客户端** | `/app/api/v1/`   | 供 APP 端调用    |
 | **服务模块**     | `/inner/api/v1/` | 供其他服务 RPC 调用 |
 
 ---
@@ -95,25 +95,63 @@ XxxDomainService
         │ (智能员工)   │            │
         └─────────────┘            │
                ↓                   │
-        ┌─────────────┐            │
-        │  mall-user  │  ← 支撑服务层
-        │  (用户服务)  │            │
-        └─────────────┘            │
-               ↑                   │
-               └───────────────────┘
+        ┌─────────────┬─────────────┐
+        │  mall-user  │ mall-product│  ← 基础业务数据服务层
+        │  (用户服务)  │ (基础商品)   │     禁止调用其他业务服务
+        └─────────────┴─────────────┘
+               ↓                   ↓
+        ┌─────────────┐
+        │  base-data  │  ← 基础配置服务层（最底层）
+        │ (配置/字典)  │     仅提供基础配置数据
+        └─────────────┘
 ```
 
 ### 2.2 服务调用规则
 
+#### 2.2.1 基础调用规则
+
 | 调用方                                 | 可调用       | 禁止调用      |
 |-------------------------------------|-----------|-----------|
-| 门面服务（mall-admin/mall-app/mall-chat） | 应用服务、支撑服务 | -         |
-| 应用服务（mall-agent）                    | 支撑服务      | 门面服务      |
-| 支撑服务（mall-user）                     | -         | 门面服务、应用服务 |
+| 门面服务（mall-admin/mall-app/mall-chat） | 应用服务、基础业务服务 | -         |
+| 应用服务（mall-agent）                   | 基础业务服务  | 门面服务      |
+| 基础业务服务（mall-user/mall-product）    | 基础配置服务  | 门面服务、应用服务、其他基础业务服务 |
+| 基础配置服务（base-data）                | -         | 门面服务、应用服务、基础业务服务 |
 
 **特殊说明**：mall-chat 作为 AI 对话门面服务，可直接调用大模型 API，同时可调用 mall-agent 获取配置信息。
 
 **所有跨服务调用必须通过 OpenFeign 实现。**
+
+#### 2.2.2 远程服务调用位置选择
+
+远程服务调用可以在以下两个位置进行，根据依赖强度选择：
+
+| 调用位置 | 适用场景 | 说明 |
+|---------|---------|------|
+| **门面服务（mall-admin/mall-app）** | 弱依赖、数据组装 | 仅用于聚合多个应用服务的数据，组装 VO 返回给前端。被调用服务故障时应有降级处理。 |
+| **应用服务 ApplicationService** | 强依赖 | 业务逻辑必需的服务调用，被调用服务故障会导致当前功能不可用。 |
+
+**调用位置决策流程：**
+
+```
+是否需要调用远程服务？
+    ↓
+是否是业务逻辑强依赖？（缺少该数据功能无法完成）
+    ├─ 是 → 在 ApplicationService 中调用
+    ↓
+    └─ 否 → 仅用于数据组装/增强？
+        ├─ 是 → 在门面服务中调用，组装 VO
+        ↓
+        └─ 否 → 重新评估是否需要调用
+```
+
+**示例场景：**
+
+| 场景 | 调用位置 | 说明 |
+|------|---------|------|
+| 订单详情需要商品基础信息 | ApplicationService | 强依赖，无商品信息订单不完整 |
+| 订单列表需要显示商品缩略图 | 门面服务 | 弱依赖，图片加载失败仍可显示订单 |
+| 智能员工详情需要用户信息 | ApplicationService | 强依赖，需要用户信息进行权限判断 |
+| 仪表盘统计需要聚合多服务数据 | 门面服务 | 纯数据组装，各服务数据独立展示 |
 
 ### 2.3 服务调用关系图
 
@@ -125,14 +163,78 @@ graph TD
     B --> I[mall-chat 门面]
     C --> E[mall-agent 服务]
     C --> F[mall-user 服务]
+    C --> K[mall-product 服务]
     D --> E
     D --> F
+    D --> K
     I --> E
     I --> J[(大模型 API)]
     E --> F
+    E --> K
     E --> G[(agent DB)]
     F --> H[(user DB)]
+    F --> M[base-data 服务]
+    K --> L[(product DB)]
+    K --> M
+    M --> N[(config DB)]
 ```
+
+### 2.4 基础业务数据服务特殊限制
+
+**mall-product**（基础商品服务）和 **mall-user**（基础用户服务）同属于基础业务数据服务层，处于架构底层，有以下特殊限制：
+
+#### 2.4.1 禁止调用范围
+
+| 禁止调用 | 说明 | 例外情况 |
+|---------|------|---------|
+| 门面服务 | 禁止调用 mall-admin/mall-app/mall-chat | 无 |
+| 应用服务 | 禁止调用 mall-agent 等应用服务 | 无 |
+| 其他基础业务服务 | mall-product 禁止调用 mall-user，反之亦然 | 无 |
+| 基础配置服务以外的服务 | - | 无 |
+
+#### 2.4.2 允许的调用
+
+| 允许调用 | 说明 | 示例 |
+|---------|------|------|
+| 基础配置服务（base-data） | 获取系统配置、字典数据等 | 配置中心、字典服务 |
+| 基础设施 | 缓存、消息队列、文件存储等 | Redis、OSS、MQ |
+
+#### 2.4.3 设计原则
+
+**为什么基础业务数据服务不能调用其他业务服务？**
+
+1. **职责单一**：基础业务服务只提供基础数据查询，不包含业务逻辑
+2. **避免循环依赖**：防止基础服务之间相互调用形成循环依赖
+3. **稳定性保障**：基础服务被大量上层服务依赖，应保持最小依赖
+4. **数据一致性**：基础数据是业务的核心，不应受其他业务逻辑影响
+5. **服务平等**：mall-product 和 mall-user 是平级关系，互不依赖
+
+**正确的数据流向：**
+
+```
+应用服务（mall-agent）→ mall-product（查询商品数据）
+                    → mall-user（查询用户数据）
+                           ↓
+              商品数据 + 用户数据
+                           ↓
+              在应用层组装业务数据
+```
+
+**错误的数据流向：**
+
+```
+mall-product → 调用 mall-user 获取用户信息 → 再返回商品数据  ❌
+mall-user → 调用 mall-product 获取商品信息 → 再返回用户数据  ❌
+```
+
+#### 2.4.4 违规场景示例
+
+| 违规场景 | 问题 | 正确做法 |
+|---------|------|---------|
+| 查询商品时调用用户服务获取商家信息 | mall-product 调用 mall-user | 在 mall-agent 中分别查询商品和商家信息，再组装 |
+| 查询用户时调用商品服务获取收藏商品 | mall-user 调用 mall-product | 在 mall-agent 中分别查询用户和收藏商品，再组装 |
+| 查询商品时调用订单服务获取销量 | mall-product 调用 mall-agent | 在 mall-agent 中查询商品，再查询订单统计 |
+| 商品详情包含推荐商品 | mall-product 内部处理推荐逻辑 | 在 mall-app 中查询商品详情，再调用推荐服务 |
 
 ---
 
@@ -609,7 +711,7 @@ mall-agent/                              # 被调用服务
 │   │   │   └── inner/
 │   │   │       └── JobTypeInnerController.java   # 实现 API 接口
 │   │   ├── service/
-│   │   │   ├── JobTypeDomainService.java
+│   │   │   ├── JobTypeApplicationService.java
 │   │   │   ├── JobTypeQueryService.java
 │   │   │   ├── JobTypeManageService.java
 │   │   │   └── mp/
@@ -738,9 +840,13 @@ mall-admin/src/main/java/com/aim/mall/
 - **参数传递灵活**：GET 请求可使用多个 `@RequestParam`，POST 请求使用 `@RequestBody`
 - **无 Service 层**：Controller 直接调用 Feign 客户端
 
-### 6.2 应用服务/支撑服务（mall-agent/mall-user）
+### 6.2 应用服务/基础业务服务（mall-agent/mall-product/mall-user）
 
-应用服务（Application Service）是后端内部服务，通过 Feign 供门面服务调用，**不直接面向前端**。
+应用服务（Application Service）和基础业务数据服务是后端内部服务，通过 Feign 供门面服务调用，**不直接面向前端**。
+
+**服务类型区分**：
+- **应用服务（mall-agent）**：包含业务逻辑编排，可调用基础业务服务
+- **基础业务服务（mall-product/mall-user）**：提供基础数据查询，可被应用服务和门面服务调用
 
 ```
 mall-agent/src/main/java/com/aim/mall/
@@ -750,7 +856,7 @@ mall-agent/src/main/java/com/aim/mall/
 │   │   └── inner/
 │   │       └── AgentInnerController.java # 内部 Feign 接口
 │   ├── service/
-│   │   ├── AgentDomainService.java      # 业务域服务（业务编排）
+│   │   ├── AgentApplicationService.java      # 应用服务（业务编排）
 │   │   ├── AgentQueryService.java       # 查询服务（只读）
 │   │   ├── AgentManageService.java      # 管理服务（增删改）
 │   │   └── mp/                          # MyBatis-Plus 数据服务
@@ -783,7 +889,7 @@ mall-agent/src/main/java/com/aim/mall/
 - **不直接面向前端**：仅供内部服务间调用，路径前缀 `/inner/api/v1/`
 - **参数封装严格**：只有当请求参数 ≤2 个且为基础类型时，才使用 `@RequestParam`；否则一律使用 `@RequestBody` 封装
 - **无 VO 概念**：直接返回 Response，不包装 VO
-- **五层架构**：Controller → DomainService → Query/Manage Service → AimXxxService → AimXxxMapper
+- **五层架构**：Controller → ApplicationService → Query/Manage Service → AimXxxService → AimXxxMapper
 - **InnerController 职责**：参数转换（Query/DTO），直接转发 Service 结果
 - **Response 复用**：供 Feign 调用方（门面服务）复用
 - **SQL 规范**：SQL 统一放在 XML 中，禁止在 Mapper 注解中写复杂 SQL
@@ -798,11 +904,12 @@ mall-agent/src/main/java/com/aim/mall/
 
 ### 8.1 术语定义
 
-| 术语       | 英文                  | 定义                                        | 调用方         |
-|----------|---------------------|-------------------------------------------|-------------|
-| **门面服务** | Facade Service      | 直接面向前端（浏览器/APP）的服务，接收 HTTP 请求，可聚合多个应用服务数据 | 前端应用        |
-| **应用服务** | Application Service | 后端内部服务，通过 Feign 供门面服务或其他应用服务调用            | 门面服务、其他应用服务 |
-| **支撑服务** | Support Service     | 提供基础能力（如用户服务）的应用服务                        | 应用服务        |
+| 术语           | 英文                      | 定义                                        | 调用方         |
+|--------------|-------------------------|-------------------------------------------|-------------|
+| **门面服务**     | Facade Service          | 直接面向前端（浏览器/APP）的服务，接收 HTTP 请求，可聚合多个服务数据 | 前端应用        |
+| **应用服务**     | Application Service     | 包含业务逻辑编排的后端服务，通过 Feign 供门面服务调用         | 门面服务        |
+| **基础业务服务**  | Base Business Service   | 提供基础业务数据查询的后端服务（如商品、用户数据）              | 门面服务、应用服务 |
+| **基础配置服务**  | Base Config Service     | 提供系统配置、字典等基础数据的服务（base-data）               | 所有服务        |
 
 ### 8.2 核心差异对比
 
@@ -814,6 +921,7 @@ mall-agent/src/main/java/com/aim/mall/
 | **返回类型**     | Response 或 VO（可聚合多个Response）            | 仅 Response（不包装VO）                       |
 | **Service层** | 无，直接调用Feign                             | 有，包含业务逻辑+DO转Response                    |
 | **VO使用**     | ✅ 允许（聚合多个Response）                      | ❌ 禁止                                    |
+| **远程服务调用** | ✅ 允许（弱依赖、数据组装场景）                    | ✅ 允许（强依赖场景）                           |
 
 ### 8.3 参数传递规则详解
 
@@ -921,6 +1029,114 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 }
 ```
 
+### 8.5 远程服务调用场景对比
+
+#### 门面服务调用场景（弱依赖）
+
+**适用场景**：数据组装、聚合查询、非核心功能增强
+
+```java
+@RestController
+@RequestMapping("/admin/api/v1/dashboard")
+public class DashboardController {
+
+    private final AgentFeignClient agentFeignClient;
+    private final UserFeignClient userFeignClient;
+    private final OrderFeignClient orderFeignClient;
+
+    /**
+     * 仪表盘统计 - 弱依赖场景
+     * 各服务数据独立展示，某个服务故障不影响其他数据显示
+     */
+    @GetMapping("/stats")
+    public CommonResult<DashboardVO> getDashboardStats() {
+        DashboardVO vo = new DashboardVO();
+        
+        // 调用多个服务聚合数据
+        try {
+            vo.setAgentCount(agentFeignClient.count().getData());
+        } catch (Exception e) {
+            // 降级处理：记录日志，使用默认值
+            vo.setAgentCount(0);
+        }
+        
+        try {
+            vo.setUserCount(userFeignClient.count().getData());
+        } catch (Exception e) {
+            vo.setUserCount(0);
+        }
+        
+        try {
+            vo.setOrderCount(orderFeignClient.count().getData());
+        } catch (Exception e) {
+            vo.setOrderCount(0);
+        }
+        
+        return CommonResult.success(vo);
+    }
+}
+```
+
+#### 应用服务调用场景（强依赖）
+
+**适用场景**：业务逻辑必需、数据完整性依赖
+
+```java
+@Service
+@RequiredArgsConstructor
+public class OrderApplicationService {
+
+    private final OrderQueryService orderQueryService;
+    private final OrderManageService orderManageService;
+    private final ProductFeignClient productFeignClient;  // 强依赖
+    private final UserFeignClient userFeignClient;        // 强依赖
+
+    /**
+     * 获取订单详情 - 强依赖场景
+     * 商品信息和用户信息是订单的必需数据
+     */
+    public OrderDetailDTO getOrderDetail(Long orderId) {
+        // 1. 查询订单基础信息
+        AimOrderDO order = orderQueryService.getById(orderId);
+        if (order == null) {
+            throw new BusinessException("订单不存在");
+        }
+        
+        // 2. 调用商品服务获取商品信息（强依赖）
+        // 如果商品服务故障，订单详情无法展示，应该报错
+        ProductApiResponse product = productFeignClient
+            .getById(order.getProductId())
+            .getData();
+        
+        // 3. 调用用户服务获取用户信息（强依赖）
+        UserApiResponse user = userFeignClient
+            .getById(order.getUserId())
+            .getData();
+        
+        // 4. 组装订单详情
+        OrderDetailDTO dto = new OrderDetailDTO();
+        dto.setOrderId(order.getId());
+        dto.setProductName(product.getName());
+        dto.setProductPrice(product.getPrice());
+        dto.setUserName(user.getName());
+        // ... 其他字段
+        
+        return dto;
+    }
+}
+```
+
+#### 调用位置选择决策表
+
+| 场景 | 推荐调用位置 | 原因 |
+|------|-------------|------|
+| 订单详情需要商品信息 | ApplicationService | 商品信息是订单的核心数据 |
+| 订单列表显示商品图片 | 门面服务 | 图片是展示增强，可降级 |
+| 智能员工详情需要部门信息 | ApplicationService | 部门信息是员工的核心属性 |
+| 仪表盘聚合多服务统计 | 门面服务 | 各统计独立，可单独降级 |
+| 商品详情需要库存信息 | ApplicationService | 库存是购买决策的关键 |
+| 商品列表显示销量排名 | 门面服务 | 销量是展示增强，可异步加载 |
+
 ---
 
 ## 9. 检查清单
@@ -928,9 +1144,11 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 ### 架构设计检查
 
 - [ ] 遵循四层架构（接口层→应用层→领域层→基础设施层）
-- [ ] 服务职责划分清晰（QueryService/ManageService/DomainService）
+- [ ] 服务职责划分清晰（QueryService/ManageService/ApplicationService）
 - [ ] 模块类型区分正确（门面模块/服务模块）
 - [ ] 服务调用关系符合规范
+- [ ] 远程服务调用位置选择正确（强依赖在应用层，弱依赖在门面层）
+- [ ] mall-product/mall-user 等基础业务服务不调用其他业务服务（可调用 base-data 配置服务）
 
 ### 接口设计检查
 
@@ -957,5 +1175,5 @@ public CommonResult<AgentDetailVO> getAgentDetail(@PathVariable("agentId") Long 
 
 ## 相关文档
 
-- **代码生成模板**：`.qoder/skills/java-code-generation.md`
-- **编码规范**：`.qoder/rules/04-coding-standards.md`
+- **代码生成模板**：`.qoder/skills/04-java-code-generation/SKILL.md`
+- **编码规范**：`.qoder/rules/coding-standards.md`

@@ -764,6 +764,5 @@ public CommonResult<Long> createJobType(
 
 ## 相关文档
 
-- **代码生成模板**：`.qoder/skills/java-code-generation.md`
-- **架构规范**：`.qoder/rules/05-architecture-standards.md`
-- **操作人ID传递规范**：`.qoder/repowiki/specs/operator-id-spec.md`
+- **代码生成模板**：`.qoder/skills/04-java-code-generation/SKILL.md`
+- **架构规范**：`.qoder/rules/architecture-standards.md`
