@@ -5,8 +5,13 @@ import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
 import com.aim.mall.agent.employee.domain.entity.AimJobTypeDO;
+import com.aim.mall.basic.api.dto.request.IdGenApiRequest;
+import com.aim.mall.basic.api.dto.response.IdGenApiResponse;
+import com.aim.mall.basic.api.feign.IdGenRemoteService;
 import com.aim.mall.common.api.CommonResult;
 import com.aim.mall.common.enums.DeleteStatusEnum;
+import com.aim.mall.common.exception.BusinessException;
+import com.aim.mall.common.exception.ErrorCodeEnum;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,7 @@ public class JobTypeApplicationService {
 
     private final JobTypeQueryService jobTypeQueryService;
     private final JobTypeManageService jobTypeManageService;
+    private final IdGenRemoteService idGenRemoteService;
 
     /**
      * 分页查询岗位类型列表
@@ -57,7 +63,35 @@ public class JobTypeApplicationService {
      */
     public Long createJobType(JobTypeCreateDTO dto) {
         log.debug("业务域：创建岗位类型");
+
+        // 生成岗位类型编码：J + 年 + 6位序号（如 J2026000001）
+        String code = generateJobTypeCode();
+        dto.setCode(code);
+
         return jobTypeManageService.createJobType(dto);
+    }
+
+    /**
+     * 生成岗位类型编码
+     * <p>
+     * 格式：J + 年(yyyy) + 6位序号（如 J2026000001）
+     *
+     * @return 生成的编码
+     */
+    private String generateJobTypeCode() {
+        IdGenApiRequest request = new IdGenApiRequest();
+        request.setPrefix("J");
+        request.setDatePattern("yyyy");
+
+        CommonResult<IdGenApiResponse> result = idGenRemoteService.generate(request);
+        if (result == null || result.getData() == null) {
+            log.error("生成岗位类型编码失败，远程调用返回空");
+            throw new BusinessException(ErrorCodeEnum.ID_GENERATE_ERROR, "生成岗位类型编码失败");
+        }
+
+        String code = result.getData().getCode();
+        log.debug("生成岗位类型编码成功, code: {}", code);
+        return code;
     }
 
     /**

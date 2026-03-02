@@ -166,9 +166,16 @@ CREATE TABLE aim_agent_job_type
 | 参数名 | 类型 | 必填 | 说明 |
 |--------|------|------|------|
 | name | String | 是 | 岗位类型名称（1-64字符） |
-| code | String | 是 | 岗位类型编码（1-32字符，唯一） |
 | description | String | 否 | 岗位描述（0-255字符） |
 | sortOrder | Integer | 否 | 排序号，默认0 |
+
+**编码生成规则**
+
+岗位类型编码由系统自动生成，格式为：`J` + `年(yyyy)` + `6位序号`
+
+- 示例：`J2026000001`、`J2026000002`
+- 通过 mall-basic 的 ID 生成服务生成
+- 数据库唯一约束保证不重复
 
 **响应数据**
 
@@ -309,13 +316,11 @@ public class JobTypeListApiRequest implements Serializable {
 |--------|------|-----------|----------|---------|
 | 10091001 | 参数错误 | 200 | 通用参数校验失败 | `MethodArgumentValidationException` |
 | 10091002 | 岗位类型名称不能为空 | 200 | name为空或空字符串 | `MethodArgumentValidationException` |
-| 10091003 | 岗位类型编码不能为空 | 200 | code为空或空字符串 | `MethodArgumentValidationException` |
-| 10091004 | 岗位类型编码格式错误 | 200 | code不符合规范 | `MethodArgumentValidationException` |
-| 10092001 | 岗位类型已存在 | 200 | code重复 | `BusinessException` |
+| 10092001 | 岗位类型已存在 | 200 | 记录已存在 | `BusinessException` |
 | 10092002 | 岗位类型不存在 | 200 | 查询/更新的ID不存在 | `BusinessException` |
 | 10092003 | 岗位类型已被删除 | 200 | 操作已删除的记录 | `BusinessException` |
 | 10092004 | 岗位类型有关联员工，无法删除 | 200 | 删除时员工数>0 | `BusinessException` |
-| 10092005 | 岗位类型编码已存在 | 200 | 创建/更新时code冲突 | `BusinessException` |
+| 10095002 | 生成编码失败 | 200 | ID生成服务调用失败 | `BusinessException` |
 
 **说明**：所有错误响应 HTTP 状态码均为 200，错误类型通过响应体中的 `code` 字段区分。
 
@@ -339,7 +344,8 @@ mall-admin (门面服务)
     ↓ Feign
 mall-agent (应用服务)
     ├── JobTypeInnerController
-    ├── JobTypeDomainService
+    ├── JobTypeApplicationService (应用层 - 业务编排)
+    │   ├── 调用 mall-basic IdGenRemoteService 生成编码
     │   ├── JobTypeQueryService
     │   └── JobTypeManageService
     │       └── AimJobTypeService
@@ -352,10 +358,12 @@ mall-agent (应用服务)
 #### 创建岗位类型
 
 ```
-mall-admin    JobTypeInnerController    JobTypeDomainService    JobTypeManageService    AimJobTypeService    AimJobTypeMapper
+mall-admin    JobTypeInnerController    JobTypeApplicationService    JobTypeManageService    AimJobTypeService    AimJobTypeMapper
     |                  |                        |                        |                      |                    |
     |---create()----->|                        |                        |                      |                    |
     |                  |---create()----------->|                        |                      |                    |
+    |                  |                        |--generateCode()------>|                      |                    |
+    |                  |                        |<--code: J2026000001---|                      |                    |
     |                  |                        |---create()----------->|                      |                    |
     |                  |                        |                        |---save()------------>|                    |
     |                  |                        |                        |                      |---insert()------->|
@@ -476,9 +484,8 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 |--------|------|--------|
 | 名称必填 | name != null && !name.isBlank() | 10091002 |
 | 名称长度 | 1 <= name.length() <= 64 | 10091002 |
-| 编码必填 | code != null && !code.isBlank() | 10091003 |
-| 编码格式 | 仅允许大写字母、数字、下划线 | 10091004 |
-| 编码唯一 | 数据库唯一约束 | 10092005 |
+| 编码生成 | 调用 mall-basic ID生成服务 | 10095002 |
+| 编码唯一 | 数据库唯一约束 | - |
 | 删除校验 | 关联员工数必须为 0 | 10092004 |
 
 ### 5.3 业务逻辑流程
@@ -490,11 +497,20 @@ mall-agent-api/src/main/java/com/aim/mall/agent/api/
 
 #### 5.3.1 创建流程
 
-1. 校验参数（name、code必填，格式正确）
-2. 校验 code 是否已存在（调用 `AimJobTypeService` 查询）
-3. 创建实体，设置默认状态为启用
-4. 调用 `AimJobTypeService.save()` 保存到数据库
-5. 返回新创建记录的 ID
+1. 校验参数（name必填）
+2. **应用层**调用 mall-basic ID生成服务生成 code（格式：J + 年 + 6位序号）
+3. **应用层**将生成的 code 设置到 DTO 中，传递给 ManageService
+4. **Manage层**创建实体，设置默认状态为启用
+5. **Manage层**调用 `AimJobTypeService.save()` 保存到数据库
+6. 返回新创建记录的 ID
+
+**编码生成说明**：
+- 生成位置：**JobTypeApplicationService**（应用层）
+- 前缀：`J`（JobType）
+- 日期格式：`yyyy`（年）
+- 序号：6位自增序号
+- 示例：`J2026000001`、`J2026000002`
+- 分层原则：远程服务调用（IdGenRemoteService）属于强依赖，在应用层编排
 
 #### 5.3.2 更新流程
 

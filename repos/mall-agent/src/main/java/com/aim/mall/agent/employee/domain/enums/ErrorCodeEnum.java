@@ -23,6 +23,9 @@ public enum ErrorCodeEnum implements IErrorCode {
     AGENT_SYSTEM_ERROR(10095001L, "智能员工系统内部错误"),
     AGENT_OTHER_ERROR(10095999L, "智能员工其他错误"),
 
+    // ID生成错误
+    ID_GENERATE_ERROR(10095002L, "生成编码失败"),
+
     // 参数校验错误
     PARAM_BIND_ERROR(10091002L, "参数绑定错误"),
     METHOD_ARGUMENT_NOT_VALID_ERROR(10091003L, "方法参数验证错误");

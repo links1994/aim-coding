@@ -41,78 +41,56 @@ Content-Type: application/json
 # 2. 创建岗位类型
 # ============================================
 
-### 2.1 创建销售岗位类型
+### 2.1 创建销售岗位类型（系统自动生成编码）
 # @sql: sql/init-schema.sql
+# 预期返回：code 为系统自动生成的 J2026xxxxxx 格式
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
   "name": "销售顾问",
-  "code": "SALES",
   "description": "负责商品销售和客户维护",
   "sortOrder": 1,
   "operatorId": 1
 }
 
-### 2.2 创建技术岗位类型
+### 2.2 创建技术岗位类型（系统自动生成编码）
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
   "name": "技术工程师",
-  "code": "TECH",
   "description": "负责技术开发和系统维护",
   "sortOrder": 2,
   "operatorId": 1
 }
 
-### 2.3 创建客服岗位类型
+### 2.3 创建客服岗位类型（系统自动生成编码）
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
   "name": "客服专员",
-  "code": "CS",
   "description": "负责客户服务和投诉处理",
   "sortOrder": 3,
   "operatorId": 1
 }
 
-### 2.4 创建岗位类型（最小参数）
+### 2.4 创建岗位类型（最小参数，系统自动生成编码）
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
-  "name": "测试岗位",
-  "code": "TEST"
+  "name": "测试岗位"
 }
 
-### 2.5 创建岗位类型（编码已存在-预期失败）
-POST {{baseUrl}}/inner/api/v1/job-types/create
-Content-Type: application/json
-
-{
-  "name": "重复编码测试",
-  "code": "SALES",
-  "operatorId": 1
-}
-
-### 2.6 创建岗位类型（名称空-预期失败）
+### 2.5 创建岗位类型（名称为空-预期失败）
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
   "name": "",
-  "code": "INVALID"
-}
-
-### 2.7 创建岗位类型（编码格式错误-预期失败）
-POST {{baseUrl}}/inner/api/v1/job-types/create
-Content-Type: application/json
-
-{
-  "name": "格式错误测试",
-  "code": "invalid-code"
+  "operatorId": 1
 }
 
 # ============================================
@@ -214,24 +192,23 @@ DELETE {{baseUrl}}/inner/api/v1/job-types/delete?id=3&operatorId=1
 # ============================================
 
 ### 6.1 创建 -> 查询 -> 更新 -> 禁用 -> 删除
-### 步骤1：创建新岗位类型
+### 步骤1：创建新岗位类型（系统自动生成编码）
 POST {{baseUrl}}/inner/api/v1/job-types/create
 Content-Type: application/json
 
 {
   "name": "临时测试岗位",
-  "code": "TEMP001",
   "description": "用于测试完整流程",
   "sortOrder": 99,
   "operatorId": 1
 }
 
-### 步骤2：查询列表确认创建成功
+### 步骤2：查询列表确认创建成功（使用返回的 code 查询）
 POST {{baseUrl}}/inner/api/v1/job-types/list
 Content-Type: application/json
 
 {
-  "keyword": "TEMP001",
+  "keyword": "临时测试岗位",
   "pageNum": 1,
   "pageSize": 10
 }

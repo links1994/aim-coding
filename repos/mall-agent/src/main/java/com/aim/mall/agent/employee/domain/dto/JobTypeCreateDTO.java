@@ -20,7 +20,7 @@ public class JobTypeCreateDTO implements Serializable {
     private String name;
 
     /**
-     * 岗位类型编码
+     * 岗位类型编码（由应用层生成）
      */
     private String code;
 

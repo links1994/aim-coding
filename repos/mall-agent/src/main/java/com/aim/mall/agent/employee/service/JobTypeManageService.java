@@ -40,13 +40,7 @@ public class JobTypeManageService {
     public Long createJobType(JobTypeCreateDTO dto) {
         log.debug("创建岗位类型开始, dto: {}", dto);
 
-        // 校验编码是否已存在
-        if (aimJobTypeService.isCodeExists(dto.getCode())) {
-            log.warn("岗位类型编码已存在, code: {}", dto.getCode());
-            throw new BusinessException(ErrorCodeEnum.JOB_TYPE_CODE_EXISTS, "岗位类型编码已存在");
-        }
-
-        // 创建实体
+        // 创建实体（code 已由应用层生成并设置到 dto 中）
         AimJobTypeDO entity = new AimJobTypeDO();
         entity.setName(dto.getName());
         entity.setCode(dto.getCode());

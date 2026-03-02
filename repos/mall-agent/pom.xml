@@ -27,6 +27,11 @@
         </dependency>
         <dependency>
             <groupId>com.aim.mall</groupId>
+            <artifactId>mall-basic-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aim.mall</groupId>
             <artifactId>mall-product-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
