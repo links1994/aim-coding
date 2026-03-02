@@ -1,6 +1,6 @@
 # 需求分解结果
 
-## Program: P-2026-001-ai-agent-platform
+## Program: P-2026-001-decomposition
 
 ### 需求概述
 

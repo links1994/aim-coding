@@ -2,6 +2,17 @@
 #
 # write: Agent 可以修改的文件/目录
 # forbidden: 绝对不能写入的文件
+#
+# 新建 Program 时根据需求类型自动限定范围：
+# - 门面服务（mall-admin/mall-app/mall-chat）:
+#     Controller + XxxApplicationService（业务编排/组装Feign调用）+ DTO + FeignClient注入使用
+# - 应用服务（mall-agent）:
+#     Service + Inner Controller + Entity + API模块（定义Feign接口供门面调用）
+# - 支撑服务（mall-user等）: 完整实现
+#
+# 类型判定优先级：
+# 1. 查询 decomposition.md 获取 REQ 对应服务类型
+# 2. 用户明确指定
 
 write:
   - repos/<repo>/src/xxx.ts
