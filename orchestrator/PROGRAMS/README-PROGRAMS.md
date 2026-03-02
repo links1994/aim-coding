@@ -72,22 +72,22 @@ tasks:
 
 # 产出物跟踪
 artifacts:
-  - path: workspace/questions.md
+  - path: artifacts/questions.md
     status: pending
     desc: 问题清单
-  - path: workspace/answers.md
+  - path: artifacts/answers.md
     status: pending
     desc: 确认结果
-  - path: workspace/decisions.md
+  - path: artifacts/decisions.md
     status: pending
     desc: 技术决策记录
-  - path: workspace/tech-spec.md
+  - path: artifacts/tech-spec.md
     status: pending
     desc: 技术规格书
-  - path: workspace/openapi.yaml
+  - path: artifacts/openapi.yaml
     status: pending
     desc: OpenAPI 定义
-  - path: workspace/checklist.md
+  - path: artifacts/checklist.md
     status: pending
     desc: 验收清单
   - path: .qoder/repowiki/feature/{feature-id}/feature-archive.md

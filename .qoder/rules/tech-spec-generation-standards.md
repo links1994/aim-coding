@@ -11,19 +11,19 @@ description: 技术规格书生成规范（纯规范定义）
 
 ## 1. 输入要求
 
-- `orchestrator/PROGRAMS/{decomposition_program_id}/workspace/decomposition.md` — 需求拆分结果
-- `orchestrator/PROGRAMS/{program_id}/workspace/answers.md` — 澄清确认结果
-- `orchestrator/PROGRAMS/{program_id}/workspace/decisions.md` — 技术决策记录
-- `.qoder/rules/05-architecture-standards.md` — 架构规范
+- `orchestrator/PROGRAMS/{decomposition_program_id}/artifacts/decomposition.md` — 需求拆分结果
+- `orchestrator/PROGRAMS/{program_id}/artifacts/answers.md` — 澄清确认结果
+- `orchestrator/PROGRAMS/{program_id}/artifacts/decisions.md` — 技术决策记录
+- `.qoder/rules/architecture-standards.md` — 架构规范
 - 用户补充的上下文（现有表结构、接口文档等）
 
 ---
 
 ## 2. 输出要求
 
-- `orchestrator/PROGRAMS/{program_id}/workspace/tech-spec.md` — 主技术规格书
-- `orchestrator/PROGRAMS/{program_id}/workspace/openapi.yaml` — OpenAPI 定义
-- `orchestrator/PROGRAMS/{program_id}/workspace/checklist.md` — 验收标准
+- `orchestrator/PROGRAMS/{program_id}/artifacts/tech-spec.md` — 主技术规格书
+- `orchestrator/PROGRAMS/{program_id}/artifacts/openapi.yaml` — OpenAPI 定义
+- `orchestrator/PROGRAMS/{program_id}/artifacts/checklist.md` — 验收标准
 - （可选）更新的需求文档（decomposition.md, answers.md, decisions.md）
 
 ---

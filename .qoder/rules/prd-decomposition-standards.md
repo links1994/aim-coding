@@ -39,13 +39,13 @@ PRD 功能模块
 
 **数据库设计说明**：表结构不单独拆分，跟随具体需求实现，由功能归档步骤统一归档。
 
-**数据库设计规范参考**：`.qoder/rules/05-architecture-standards.md` 数据库设计章节
+**数据库设计规范参考**：`.qoder/rules/architecture-standards.md` 数据库设计章节
 
 ---
 
 ## 2. 架构设计约束
 
-> **详细规范参考**：`.qoder/rules/05-architecture-standards.md`
+> **详细规范参考**：`.qoder/rules/architecture-standards.md`
 
 ### 2.1 服务类型定义
 

@@ -59,7 +59,7 @@ Skill 是**可复用的执行模块**，特点：
 用户: "生成技术规格书"
 主 Agent: 
   → 读取 .qoder/rules/tech-spec-generation-standards.md（规范）
-  → 读取 workspace/answers.md（输入）
+  → 读取 artifacts/answers.md（输入）
   → 调用 03-tech-spec-generation Skill（执行）
   → 生成 tech-spec.md（输出）
 ```

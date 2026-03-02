@@ -27,8 +27,8 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 
 ## 输入
 
-- `orchestrator/PROGRAMS/{program_id}/workspace/tech-spec.md` — 技术规格书
-- `orchestrator/PROGRAMS/{program_id}/workspace/openapi.yaml` — API 定义
+- `orchestrator/PROGRAMS/{program_id}/artifacts/tech-spec.md` — 技术规格书
+- `orchestrator/PROGRAMS/{program_id}/artifacts/openapi.yaml` — API 定义
 - `orchestrator/ALWAYS/RESOURCE-MAP.yml` — 项目资源映射
 - `orchestrator/PROGRAMS/{program_id}/SCOPE.yml` — 写入范围控制
 - `.qoder/rules/coding-standards.md` — 编码规范
@@ -41,7 +41,7 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 ## 输出
 
 - 每个服务的 Java 源代码 → `{service}/src/main/java/`
-- 代码生成报告 `orchestrator/PROGRAMS/{program_id}/workspace/code-generation-report.md`
+- 代码生成报告 `orchestrator/PROGRAMS/{program_id}/artifacts/code-generation-report.md`
 
 ---
 
@@ -100,25 +100,32 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 
 ```
 mall-agent/src/main/java/com/aim/mall/
-├── agent/               # 业务模块
-│   ├── controller/      # 接口层
-│   │   └── inner/       # 内部接口（用于 Feign 调用）
-│   ├── service/         # 应用层
-│   │   ├── XxxApplicationService.java    # 应用服务（业务编排）
-│   │   ├── XxxQueryService.java     # 查询服务（只读）
-│   │   ├── XxxManageService.java    # 管理服务（增删改）
-│   │   └── mp/                      # MyBatis-Plus 数据服务
-│   │       └── AimXxxService.java   # 继承 IService<AimXxxDO>
-│   ├── mapper/          # 基础设施层
-│   │   └── AimXxxMapper.java        # 原生 MyBatis
-│   └── domain/          # 领域层
-│       ├── entity/      # 实体类（AimXxxDO）
-│       ├── dto/         # 内部 DTO（XxxDTO、XxxQuery）
-│       ├── enums/       # 内部枚举
-│       └── exception/   # 异常类
-├── config/              # 全局配置类（共享）
-└── constants/           # 全局常量（共享）
+├── agent/                                         # 业务模块（如：agent, admin, user）
+│   ├── {业务域}/                                   # 业务域（如：employee, order）
+│   │   ├── controller/                            # 接口层
+│   │   │   └── inner/                             # 内部接口（用于 Feign 调用）
+│   │   ├── service/                               # 应用层
+│   │   │   ├── mp/                                # MyBatis-Plus 数据服务
+│   │   │   │   └── AimXxxService.java             # 继承 IService<AimXxxDO>
+│   │   │   ├── XxxApplicationService.java         # 应用服务（业务编排）
+│   │   │   ├── XxxQueryService.java               # 查询服务（只读）
+│   │   │   └── XxxManageService.java              # 管理服务（增删改）
+│   │   ├── mapper/                                # 基础设施层
+│   │   │   └── AimXxxMapper.java                  # 原生 MyBatis
+│   │   └── domain/                                # 领域层
+│   │       ├── entity/                            # 实体类（AimXxxDO）
+│   │       ├── dto/                               # 内部 DTO（XxxDTO、XxxQuery）
+│   │       ├── enums/                             # 内部枚举
+│   │       └── exception/                         # 异常类
+│   ├── config/                                    # 全局配置类（模块级共享）
+│   └── constants/                                 # 全局常量（模块级共享）
 ```
+
+**说明**：
+- 一个模块可包含多个业务域（如 agent 模块下有 employee、order 等）
+- 一个业务域可包含多个功能（如 employee 业务域下有 job-type、skill、employee 等）
+- config/ 和 constants/ 位于模块下，与业务域同一级，作为模块内共享
+- 每个业务域内部保持完整的 controller/service/mapper/domain 分层结构
 
 **API 模块（mall-agent-api）- 统一在 mall-inner-api 目录**：
 
@@ -137,18 +144,23 @@ repos/mall-inner-api/mall-agent-api/src/main/java/com/aim/mall/agent/
 
 ```
 mall-admin/src/main/java/com/aim/mall/
-├── admin/               # 业务模块
-│   ├── controller/      # 接口层
-│   │   └── admin/       # 管理接口
-│   └── domain/          # 领域层
-│       └── dto/
-│           ├── request/ # 前端请求参数（本地使用，不对外暴露）
-│           └── response/# 前端响应值/VO（本地使用，不对外暴露）
-├── config/              # 全局配置类（共享）
-└── constants/           # 全局常量（共享）
-
-注意：门面服务禁止相互调用，因此不存在 feign 目录。门面服务通过 mall-inner-api 中的 RemoteService 调用应用服务。
+├── admin/                                         # 业务模块
+│   ├── {业务域}/                                   # 业务域（如：agent, user）
+│   │   ├── controller/                            # 接口层
+│   │   │   └── admin/                             # 管理接口
+│   │   └── domain/                                # 领域层
+│   │       └── dto/
+│   │           ├── request/                       # 前端请求参数（本地使用）
+│   │           └── response/                      # 前端响应值/VO（本地使用）
+│   ├── config/                                    # 全局配置类（模块级共享）
+│   └── constants/                                 # 全局常量（模块级共享）
 ```
+
+**说明**：
+- 门面服务禁止相互调用，因此不存在 feign 目录
+- 门面服务通过 mall-inner-api 中的 RemoteService 调用应用服务
+- config/ 和 constants/ 位于模块下，与业务域同一级，作为模块内共享
+- 一个业务域可包含多个功能模块
 
 #### 对象类型规范
 
@@ -353,7 +365,7 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 
 ### 步骤 5：输出报告
 
-生成 `orchestrator/PROGRAMS/{program_id}/workspace/code-generation-report.md`：
+生成 `orchestrator/PROGRAMS/{program_id}/artifacts/code-generation-report.md`：
 
 ```markdown
 # 代码生成报告
@@ -457,7 +469,7 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 
 ```
 状态：已完成
-报告：orchestrator/PROGRAMS/{program_id}/workspace/code-generation-report.md
+报告：orchestrator/PROGRAMS/{program_id}/artifacts/code-generation-report.md
 输出：N 个文件（列出每个服务的代码路径）
 决策点：无
 ```

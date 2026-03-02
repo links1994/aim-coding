@@ -219,8 +219,8 @@ D. 其他：______
 
 | 阶段 | 记录文件 | 记录格式 |
 |------|----------|----------|
-| 需求澄清 | `workspace/answers.md` | 问题-选项-确认答案 |
-| 技术规格 | `workspace/decisions.md` | ADR 格式记录决策 |
+| 需求澄清 | `artifacts/answers.md` | 问题-选项-确认答案 |
+| 技术规格 | `artifacts/decisions.md` | ADR 格式记录决策 |
 | 代码生成 | 代码注释 + 变更说明 | 关键决策点注释 |
 
 ---

@@ -31,7 +31,7 @@ Analyze generated code for quality issues, standard compliance, design principle
 
 ## Outputs
 
-- Quality report → `orchestrator/PROGRAMS/{program_id}/workspace/quality-report.md`
+- Quality report → `orchestrator/PROGRAMS/{program_id}/artifacts/quality-report.md`
 - Issue list with severity levels
 - Fix suggestions
 
@@ -554,7 +554,7 @@ For each file, run quality checks:
 
 ```
 Status: Completed / Issues Found
-Report: workspace/quality-report.md
+Report: artifacts/quality-report.md
 Issues: X total (Y critical, Z warning, W info)
   - Naming: X issues
   - Architecture: X issues

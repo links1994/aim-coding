@@ -177,7 +177,7 @@ private LocalDateTime createTime;
 | PageQuery     | 大驼峰 + PageQuery 后缀     | `JobTypePageQuery`       | 应用服务     | **分页查询参数**（Service层内部使用） |
 | ListQuery     | 大驼峰 + ListQuery 后缀     | `JobTypeListQuery`       | 应用服务     | **列表查询参数**（Service层内部使用） |
 | DTO           | 大驼峰 + DTO 后缀           | `AgentDTO`               | 应用服务     | 内部数据传输对象                  |
-| DomainService | 大驼峰 + DomainService 后缀 | `AgentDomainService`     | 应用服务     | 业务域服务                     |
+| ApplicationService | 大驼峰 + ApplicationService 后缀 | `AgentApplicationService` | 应用服务     | 应用服务（业务编排）                     |
 | QueryService  | 大驼峰 + QueryService 后缀  | `AgentQueryService`      | 应用服务     | 查询服务                      |
 | ManageService | 大驼峰 + ManageService 后缀 | `AgentManageService`     | 应用服务     | 管理服务                      |
 | AimService    | Aim + 大驼峰 + Service 后缀 | `AimAgentService`        | 应用服务     | MP数据服务，继承IService         |
@@ -254,30 +254,33 @@ private boolean active;     // 布尔值无前缀
 ```
 {服务名}/src/main/java/com/aim/mall/
 ├── {模块}/              # 业务模块（如：agent, admin, user）
-│   ├── controller/      # 接口层
-│   │   ├── admin/       # 管理端接口（门面服务）
-│   │   ├── app/         # 客户端接口（门面服务）
-│   │   └── inner/       # 内部接口（应用/支撑服务，供Feign调用）
-│   ├── service/         # 应用层
-│   │   ├── XxxDomainService.java    # 业务域服务（业务编排）
-│   │   ├── XxxQueryService.java     # 查询服务（只读）
-│   │   ├── XxxManageService.java    # 管理服务（增删改）
-│   │   └── mp/                      # MyBatis-Plus 数据服务
-│   │       └── AimXxxService.java   # 继承 IService<AimXxxDO>
-│   ├── mapper/          # 基础设施层
-│   │   └── AimXxxMapper.java        # 原生 MyBatis
-│   └── domain/          # 领域层
-│       ├── entity/      # 实体类 (AimXxxDO)
-│       ├── dto/         # 内部DTO (XxxDTO, XxxQuery)
-│       ├── enums/       # 枚举类（非远程调用相关）
-│       ├── vo/          # 视图对象 (XxxVO) - 仅门面服务
-│       └── exception/   # 异常类
-├── config/              # 全局配置类（共享，所有模块共用）
-└── constants/           # 全局常量（共享，所有模块共用）
+│   ├── {业务域}/        # 业务域（如：employee, order）
+│   │   ├── controller/  # 接口层
+│   │   │   ├── admin/   # 管理端接口（门面服务）
+│   │   │   ├── app/     # 客户端接口（门面服务）
+│   │   │   └── inner/   # 内部接口（应用/支撑服务，供Feign调用）
+│   │   ├── service/     # 应用层
+│   │   │   ├── mp/                      # MyBatis-Plus 数据服务
+│   │   │   │   └── AimXxxService.java   # 继承 IService<AimXxxDO>
+│   │   │   ├── XxxApplicationService.java # 应用服务（业务编排）
+│   │   │   ├── XxxQueryService.java     # 查询服务（只读）
+│   │   │   └── XxxManageService.java    # 管理服务（增删改）
+│   │   ├── mapper/      # 基础设施层
+│   │   │   └── AimXxxMapper.java        # 原生 MyBatis
+│   │   └── domain/      # 领域层
+│   │       ├── entity/  # 实体类 (AimXxxDO)
+│   │       ├── dto/     # 内部DTO (XxxDTO, XxxQuery)
+│   │       ├── enums/   # 枚举类（非远程调用相关）
+│   │       ├── vo/      # 视图对象 (XxxVO) - 仅门面服务
+│   │       └── exception/ # 异常类
+│   ├── config/          # 全局配置类（模块级共享）
+│   └── constants/       # 全局常量（模块级共享）
 ```
 
 **说明**：
-- `config/` 和 `constants/` 位于 `com.aim.mall` 包下，与业务模块同级，可被多个模块共享
+- 一个模块可包含多个业务域（如 agent 模块下有 employee、order 等）
+- 一个业务域可包含多个功能（如 employee 业务域下有 job-type、skill、employee 等）
+- `config/` 和 `constants/` 位于模块下，与业务域同一级，作为模块内共享
 - 门面服务不存在 `feign/` 目录，通过引用 `mall-inner-api` 中的 RemoteService 调用应用服务
 - 应用服务的 `api/` 目录已移除，所有对外接口定义在 `mall-{模块}-api` 模块中
 

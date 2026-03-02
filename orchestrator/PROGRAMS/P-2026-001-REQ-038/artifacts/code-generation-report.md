@@ -4,7 +4,7 @@
 
 | 服务 | 状态 | 代码文件数 | 主要类 |
 |------|------|-----------|--------|
-| mall-agent | 完成 | 10 | JobTypeInnerController, JobTypeDomainService, JobTypeQueryService, JobTypeManageService, AimJobTypeService, AimJobTypeMapper |
+| mall-agent | 完成 | 10 | JobTypeInnerController, JobTypeApplicationService, JobTypeQueryService, JobTypeManageService, AimJobTypeService, AimJobTypeMapper |
 | mall-agent-api | 完成 | 7 | JobTypeRemoteService, JobTypeApiResponse, JobTypeCreateApiRequest, JobTypeUpdateApiRequest, JobTypePageApiRequest, JobTypeStatusApiRequest, JobTypeStatusEnum |
 
 ## 生成文件清单
@@ -24,7 +24,7 @@
 | `service/mp/AimJobTypeService.java` | MyBatis-Plus数据服务 |
 | `service/JobTypeQueryService.java` | 查询服务（只读） |
 | `service/JobTypeManageService.java` | 管理服务（增删改） |
-| `service/JobTypeDomainService.java` | 业务域服务（业务编排） |
+| `service/JobTypeApplicationService.java` | 应用服务（业务编排） |
 | `controller/inner/JobTypeInnerController.java` | Inner API控制器 |
 
 ### mall-agent-api 模块
@@ -58,7 +58,8 @@
 
 ### 已遵循规范
 
-- [x] 五层架构：Controller → DomainService → Query/Manage Service → AimXxxService → AimXxxMapper
+- [x] 五层架构：Controller → ApplicationService → Query/Manage Service → AimXxxService → AimXxxMapper
+- [x] 包结构组织（见下方 3.2 章节）
 - [x] 实体类命名：`AimJobTypeDO`（大驼峰 + DO 后缀）
 - [x] DTO/Query 命名规范
 - [x] SQL 统一放在 XML Mapper 中
@@ -67,12 +68,38 @@
 - [x] Request/Response 实现 `Serializable` 接口，`serialVersionUID = -1L`
 - [x] Response 中的 `LocalDateTime` 使用 `@JsonFormat` 注解
 
+### 3.2 包结构组织
+
+```
+{服务名}/src/main/java/com/aim/mall/{模块}/          # 业务模块（如：agent, admin, user）
+├── {业务域}/                                        # 业务域（如：employee, jobtype）
+│   ├── controller/                                  # 控制器
+│   │   └── inner/                                   # 内部 Feign 接口
+│   ├── service/                                     # 服务层
+│   │   ├── mp/                                      # MyBatis-Plus 数据服务
+│   │   ├── XxxApplicationService.java               # 应用服务（业务编排）
+│   │   ├── XxxQueryService.java                     # 查询服务（只读）
+│   │   └── XxxManageService.java                    # 管理服务（增删改）
+│   ├── mapper/                                      # Mapper 接口
+│   └── domain/                                      # 领域层
+│       ├── entity/                                  # 实体类（DO）
+│       ├── dto/                                     # DTO/Query
+│       └── enums/                                   # 枚举
+├── config/                                          # 全局配置（与业务域平级）
+└── constants/                                       # 全局常量（与业务域平级）
+```
+
+**说明**：
+- 一个模块可包含多个业务域（如 agent 模块下有 employee、jobtype 等）
+- config/ 和 constants/ 与业务域平级，作为全局共享
+- 每个业务域内部保持完整的 controller/service/mapper/domain 结构
+
 ### TODO 标记
 
 | 位置 | 描述 | 依赖 |
 |------|------|------|
 | `JobTypeManageService.deleteJobType` | 员工数量校验 | 智能员工需求(REQ-031) |
-| `JobTypeDomainService.convertToResponse` | 员工数量统计 | 智能员工需求(REQ-031) |
+| `JobTypeApplicationService.convertToResponse` | 员工数量统计 | 智能员工需求(REQ-031) |
 
 ## 问题
 
