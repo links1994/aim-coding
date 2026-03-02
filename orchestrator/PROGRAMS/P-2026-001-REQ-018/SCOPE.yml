@@ -1,0 +1,34 @@
+# 写入范围控制
+#
+# write: Agent 可以修改的文件/目录
+# forbidden: 绝对不能写入的文件
+
+write:
+  # mall-admin 门面服务 - 岗位类型管理模块
+  # Controller 层
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/controller/JobTypeAdminController.java
+  
+  # DTO - Request
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/request/JobTypeListRequest.java
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/request/JobTypeCreateRequest.java
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/request/JobTypeUpdateRequest.java
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/request/JobTypeStatusRequest.java
+  
+  # DTO - Response
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/response/JobTypeResponse.java
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/domain/dto/response/JobTypePageResponse.java
+  
+  # Feign 客户端
+  - repos/mall-admin/src/main/java/com/aim/mall/admin/jobtype/feign/JobTypeFeignClient.java
+
+forbidden:
+  - .env
+  - repos/*/.env
+  - repos/mall-common/
+  - repos/mall-basic/
+  # mall-agent 及 API 模块由 REQ-038 实现，本需求只读引用
+  - repos/mall-agent/
+  - repos/mall-inner-api/mall-agent-api/
+  # 其他门面服务的模块禁止写入
+  - repos/mall-app/
+  - repos/mall-chat/

@@ -1,0 +1,55 @@
+program: P-2026-001-REQ-018
+name: 岗位类型管理服务（mall-admin 门面层）
+status: not-started      # not-started / active / blocked / deployed
+
+# 当前阶段（整个 Program 的执行状态）
+phase: planning          # planning / in-progress / review / done
+
+# 任务列表
+tasks:
+  - id: t1
+    name: 需求澄清 - 确认 mall-admin 接口字段和校验规则
+    status: pending
+  - id: t2
+    name: 技术规格 - 设计 mall-admin 门面层接口契约
+    status: pending
+  - id: t3
+    name: 开发实现 - mall-admin Controller 和 Feign 客户端
+    status: pending
+  - id: t4
+    name: 测试验证 - HTTP 接口测试
+    status: pending
+  - id: t5
+    name: 代码质量检查
+    status: pending
+  - id: t6
+    name: 功能归档
+    status: pending
+
+# 依赖检查
+dependencies:
+  - program: P-2026-001-REQ-038
+    name: mall-agent 岗位类型基础服务
+    status: completed    # pending / completed / blocked
+    required: true       # 是否为阻塞性依赖
+
+# 产出物跟踪
+artifacts:
+  - path: artifacts/tech-spec.md
+    status: pending
+    desc: 技术规格书
+  - path: artifacts/checklist.md
+    status: pending
+    desc: 开发检查清单
+  - path: artifacts/code-generation-report.md
+    status: pending
+    desc: 代码生成报告
+  - path: artifacts/quality-report.md
+    status: pending
+    desc: 质量检查报告
+  - path: http-tests/JobTypeAdminController.http
+    status: pending
+    desc: HTTP 测试文件
+  - path: workspace/RESULT.md
+    status: pending
+    desc: 完结报告
