@@ -1,0 +1,19 @@
+# 写入范围控制
+#
+# write: Agent 可以修改的文件/目录
+# forbidden: 绝对不能写入的文件
+
+write:
+  # mall-basic 服务模块
+  - repos/mall-basic/
+  # mall-basic-api API模块
+  - repos/mall-inner-api/mall-basic-api/
+  # 更新 mall-inner-api 父 pom
+  - repos/mall-inner-api/pom.xml
+  # 更新资源索引
+  - orchestrator/ALWAYS/RESOURCE-MAP.yml
+
+forbidden:
+  - .env
+  - repos/mall-agent/src/main/resources/bootstrap-prod.yml
+  - repos/mall-user/src/main/resources/bootstrap-prod.yml
