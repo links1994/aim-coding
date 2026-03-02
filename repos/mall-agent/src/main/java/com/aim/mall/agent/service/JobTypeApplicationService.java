@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 岗位类型业务域服务
+ * 岗位类型应用服务
  * <p>
  * 业务编排，协调查询和管理服务
  *
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JobTypeDomainService {
+public class JobTypeApplicationService {
 
     private final JobTypeQueryService jobTypeQueryService;
     private final JobTypeManageService jobTypeManageService;

@@ -9,7 +9,7 @@ import com.aim.mall.agent.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.domain.dto.JobTypeUpdateDTO;
-import com.aim.mall.agent.service.JobTypeDomainService;
+import com.aim.mall.agent.service.JobTypeApplicationService;
 import com.aim.mall.common.api.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @Tag(name = "岗位类型内部接口", description = "岗位类型管理内部接口（供Feign调用）")
 public class JobTypeInnerController {
 
-    private final JobTypeDomainService jobTypeDomainService;
+    private final JobTypeApplicationService jobTypeApplicationService;
 
     /**
      * 岗位类型分页列表
@@ -59,8 +59,8 @@ public class JobTypeInnerController {
         query.setPageNum(request.getPageNum());
         query.setPageSize(request.getPageSize());
 
-        CommonResult<CommonResult.PageData<JobTypeDomainService.JobTypeResponse>> result =
-                jobTypeDomainService.pageJobType(query);
+        CommonResult<CommonResult.PageData<JobTypeApplicationService.JobTypeResponse>> result =
+                jobTypeApplicationService.pageJobType(query);
 
         // 转换为 API Response
         List<JobTypeApiResponse> items = result.getData().getItems().stream()
@@ -89,7 +89,7 @@ public class JobTypeInnerController {
         dto.setSortOrder(request.getSortOrder());
         dto.setCreatorId(request.getOperatorId());
 
-        Long jobTypeId = jobTypeDomainService.createJobType(dto);
+        Long jobTypeId = jobTypeApplicationService.createJobType(dto);
         log.info("创建岗位类型成功, jobTypeId: {}", jobTypeId);
 
         return CommonResult.success(jobTypeId);
@@ -114,7 +114,7 @@ public class JobTypeInnerController {
         dto.setSortOrder(request.getSortOrder());
         dto.setUpdaterId(request.getOperatorId());
 
-        boolean result = jobTypeDomainService.updateJobType(dto);
+        boolean result = jobTypeApplicationService.updateJobType(dto);
         log.info("更新岗位类型成功, jobTypeId: {}", request.getId());
 
         return CommonResult.success(result);
@@ -137,7 +137,7 @@ public class JobTypeInnerController {
         dto.setStatus(request.getStatus());
         dto.setUpdaterId(request.getOperatorId());
 
-        boolean result = jobTypeDomainService.updateStatus(dto);
+        boolean result = jobTypeApplicationService.updateStatus(dto);
         log.info("更新岗位类型状态成功, jobTypeId: {}, status: {}", request.getId(), request.getStatus());
 
         return CommonResult.success(result);
@@ -155,7 +155,7 @@ public class JobTypeInnerController {
                                         @RequestParam(value = "operatorId", required = false) Long operatorId) {
         log.debug("删除岗位类型, id: {}, operatorId: {}", id, operatorId);
 
-        boolean result = jobTypeDomainService.deleteJobType(id, operatorId);
+        boolean result = jobTypeApplicationService.deleteJobType(id, operatorId);
         log.info("删除岗位类型成功, jobTypeId: {}", id);
 
         return CommonResult.success(result);
@@ -167,7 +167,7 @@ public class JobTypeInnerController {
      * @param response 内部Response
      * @return API Response
      */
-    private JobTypeApiResponse convertToApiResponse(JobTypeDomainService.JobTypeResponse response) {
+    private JobTypeApiResponse convertToApiResponse(JobTypeApplicationService.JobTypeResponse response) {
         JobTypeApiResponse apiResponse = new JobTypeApiResponse();
         apiResponse.setId(response.getId());
         apiResponse.setName(response.getName());
