@@ -44,7 +44,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| prefix | String | 是 | 业务前缀，1-2位字母，如 OR、EM |
+| prefix | String | 是 | 业务前缀，1-3位大写字母，如 OR、EMP |
 | datePattern | String | 是 | 日期格式，可选：yyyyMMdd/yyyyMMddHHmmss/yyyyMM/yyyy |
 
 **响应参数** (`IdGenApiResponse`):
@@ -85,7 +85,7 @@ repos/mall-inner-api/mall-basic-api/
 ```
 
 **IdGenApiRequest.java**:
-- prefix: String, 长度 1-2，正则 `[A-Z]{1,2}`
+- prefix: String, 长度 1-3，正则 `[A-Z]{1,3}`
 - datePattern: String, 枚举值
 
 **IdGenApiResponse.java**:
@@ -197,7 +197,7 @@ String seqStr = String.format("%06d", sequence);
 | 错误码 | 说明 |
 |--------|------|
 | 40001001 | 业务前缀不能为空 |
-| 40001002 | 业务前缀格式错误，必须为1-2位大写字母 |
+| 40001002 | 业务前缀格式错误，必须为1-3位大写字母 |
 | 40001003 | 日期格式不能为空 |
 | 40001004 | 日期格式不支持 |
 | 40002001 | Redis 操作失败 |

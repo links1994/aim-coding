@@ -17,10 +17,10 @@ public class IdGenApiRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 业务前缀，1-2位大写字母
+     * 业务前缀，1-3位大写字母
      */
     @NotBlank(message = "业务前缀不能为空")
-    @Pattern(regexp = "^[A-Z]{1,2}$", message = "业务前缀必须为1-2位大写字母")
+    @Pattern(regexp = "^[A-Z]{1,3}$", message = "业务前缀必须为1-3位大写字母")
     private String prefix;
 
     /**
