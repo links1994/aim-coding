@@ -21,8 +21,10 @@ Analyze generated code for quality issues, standard compliance, design principle
 ## Inputs
 
 - Generated source code in `repos/`
-- `.qoder/rules/04-coding-standards.md` — coding standards
-- `.qoder/rules/05-architecture-standards.md` — architecture standards
+- `.qoder/rules/coding-standards.md` — 编码规范
+- `.qoder/rules/architecture-standards.md` — 架构规范
+- `.qoder/rules/common-result-standards.md` — 响应格式规范
+- `.qoder/rules/operator-id-standards.md` — 操作人ID传递规范
 - Pitfall archives from `.qoder/repowiki/pitfalls/`
 
 ---

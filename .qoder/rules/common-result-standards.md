@@ -1,13 +1,6 @@
 ---
-spec_type: 响应格式规范
-description: 定义项目统一响应对象 CommonResult 的结构、使用场景和最佳实践
-version: v1.0
-scope: 所有服务模块（mall-admin/mall-app/mall-agent/mall-user等）
-status: active
-created_at: 2026-03-02
-updated_at: 2026-03-02
-author: AI Agent
-reviewer: -
+trigger: model_decision
+description: CommonResult 响应格式规范 - 定义项目统一响应对象的结构、使用场景和最佳实践
 ---
 
 # CommonResult 响应格式规范

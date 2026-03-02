@@ -1,13 +1,6 @@
 ---
-spec_type: 操作人ID传递规范
-description: 定义门面服务和应用服务中获取操作人ID的标准方式
-version: v1.0
-scope: 所有服务模块（mall-admin/mall-app/mall-agent/mall-user等）
-status: active
-created_at: 2026-03-02
-updated_at: 2026-03-02
-author: AI Agent
-reviewer: -
+trigger: model_decision
+description: 操作人 ID 传递规范 - 定义门面服务和应用服务中获取操作人ID的标准方式
 ---
 
 # 操作人ID传递规范
