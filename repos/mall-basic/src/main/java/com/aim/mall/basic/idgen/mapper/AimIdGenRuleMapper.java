@@ -4,8 +4,6 @@ import com.aim.mall.basic.idgen.domain.entity.AimIdGenRuleDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 /**
  * ID生成规则 Mapper
@@ -22,7 +20,6 @@ public interface AimIdGenRuleMapper extends BaseMapper<AimIdGenRuleDO> {
      * @param datePattern  日期格式
      * @return ID生成规则
      */
-    @Select("SELECT * FROM aim_idgen_rule WHERE prefix = #{prefix} AND date_pattern = #{datePattern}")
     AimIdGenRuleDO selectByPrefixAndPattern(@Param("prefix") String prefix, @Param("datePattern") String datePattern);
 
     /**
@@ -34,7 +31,5 @@ public interface AimIdGenRuleMapper extends BaseMapper<AimIdGenRuleDO> {
      * @param stepSize     步长
      * @return 更新行数
      */
-    @Update("UPDATE aim_idgen_rule SET current_max_seq = current_max_seq + #{stepSize}, " +
-            "update_time = NOW() WHERE prefix = #{prefix} AND date_pattern = #{datePattern}")
     int allocateSegment(@Param("prefix") String prefix, @Param("datePattern") String datePattern, @Param("stepSize") int stepSize);
 }
