@@ -3,7 +3,7 @@ package com.aim.mall.agent.config;
 import com.aim.mall.agent.employee.domain.exception.BusinessException;
 import com.aim.mall.agent.employee.domain.exception.MethodArgumentValidationException;
 import com.aim.mall.agent.employee.domain.exception.RemoteApiCallException;
-import com.aim.mall.agent.employee.domain.enums.ErrorCodeEnum;
+import com.aim.mall.agent.employee.domain.enums.AgentErrorCodeEnum;
 import com.aim.mall.common.api.CommonResult;
 import com.aim.mall.common.api.IErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
         log.error("业务异常: {}", e.getMessage(), e);
         // 如果异常对象中包含错误码，则使用异常对象的错误码，否则返回该模块系统内部异常
         IErrorCode errorCode = e.getErrorCode() != null ? e.getErrorCode() : ErrorCodeEnum.AGENT_OTHER_ERROR;
-        return CommonResult.failed(errorCode);
+        return CommonResult.failed(errorCode, e.getMessage());
     }
 
     /**

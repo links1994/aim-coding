@@ -1,4 +1,4 @@
-package com.aim.mall.agent.controller.inner;
+package com.aim.mall.agent.employee.controller.inner;
 
 import com.aim.mall.agent.api.dto.request.JobTypeCreateApiRequest;
 import com.aim.mall.agent.api.dto.request.JobTypePageApiRequest;
@@ -9,7 +9,7 @@ import com.aim.mall.agent.employee.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
-import com.aim.mall.agent.employee.domain.enums.ErrorCodeEnum;
+import com.aim.mall.agent.employee.domain.enums.AgentErrorCodeEnum;
 import com.aim.mall.agent.employee.domain.exception.BusinessException;
 import com.aim.mall.agent.employee.service.JobTypeApplicationService;
 import com.aim.mall.common.api.CommonResult;
@@ -64,15 +64,15 @@ public class JobTypeInnerController {
         query.setPageNum(request.getPageNum());
         query.setPageSize(request.getPageSize());
 
-        CommonResult<CommonResult.PageData<JobTypeApplicationService.JobTypeResponse>> result =
+        CommonResult<CommonResult.PageData<JobTypeApplicationService.JobTypeResponse>> listResult =
                 jobTypeApplicationService.pageJobType(query);
 
         // 转换为 API Response
-        List<JobTypeApiResponse> items = result.getData().getItems().stream()
+        List<JobTypeApiResponse> items = listResult.getData().getItems().stream()
                 .map(this::convertToApiResponse)
                 .collect(Collectors.toList());
 
-        return CommonResult.pageSuccess(items, result.getData().getTotalCount());
+        return CommonResult.pageSuccess(items, listResult.getData().getTotalCount());
     }
 
     /**
@@ -180,17 +180,17 @@ public class JobTypeInnerController {
      * @param response 内部Response
      * @return API Response
      */
-    private JobTypeApiResponse convertToApiResponse(JobTypeApplicationService.JobTypeResponse response) {
+    private JobTypeApiResponse convertToApiResponse(JobTypeApplicationService.JobTypeResponse innerResponse) {
         JobTypeApiResponse apiResponse = new JobTypeApiResponse();
-        apiResponse.setId(response.getId());
-        apiResponse.setName(response.getName());
-        apiResponse.setCode(response.getCode());
-        apiResponse.setDescription(response.getDescription());
-        apiResponse.setStatus(response.getStatus());
-        apiResponse.setSortOrder(response.getSortOrder());
-        apiResponse.setEmployeeCount(response.getEmployeeCount());
-        apiResponse.setCreateTime(response.getCreateTime());
-        apiResponse.setUpdateTime(response.getUpdateTime());
+        apiResponse.setId(innerResponse.getId());
+        apiResponse.setName(innerResponse.getName());
+        apiResponse.setCode(innerResponse.getCode());
+        apiResponse.setDescription(innerResponse.getDescription());
+        apiResponse.setStatus(innerResponse.getStatus());
+        apiResponse.setSortOrder(innerResponse.getSortOrder());
+        apiResponse.setEmployeeCount(innerResponse.getEmployeeCount());
+        apiResponse.setCreateTime(innerResponse.getCreateTime());
+        apiResponse.setUpdateTime(innerResponse.getUpdateTime());
         return apiResponse;
     }
 
