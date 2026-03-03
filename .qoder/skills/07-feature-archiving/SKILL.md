@@ -16,6 +16,8 @@ description: 归档已完成的功能到 repowiki 以供未来复用。在功能
 - 实现 Program 的标准工作流最终任务
 - 数据库表设计完成需要归档
 
+> **执行方式**：优先委托给 `doc-generator` Agent 执行；如果 Sub-Agent 不可用，则使用本 Skill 执行
+
 ---
 
 ## 输入

@@ -25,6 +25,8 @@ description: 根据项目规范生成 Java 微服务代码。在用户说"生成
 - 用户明确指令："生成代码" 或 "委托：生成代码"
 - 主 Agent 在第 4 阶段调用
 
+> **执行方式**：优先委托给 `code-generator` Agent 执行；如果 Sub-Agent 不可用，则使用本 Skill 执行
+
 ---
 
 ## 输入

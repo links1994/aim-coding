@@ -19,6 +19,8 @@ description: 生成详细的技术规格书文档。在用户说"生成技术规
 - 当前 Program 是实现类型
 - 需求澄清完成（已生成 artifacts/answers.md）
 
+> **执行方式**：此任务优先委托给 `doc-generator` Agent 执行；如果 Sub-Agent 不可用，则使用本 Skill 执行
+
 ---
 
 ## Program 类型
