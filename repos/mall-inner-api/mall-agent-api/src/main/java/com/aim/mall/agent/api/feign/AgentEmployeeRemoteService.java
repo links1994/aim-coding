@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author AI Agent
  */
-@FeignClient(name = "mall-agent", contextId = "jobTypeRemoteService")
-public interface JobTypeRemoteService {
+@FeignClient(name = "mall-agent-employee-service")
+public interface AgentEmployeeRemoteService {
 
     /**
      * 岗位类型分页列表

@@ -9,7 +9,7 @@ import com.aim.mall.agent.employee.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
-import com.aim.mall.agent.service.JobTypeApplicationService;
+import com.aim.mall.agent.employee.service.JobTypeApplicationService;
 import com.aim.mall.common.api.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
