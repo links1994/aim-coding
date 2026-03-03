@@ -422,7 +422,7 @@ public class IdGenQueryService {
 - 路径参数必须放在 URL 最后
 - 推荐格式：`/resource/action/{id}`
 
-### 3.2 应用服务
+### 3.2 应用服务（远程调用服务端）
 
 - **职责**：核心业务逻辑处理，供门面服务通过 Feign 调用
 - **风格**：简化风格（仅 GET/POST）
@@ -436,6 +436,43 @@ public class IdGenQueryService {
 - 所有参数通过 Query 参数或 RequestBody 传递
 - 查询类：使用 Query 参数（GET 请求）
 - 操作类：使用 RequestBody（POST 请求）
+
+**参数校验规范（重要）**：
+
+| 层级 | 校验方式 | 说明 |
+|------|---------|------|
+| **门面服务** | ✅ 使用 `jakarta.validation`（`@Valid`、`@NotNull` 等） | 自动校验，快速失败 |
+| **应用服务（远程接口）** | ❌ **禁止使用 `jakarta.validation`** | 手动编写验证方法进行校验 |
+
+**应用服务手动校验示例**：
+
+```java
+@RestController
+@RequestMapping("/inner/api/v1/agent")
+public class JobTypeInnerController {
+    
+    @PostMapping("/create")
+    public CommonResult<Long> create(@RequestBody JobTypeCreateRequest request) {
+        // ✅ 手动校验参数
+        validateCreateRequest(request);
+        
+        // ... 业务逻辑
+    }
+    
+    private void validateCreateRequest(JobTypeCreateRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCodeEnum.PARAM_ERROR, "请求参数不能为空");
+        }
+        if (StringUtils.isBlank(request.getName())) {
+            throw new BusinessException(ErrorCodeEnum.PARAM_ERROR, "岗位类型名称不能为空");
+        }
+        if (request.getName().length() > 50) {
+            throw new BusinessException(ErrorCodeEnum.PARAM_ERROR, "岗位类型名称长度不能超过50个字符");
+        }
+        // ... 其他校验
+    }
+}
+```
 
 ### 3.3 调用关系
 
@@ -1304,3 +1341,4 @@ public class JobTypeAdminController {
 | v1.0 | 2026-03-02 | AI Agent | 初始版本，从原 architecture-standards.md 提取通用内容                          |
 | v1.1 | 2026-03-03 | AI Agent | 新增门面服务分层规范（第9章），明确 XxxApplicationService 作为业务编排层                  |
 | v1.2 | 2026-03-03 | AI Agent | 新增 MyBatis-Plus 使用规范：MP 仅用于增删改，查询必须用原生 Mapper；DO 类必须是 AimXxxDO 格式 |
+| v1.3 | 2026-03-03 | AI Agent | 新增远程调用接口参数校验规范：应用服务（服务端）禁止使用 jakarta.validation，必须手动校验 |
