@@ -1,6 +1,6 @@
 ---
 name: java-code-generation
-description: 根据项目规范生成 Java 微服务代码。在用户说"生成代码"、"委托：生成代码"或技术规格书已确认并准备实现时使用。支持 mall-admin、mall-app、mall-agent、mall-user 服务，具有正确的分层和 Feign 集成。
+description: 根据项目规范生成 Java 微服务代码。在用户说"生成代码"、"委托：生成代码"或技术规格书已确认并准备实现时使用。
 ---
 
 # Java 代码生成 Skill

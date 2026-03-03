@@ -26,7 +26,6 @@
 |--------|------------------------------|----------------------|-----------|
 | API 归档 | `api-archiving/`             | 归档 API 定义到 repowiki  | API 设计完成后 |
 | 数据库归档  | `database-schema-archiving/` | 归档数据库表结构到 repowiki   | 表设计完成后    |
-| 规格书归档  | `spec-archiving/`            | 归档技术规格书到 repowiki    | 规格书完成后    |
 | 陷阱归档   | `pitfalls-archiving/`        | 归档代码陷阱和反模式到 repowiki | 发现问题时     |
 
 > **注意**: 功能归档 Skill (`feature-archiving`) 已集成数据库表结构归档功能，在归档功能时会自动归档相关的表结构到 `repowiki/schemas/` 目录。

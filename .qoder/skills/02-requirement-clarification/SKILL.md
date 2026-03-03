@@ -1,6 +1,6 @@
 ---
 name: requirement-clarification
-description: 使用 ReAct 模式进行交互式需求澄清。在用户说"澄清 REQ-xxx"、"确认需求 REQ-xxx"或需要在技术设计前澄清业务规则时使用。支持逐题确认和实时文档更新。
+description: 使用 ReAct 模式进行交互式需求澄清。在用户说"澄清 REQ-xxx"、"确认需求 REQ-xxx"或需要在技术设计前澄清业务规则时使用。
 ---
 
 # 需求澄清 Skill

@@ -1,6 +1,6 @@
 ---
 name: feature-archiving
-description: 归档已完成的功能到 repowiki 以供未来复用。在功能实现完成、需要记录以供参考或创建可复用功能模板时使用。包含数据库表结构归档。
+description: 归档已完成的功能到 repowiki 以供未来复用。在功能实现完成、需要记录以供参考或创建可复用功能模板时使用。
 ---
 
 # 功能归档 Skill

@@ -1,77 +1,77 @@
 ---
 name: code-quality-analysis
-description: Analyze code quality and identify issues. Use when code generation is complete, before code review, or when user wants to check code against project standards and best practices.
+description: 分析代码质量并识别问题。在代码生成完成、代码审查前或用户希望检查代码是否符合项目标准和最佳实践时使用。
 ---
 
-# Code Quality Analysis Skill
+# 代码质量分析 Skill
 
-Analyze generated code for quality issues, standard compliance, design principles, design patterns, and potential improvements.
-
----
-
-## Trigger Conditions
-
-- Code generation completed
-- Before code review
-- User command: "analyze code quality" or "check code standards"
-- Need to validate code against project standards
+分析生成代码的质量问题、标准合规性、设计原则、设计模式和潜在改进点。
 
 ---
 
-## Inputs
+## 触发条件
 
-- Generated source code in `repos/`
+- 代码生成完成
+- 代码审查前
+- 用户指令："分析代码质量" 或 "检查代码规范"
+- 需要验证代码是否符合项目标准
+
+---
+
+## 输入
+
+- `repos/` 中生成的源代码
 - `.qoder/rules/common-coding-standards.md` — 通用编码规范
 - `.qoder/rules/common-architecture-standards.md` — 通用架构规范
 - `.qoder/rules/project-naming-standards.md` — 项目命名规范
 - `.qoder/rules/project-error-code-standards.md` — 项目错误码规范
 - `.qoder/rules/project-common-result-standards.md` — 项目响应格式规范
 - `.qoder/rules/project-operator-id-standards.md` — 项目操作人ID规范
-- Pitfall archives from `.qoder/repowiki/pitfalls/`
+- `.qoder/repowiki/pitfalls/` 中的陷阱归档
 
 ---
 
-## Outputs
+## 输出
 
-- Quality report → `orchestrator/PROGRAMS/{program_id}/artifacts/quality-report.md`
-- Issue list with severity levels
-- Fix suggestions
+- 质量报告 → `orchestrator/PROGRAMS/{program_id}/artifacts/quality-report.md`
+- 带严重级别的问题列表
+- 修复建议
 
 ---
 
-## Analysis Categories
+## 分析类别
 
-### 1. Naming Conventions
+### 1. 命名规范
 
-Check against project naming standards:
-- Class names
-- Method names
-- Variable names
-- Package structure
+检查项目命名标准：
+- 类名
+- 方法名
+- 变量名
+- 包结构
 
-### 2. Architecture Compliance
+### 2. 架构合规性
 
-Verify layered architecture:
-- Controller layer responsibilities
-- Service layer usage
-- Mapper/Repository patterns
-- DTO/VO separation
+验证分层架构：
+- Controller 层职责
+- Service 层使用
+- Mapper/Repository 模式
+- DTO/VO 分离
 
-### 3. Common Pitfalls
+### 3. 常见陷阱
 
-Query pitfall archives and check:
-- Feign client issues
-- Transaction boundaries
-- Null pointer risks
-- Performance anti-patterns
+查询陷阱归档并检查：
+- Feign 客户端问题
+- 事务边界
+- 空指针风险
+- 性能反模式
 
-### 4. Code Smells
+### 4. 代码异味
 
-Identify common code smells:
-- Duplicate code
-- Long methods
-- Large classes
-- Deep nesting
+识别常见代码异味：
+- 重复代码
+- 长方法
+- 大类
+- 深层嵌套
 
 ### 5. 设计原则适用性检查
 
@@ -460,114 +460,114 @@ public void processRefund(Refund refund) {
 
 ---
 
-## Workflow
+## 工作流程
 
-### Step 1: Read Standards and Pitfalls
+### 步骤 1：读取规范和陷阱
 
-1. Read common coding standards (`.qoder/rules/common-coding-standards.md`)
-2. Read common architecture standards (`.qoder/rules/common-architecture-standards.md`)
-3. Read project naming standards (`.qoder/rules/project-naming-standards.md`)
-4. Query pitfall archives using knowledge-base-query Skill
+1. 读取通用编码规范（`.qoder/rules/common-coding-standards.md`）
+2. 读取通用架构规范（`.qoder/rules/common-architecture-standards.md`）
+3. 读取项目命名规范（`.qoder/rules/project-naming-standards.md`）
+4. 使用 knowledge-base-query Skill 查询陷阱归档
 
-### Step 2: Scan Source Code
+### 步骤 2：扫描源代码
 
-Read generated source files:
+读取生成的源文件：
 - Controllers
 - Services
 - Mappers
 - DTOs/Entities
 
-### Step 3: Execute Checks
+### 步骤 3：执行检查
 
-For each file, run quality checks:
-1. Naming convention check
-2. Architecture pattern check
-3. Pitfall pattern matching
-4. Code smell detection
-5. **Design Principles check**（根据场景判断是否适用）
-   - SOLID Principles (SRP, OCP, LSP, ISP, DIP)
-   - Law of Demeter (LoD)
-   - DRY Principle（强烈建议）
-   - KISS Principle（强烈建议）
-   - YAGNI Principle（强烈建议）
-   - Composition Over Inheritance
-   - Program to Interface
-   - Fail Fast（强烈建议）
-   - Separation of Concerns (SoC)
-6. **Design patterns check**（根据场景判断是否适用）
-   - Identify pattern opportunities
-   - Verify appropriate pattern usage
-   - Check for anti-patterns
+对每个文件执行质量检查：
+1. 命名规范检查
+2. 架构模式检查
+3. 陷阱模式匹配
+4. 代码异味检测
+5. **设计原则检查**（根据场景判断是否适用）
+   - SOLID 原则（SRP、OCP、LSP、ISP、DIP）
+   - 迪米特法则（LoD）
+   - DRY 原则（强烈建议）
+   - KISS 原则（强烈建议）
+   - YAGNI 原则（强烈建议）
+   - 组合优于继承
+   - 面向接口编程
+   - 快速失败（强烈建议）
+   - 关注点分离（SoC）
+6. **设计模式检查**（根据场景判断是否适用）
+   - 识别模式机会
+   - 验证适当的模式使用
+   - 检查反模式
 
-### Step 4: Generate Report
+### 步骤 4：生成报告
 
 ```markdown
-# Code Quality Report
+# 代码质量报告
 
-## Summary
+## 摘要
 
-| Category | Issues | Critical | Warning | Info |
-|----------|--------|----------|---------|------|
-| Naming | 2 | 0 | 1 | 1 |
-| Architecture | 1 | 0 | 1 | 0 |
-| Pitfalls | 0 | 0 | 0 | 0 |
-| Design Principles | 5 | 0 | 3 | 2 |
-| Design Patterns | 1 | 0 | 0 | 1 |
+| 类别 | 问题数 | 严重 | 警告 | 信息 |
+|------|--------|------|------|------|
+| 命名规范 | 2 | 0 | 1 | 1 |
+| 架构合规 | 1 | 0 | 1 | 0 |
+| 陷阱 | 0 | 0 | 0 | 0 |
+| 设计原则 | 5 | 0 | 3 | 2 |
+| 设计模式 | 1 | 0 | 0 | 1 |
 
-## Detailed Issues
+## 详细问题
 
-### Issue 1: Naming Convention
-- **File**: XxxController.java
-- **Line**: 45
-- **Severity**: Warning
-- **Description**: Method name should start with lowercase
-- **Suggestion**: Rename to `getJobTypeList`
+### 问题 1：命名规范
+- **文件**：XxxController.java
+- **行号**：45
+- **严重级别**：警告
+- **描述**：方法名应小写开头
+- **建议**：重命名为 `getJobTypeList`
 
-### Issue 2: Design Principle - SRP Violation
-- **File**: OrderService.java
-- **Line**: 25-80
-- **Severity**: Warning
-- **Description**: Class has multiple responsibilities: order processing and Excel export
-- **Suggestion**: Extract Excel export logic to OrderExportService
+### 问题 2：设计原则 - 违反 SRP
+- **文件**：OrderService.java
+- **行号**：25-80
+- **严重级别**：警告
+- **描述**：类职责过多：订单处理和 Excel 导出
+- **建议**：将 Excel 导出逻辑提取到 OrderExportService
 
-### Issue 3: Design Principle - DRY Violation
-- **File**: OrderValidator.java
-- **Line**: 30-45, 60-75
-- **Severity**: Warning
-- **Description**: Duplicate validation logic in multiple methods
-- **Suggestion**: Extract common validation to a private method
+### 问题 3：设计原则 - 违反 DRY
+- **文件**：OrderValidator.java
+- **行号**：30-45, 60-75
+- **严重级别**：警告
+- **描述**：多个方法中存在重复验证逻辑
+- **建议**：将公共验证提取为私有方法
 
-### Issue 4: Design Pattern Opportunity
-- **File**: PaymentService.java
-- **Line**: 40-60
-- **Severity**: Info
-- **Description**: Multiple if-else for payment type handling
-- **Suggestion**: Consider using Strategy pattern for different payment processors
+### 问题 4：设计模式机会
+- **文件**：PaymentService.java
+- **行号**：40-60
+- **严重级别**：信息
+- **描述**：支付方式处理使用大量 if-else
+- **建议**：考虑使用策略模式处理不同支付处理器
 
-## Recommendations
+## 建议
 
-1. Fix naming issues
-2. Review architecture compliance
-3. Refactor classes violating SRP
-4. Consider applying appropriate design patterns
+1. 修复命名问题
+2. 审查架构合规性
+3. 重构违反 SRP 的类
+4. 考虑应用适当的设计模式
 
 ---
 
-## Return Format
+## 返回格式
 
 ```
-Status: Completed / Issues Found
-Report: artifacts/quality-report.md
-Issues: X total (Y critical, Z warning, W info)
-  - Naming: X issues
-  - Architecture: X issues
-  - Pitfalls: X issues
-  - Design Principles: X issues (SOLID, DRY, KISS, etc.)
-  - Design Patterns: X issues
+状态：已完成 / 发现问题
+报告：artifacts/quality-report.md
+问题：共 X 个（Y 严重，Z 警告，W 信息）
+  - 命名规范：X 个问题
+  - 架构合规：X 个问题
+  - 陷阱：X 个问题
+  - 设计原则：X 个问题（SOLID、DRY、KISS 等）
+  - 设计模式：X 个问题
 
-Recommendations:
-- Fix critical issues before review
-- Address warnings in next iteration
+建议：
+- 审查前修复严重问题
+- 下次迭代处理警告
 - 评估设计原则的适用性，简单场景不需要强行遵守
 - 设计模式按需使用，避免过度设计
 ```
