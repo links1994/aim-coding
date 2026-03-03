@@ -2,7 +2,9 @@ package com.aim.mall.basic.idgen.controller.inner;
 
 import com.aim.mall.basic.api.dto.request.IdGenApiRequest;
 import com.aim.mall.basic.api.dto.response.IdGenApiResponse;
+import com.aim.mall.basic.idgen.domain.enums.BasicErrorCodeEnum;
 import com.aim.mall.basic.idgen.domain.enums.DatePatternEnum;
+import com.aim.mall.basic.idgen.domain.exception.BusinessException;
 import com.aim.mall.basic.idgen.service.IdGenService;
 import com.aim.mall.common.api.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +47,8 @@ public class IdGenInnerController {
         // 转换日期格式
         DatePatternEnum datePattern = DatePatternEnum.fromPattern(request.getDatePattern());
         if (datePattern == null) {
-            return CommonResult.failed("40001004", "不支持的日期格式: " + request.getDatePattern());
+            throw new BusinessException(BasicErrorCodeEnum.DATE_PATTERN_NOT_SUPPORT,
+                    "不支持的日期格式: " + request.getDatePattern());
         }
 
         // 生成编码

@@ -2,11 +2,12 @@ package com.aim.mall.basic.idgen.service.impl;
 
 import com.aim.mall.basic.idgen.constant.IdGenConstant;
 import com.aim.mall.basic.idgen.domain.entity.AimIdGenRuleDO;
+import com.aim.mall.basic.idgen.domain.enums.BasicErrorCodeEnum;
 import com.aim.mall.basic.idgen.domain.enums.DatePatternEnum;
+import com.aim.mall.basic.idgen.domain.exception.BusinessException;
 import com.aim.mall.basic.idgen.mapper.AimIdGenRuleMapper;
 import com.aim.mall.basic.idgen.service.IdGenService;
 import com.aim.mall.basic.idgen.util.RedisDistributedLock;
-import com.aim.mall.common.api.CommonResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -59,7 +60,7 @@ public class IdGenServiceImpl implements IdGenService {
         // 检查是否超过上限
         if (sequence > IdGenConstant.SEQUENCE_MAX_VALUE) {
             log.error("ID生成序号达到上限，prefix={}, datePattern={}, sequence={}", prefix, datePattern.getPattern(), sequence);
-            throw new RuntimeException("当日序号已用完");
+            throw new BusinessException(BasicErrorCodeEnum.SEQUENCE_EXHAUSTED);
         }
 
         // 格式化序号（6位，不足补零）
@@ -182,7 +183,8 @@ public class IdGenServiceImpl implements IdGenService {
         int updated = idGenRuleMapper.allocateSegment(prefix, datePattern, stepSize);
 
         if (updated == 0) {
-            throw new RuntimeException("分配号段失败，prefix=" + prefix + ", datePattern=" + datePattern);
+            throw new BusinessException(BasicErrorCodeEnum.SEGMENT_ALLOCATE_ERROR,
+                    "分配号段失败，prefix=" + prefix + ", datePattern=" + datePattern);
         }
 
         // 4. 查询更新后的记录
