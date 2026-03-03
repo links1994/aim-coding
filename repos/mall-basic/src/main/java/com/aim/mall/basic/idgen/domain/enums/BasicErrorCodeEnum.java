@@ -13,6 +13,7 @@ public enum BasicErrorCodeEnum implements IErrorCode {
 
     // ==================== 客户端错误 (1) ====================
     // 参数错误 40001xxx
+    PARAM_ERROR(40001000L, "参数错误"),
     PREFIX_EMPTY(40001001L, "业务前缀不能为空"),
     PREFIX_FORMAT_ERROR(40001002L, "业务前缀格式错误，必须为1-3位大写字母"),
     DATE_PATTERN_EMPTY(40001003L, "日期格式不能为空"),

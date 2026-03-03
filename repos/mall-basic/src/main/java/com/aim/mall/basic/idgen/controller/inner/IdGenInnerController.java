@@ -9,9 +9,9 @@ import com.aim.mall.basic.idgen.service.IdGenService;
 import com.aim.mall.common.api.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,8 +41,11 @@ public class IdGenInnerController {
      */
     @PostMapping("/generate")
     @Operation(summary = "生成分布式ID编码")
-    public CommonResult<IdGenApiResponse> generate(@RequestBody @Valid IdGenApiRequest request) {
+    public CommonResult<IdGenApiResponse> generate(@RequestBody IdGenApiRequest request) {
         log.debug("生成分布式ID编码, request: {}", request);
+
+        // 手动校验参数
+        validateRequest(request);
 
         // 转换日期格式
         DatePatternEnum datePattern = DatePatternEnum.fromPattern(request.getDatePattern());
@@ -70,5 +73,28 @@ public class IdGenInnerController {
         log.info("生成编码成功, code: {}", code);
 
         return CommonResult.success(response);
+    }
+
+    /**
+     * 手动校验请求参数
+     *
+     * @param request ID生成请求
+     */
+    private void validateRequest(IdGenApiRequest request) {
+        if (request == null) {
+            throw new BusinessException(BasicErrorCodeEnum.PARAM_ERROR, "请求参数不能为空");
+        }
+        if (StringUtils.isBlank(request.getPrefix())) {
+            throw new BusinessException(BasicErrorCodeEnum.PARAM_ERROR, "业务前缀不能为空");
+        }
+        if (request.getPrefix().length() < 1 || request.getPrefix().length() > 3) {
+            throw new BusinessException(BasicErrorCodeEnum.PARAM_ERROR, "业务前缀长度必须在1-3个字符之间");
+        }
+        if (!request.getPrefix().matches("[A-Z]+")) {
+            throw new BusinessException(BasicErrorCodeEnum.PARAM_ERROR, "业务前缀必须为大写字母");
+        }
+        if (StringUtils.isBlank(request.getDatePattern())) {
+            throw new BusinessException(BasicErrorCodeEnum.PARAM_ERROR, "日期格式不能为空");
+        }
     }
 }

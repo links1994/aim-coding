@@ -9,13 +9,15 @@ import com.aim.mall.agent.employee.domain.dto.JobTypeCreateDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypePageQuery;
 import com.aim.mall.agent.employee.domain.dto.JobTypeStatusDTO;
 import com.aim.mall.agent.employee.domain.dto.JobTypeUpdateDTO;
+import com.aim.mall.agent.employee.domain.enums.ErrorCodeEnum;
+import com.aim.mall.agent.employee.domain.exception.BusinessException;
 import com.aim.mall.agent.employee.service.JobTypeApplicationService;
 import com.aim.mall.common.api.CommonResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,8 +52,11 @@ public class JobTypeInnerController {
     @PostMapping("/list")
     @Operation(summary = "岗位类型分页列表")
     public CommonResult<CommonResult.PageData<JobTypeApiResponse>> list(
-            @RequestBody @Valid JobTypePageApiRequest request) {
+            @RequestBody JobTypePageApiRequest request) {
         log.debug("岗位类型分页列表, request: {}", request);
+
+        // 手动校验参数
+        validatePageRequest(request);
 
         // Request 转换为 Query
         JobTypePageQuery query = new JobTypePageQuery();
@@ -78,8 +83,11 @@ public class JobTypeInnerController {
      */
     @PostMapping("/create")
     @Operation(summary = "创建岗位类型")
-    public CommonResult<Long> create(@RequestBody @Valid JobTypeCreateApiRequest request) {
+    public CommonResult<Long> create(@RequestBody JobTypeCreateApiRequest request) {
         log.debug("创建岗位类型, request: {}", request);
+
+        // 手动校验参数
+        validateCreateRequest(request);
 
         // Request 转换为 DTO
         JobTypeCreateDTO dto = new JobTypeCreateDTO();
@@ -102,8 +110,11 @@ public class JobTypeInnerController {
      */
     @PutMapping("/update")
     @Operation(summary = "更新岗位类型")
-    public CommonResult<Boolean> update(@RequestBody @Valid JobTypeUpdateApiRequest request) {
+    public CommonResult<Boolean> update(@RequestBody JobTypeUpdateApiRequest request) {
         log.debug("更新岗位类型, request: {}", request);
+
+        // 手动校验参数
+        validateUpdateRequest(request);
 
         // Request 转换为 DTO
         JobTypeUpdateDTO dto = new JobTypeUpdateDTO();
@@ -127,8 +138,11 @@ public class JobTypeInnerController {
      */
     @PutMapping("/status")
     @Operation(summary = "状态变更（启用/禁用）")
-    public CommonResult<Boolean> updateStatus(@RequestBody @Valid JobTypeStatusApiRequest request) {
+    public CommonResult<Boolean> updateStatus(@RequestBody JobTypeStatusApiRequest request) {
         log.debug("更新岗位类型状态, request: {}", request);
+
+        // 手动校验参数
+        validateStatusRequest(request);
 
         // Request 转换为 DTO
         JobTypeStatusDTO dto = new JobTypeStatusDTO();
@@ -178,5 +192,70 @@ public class JobTypeInnerController {
         apiResponse.setCreateTime(response.getCreateTime());
         apiResponse.setUpdateTime(response.getUpdateTime());
         return apiResponse;
+    }
+
+    // ==================== 手动参数校验方法 ====================
+
+    private void validatePageRequest(JobTypePageApiRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "请求参数不能为空");
+        }
+        if (request.getPageNum() == null || request.getPageNum() < 1) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "页码必须大于等于1");
+        }
+        if (request.getPageSize() == null || request.getPageSize() < 1 || request.getPageSize() > 100) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "每页数量必须在1-100之间");
+        }
+    }
+
+    private void validateCreateRequest(JobTypeCreateApiRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "请求参数不能为空");
+        }
+        if (StringUtils.isBlank(request.getName())) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型名称不能为空");
+        }
+        if (request.getName().length() > 50) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型名称长度不能超过50个字符");
+        }
+        if (StringUtils.isNotBlank(request.getDescription()) && request.getDescription().length() > 200) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型描述长度不能超过200个字符");
+        }
+        if (request.getStatus() == null || (request.getStatus() != 0 && request.getStatus() != 1)) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "状态值只能是0（禁用）或1（启用）");
+        }
+    }
+
+    private void validateUpdateRequest(JobTypeUpdateApiRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "请求参数不能为空");
+        }
+        if (request.getId() == null || request.getId() <= 0) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型ID不能为空且必须大于0");
+        }
+        if (StringUtils.isBlank(request.getName())) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型名称不能为空");
+        }
+        if (request.getName().length() > 50) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型名称长度不能超过50个字符");
+        }
+        if (StringUtils.isNotBlank(request.getDescription()) && request.getDescription().length() > 200) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型描述长度不能超过200个字符");
+        }
+        if (request.getStatus() == null || (request.getStatus() != 0 && request.getStatus() != 1)) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "状态值只能是0（禁用）或1（启用）");
+        }
+    }
+
+    private void validateStatusRequest(JobTypeStatusApiRequest request) {
+        if (request == null) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "请求参数不能为空");
+        }
+        if (request.getId() == null || request.getId() <= 0) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "岗位类型ID不能为空且必须大于0");
+        }
+        if (request.getStatus() == null || (request.getStatus() != 0 && request.getStatus() != 1)) {
+            throw new BusinessException(ErrorCodeEnum.AGENT_PARAM_ERROR, "状态值只能是0（禁用）或1（启用）");
+        }
     }
 }

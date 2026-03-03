@@ -12,7 +12,7 @@ import lombok.Getter;
  * @since 2026/2/25
  */
 @Getter
-public enum ErrorCodeEnum implements IErrorCode {
+public enum AgentAgentErrorCodeEnum implements IErrorCode {
 
     // 智能员工模块业务错误
     AGENT_BUSINESS_ERROR(10092001L, "智能员工业务错误"),
@@ -33,7 +33,7 @@ public enum ErrorCodeEnum implements IErrorCode {
     private final long code;
     private final String message;
 
-    ErrorCodeEnum(long code, String message) {
+    AgentErrorCodeEnum(long code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -44,8 +44,8 @@ public enum ErrorCodeEnum implements IErrorCode {
      * @param code 错误码
      * @return 错误码枚举
      */
-    public static ErrorCodeEnum getByCode(String code) {
-        for (ErrorCodeEnum errorCode : values()) {
+    public static AgentErrorCodeEnum getByCode(String code) {
+        for (AgentErrorCodeEnum errorCode : values()) {
             if (String.valueOf(errorCode.getCode()).equals(code)) {
                 return errorCode;
             }
