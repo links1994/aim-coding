@@ -1,36 +1,127 @@
-# Skill 使用指南
+---
+trigger: manual
+alwaysApply: false
+---
 
-本目录包含可复用的能力模块（Skills），用于执行特定的代码生成和分析任务。
+# Skill 索引
 
-> **职责边界**：Skill 文件只定义"如何执行"，规范标准在 `.qoder/rules/` 中定义。Skill 执行前必须先读取对应的 Rule 文件。
+本目录包含可复用的执行模块（Skills），用于执行特定的代码生成和分析任务。
+
+> **职责边界**：Skill 只定义"如何执行"，规范标准在 `.qoder/rules/` 中定义。Skill 执行前**必须先读取对应的 Rule 文件**。
 
 ---
 
-## Skill 列表
+## 核心开发 Skills（Spec 模式）
 
-### 核心开发 Skills（Spec 模式）
+| Skill | 目录 | 阶段 | 依赖 Rule | 产出物 |
+|-------|------|------|-----------|--------|
+| 需求分解 | `01-prd-decomposition/` | Phase 1 | `prd-decomposition-standards.md` | `decomposition.md` |
+| 需求澄清 | `02-requirement-clarification/` | Phase 2 | `requirement-clarification-standards.md` | `answers.md`, `decisions.md` |
+| 技术规格生成 | `03-tech-spec-generation/` | Phase 3 | `tech-spec-generation-standards.md` | `tech-spec.md`, `openapi.yaml` |
+| Java 代码生成 | `04-java-code-generation/` | Phase 4 | 所有编码/架构/项目规范 | Java 源代码 |
+| HTTP 测试生成 | `05-http-test-generation/` | Phase 5 | - | `.http` 文件, SQL 脚本 |
+| 代码质量分析 | `06-code-quality-analysis/` | Phase 6 | 所有编码/架构/项目规范 | `quality-report.md` |
+| 单元测试生成 | `07-unit-test-generation/` | Phase 6.5 | `common-coding-standards.md` | 单元测试类 |
+| 功能归档 | `08-feature-archiving/` | Phase 8 | - | `repowiki/features/` |
 
-| Skill     | 目录                              | 说明                   | 使用时机     | 依赖 Rule                                            |
-|-----------|---------------------------------|----------------------|----------|----------------------------------------------------|
-| 需求分解      | `01-prd-decomposition/`         | 根据 PRD 进行需求拆解        | Phase 1  | `prd-decomposition-standards.md`                   |
-| 需求澄清      | `02-requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2  | `requirement-clarification-standards.md`           |
-| 技术规格生成    | `03-tech-spec-generation/`      | 生成技术规格书              | Phase 3  | `tech-spec-generation-standards.md`                |
-| Java 代码生成 | `04-java-code-generation/`      | 生成 Java 微服务代码        | Phase 4  | `coding-standards.md`, `architecture-standards.md` |
-| HTTP 测试生成 | `05-http-test-generation/`      | 生成 HTTP 测试文件         | Phase 5  | -                                                  |
-| 代码质量分析    | `06-code-quality-analysis/`     | 代码质量分析和优化            | Phase 6  | -                                                  |
-| 单元测试生成    | `07-unit-test-generation/`      | 生成 Java 单元测试（可选）    | Phase 7  | `common-coding-standards.md`                       |
-| 功能归档      | `08-feature-archiving/`         | 功能归档到 repowiki 知识库   | Phase 8  | -                                                  |
+> **阶段编号说明**：Phase 6.5 是可选阶段，位于 Phase 6 之后，Phase 8 之前（无 Phase 7）
 
-### 归档类 Skills（按需加载）
+### 阶段规则引用关系
 
-| Skill  | 目录                           | 说明                   | 使用时机      |
-|--------|------------------------------|----------------------|-----------|
-| API 归档 | `api-archiving/`             | 归档 API 定义到 repowiki  | API 设计完成后 |
-| 数据库归档  | `database-schema-archiving/` | 归档数据库表结构到 repowiki   | 表设计完成后    |
-| 陷阱归档   | `pitfalls-archiving/`        | 归档代码陷阱和反模式到 repowiki | 发现问题时     |
+```
+Phase 1: prd-decomposition
+         ↓ 读取
+         prd-decomposition-standards.md
 
-> **注意**: 功能归档 Skill (`feature-archiving`) 已集成数据库表结构归档功能，在归档功能时会自动归档相关的表结构到
-`repowiki/schemas/` 目录。
+Phase 2: requirement-clarification
+         ↓ 读取
+         requirement-clarification-standards.md
+
+Phase 3: tech-spec-generation
+         ↓ 读取
+         tech-spec-generation-standards.md
+         project-error-code-standards.md
+
+Phase 4: java-code-generation
+         ↓ 读取（按优先级）
+         1. common-coding-standards.md
+         2. common-architecture-standards.md
+         3. project-naming-standards.md
+         4. project-error-code-standards.md
+         5. project-common-result-standards.md
+         6. project-operator-id-standards.md
+
+Phase 6: code-quality-analysis
+         ↓ 读取（同上 Phase 4）
+         所有编码/架构/项目规范
+```
+
+---
+
+## 归档类 Skills
+
+| Skill | 目录 | 使用时机 | 产出位置 |
+|-------|------|----------|----------|
+| API 归档 | `api-archiving/` | API 设计完成后 | `repowiki/apis/` |
+| 数据库归档 | `database-schema-archiving/` | 表设计完成后 | `repowiki/schemas/` |
+| 陷阱归档 | `pitfalls-archiving/` | 发现问题时 | `repowiki/pitfalls/` |
+| 知识库查询 | `knowledge-base-query/` | 任何需要查询时 | - |
+
+> 注：`feature-archiving` 已集成数据库表结构归档功能。
+
+---
+
+## Skill 文件格式
+
+```yaml
+---
+name: skill-name
+description: Skill 描述，包含触发关键词
+---
+
+# Skill 标题
+
+> **前置依赖**：执行前必须先读取以下 Rule 文件：
+> - `.qoder/rules/xxx-standards.md`
+
+## 触发条件
+
+何时使用此 Skill。
+
+## 输入
+
+- 输入项 1
+- 输入项 2
+- `.qoder/rules/xxx-standards.md` — 规范文件（**必须先读取**）
+
+## 输出
+
+- 输出项 1
+- 输出项 2
+
+## 工作流程
+
+1. 步骤 1
+2. 步骤 2
+3. ...
+
+## 检查清单（Checklist）
+
+生成类 Skill 必须包含最终检查步骤：
+
+- [ ] 检查项 1
+- [ ] 检查项 2
+- [ ] 检查项 3
+
+## 返回格式
+
+```
+状态：已完成/失败/需要决策
+报告：workspace/xxx.md
+输出：N 个文件
+决策点：[如有]
+```
+```
 
 ---
 
@@ -50,154 +141,38 @@
 产出格式保持一致
 ```
 
-### 任务映射关系
+### 阶段执行映射
 
-| 阶段 | 首选执行者 | 降级 Skill | 说明 |
-|------|-----------|-----------|------|
-| Phase 1 | `prd-decomposition` (Skill) | - | 标准化分解流程 |
-| Phase 2 | `tech-researcher` (Agent) | - | 并行技术调研 |
-| Phase 2 | `requirement-clarification` (Skill) | - | ReAct 交互 |
-| Phase 3 | `doc-generator` (Agent) | `tech-spec-generation` | 技术规格生成 |
-| Phase 4 | `code-generator` (Agent) | `java-code-generation` | 代码生成 |
-| Phase 5 | `http-test-generation` (Skill) | - | 标准化生成 |
-| Phase 6 | `code-reviewer` (Agent) | `code-quality-analysis` | 代码审查 |
-| Phase 6.5 | `unit-test-generation` (Skill) | - | 单元测试生成（可选） |
-| Phase 7 | `doc-generator` (Agent) | `feature-archiving` | 功能归档 |
-
-详见：`.qoder/agents/README-AGENTS.md`
-
-### 上下文管理 Skills（按需加载）
-
-| Skill | 目录                      | 说明                | 使用时机    |
-|-------|-------------------------|-------------------|---------|
-| 知识库查询 | `knowledge-base-query/` | 统一查询 repowiki 知识库 | 任何需要查询时 |
+| 阶段 | 首选执行者 | 降级 Skill |
+|------|-----------|-----------|
+| Phase 1 | `prd-decomposition` (Skill) | - |
+| Phase 2 | `requirement-clarification` (Skill) + `tech-researcher` (Agent) | - |
+| Phase 3 | `doc-generator` (Agent) | `tech-spec-generation` (Skill) |
+| Phase 4 | `code-generator` (Agent) | `java-code-generation` (Skill) |
+| Phase 5 | `http-test-generation` (Skill) | - |
+| Phase 6 | `code-reviewer` (Agent) | `code-quality-analysis` (Skill) |
+| Phase 6.5 | `unit-test-generation` (Skill) | - |
+| Phase 8 | `doc-generator` (Agent) | `feature-archiving` (Skill) |
 
 ---
 
-## Skill 定义
+## Agent vs Skill 对比
 
-Skill 是**可复用的执行模块**，特点：
-
-1. **单一职责**：每个 Skill 只做一件事
-2. **明确的输入输出**：有清晰的接口定义
-3. **可被调用**：由主 Agent 在适当时机调用
-4. **不维护状态**：无持久化状态，纯函数式
-5. **依赖规范**：执行前必须先读取对应的 Rule 文件
-
----
-
-## Skill 使用方式
-
-### 方式一：主 Agent 直接调用
-
-```
-用户: "生成技术规格书"
-主 Agent: 
-  → 读取 .qoder/rules/tech-spec-generation-standards.md（规范）
-  → 读取 artifacts/answers.md（输入）
-  → 调用 03-tech-spec-generation Skill（执行）
-  → 生成 tech-spec.md（输出）
-```
-
-### 方式二：通过 Sub-Agent 委托
-
-```
-用户: "委托: 生成代码"
-主 Agent:
-  → 创建 Sub-Agent
-  → Sub-Agent 读取对应的 Rule 文件（获取规范）
-  → Sub-Agent 读取对应的 Skill 文件（获取执行流程）
-  → 执行代码生成
-  → 返回结果
-```
+| 特性 | Skill | Agent |
+|------|-------|-------|
+| 复杂度 | 低（单一能力） | 高（完整工作流） |
+| 决策能力 | 无（按规范执行） | 有（自主判断） |
+| 上下文管理 | 输入即上下文 | 需要维护上下文 |
+| 使用方式 | 被调用执行 | 独立运行或被委托 |
+| 规范依赖 | 必须读取 Rule | 自主判断 |
 
 ---
 
-## Skill 文件格式
+## 新增 Skill 步骤
 
-```yaml
----
-name: skill-name
-description: Skill 描述，包含触发关键词。在用户说"xxx"或需要做 yyy 时使用。
----
-
-# Skill 标题
-
-  > **前置条件**：执行前必须先读取 `.qoder/rules/xxx-standards.md` 以获取规范标准。
-
-  ## 触发条件
-
-  何时使用此 Skill。
-
-  ## 输入
-
-- 输入项 1
-- 输入项 2
-- `.qoder/rules/xxx-standards.md` — 规范文件（**必须先读取**）
-
-## 输出
-
-- 输出项 1
-- 输出项 2
-
-  ## 工作流程
-
-  详细的工作流程步骤...
-
-## 返回格式
-
-```
-
-状态：已完成/失败/需要决策
-报告：workspace/xxx.md
-输出：N 个文件
-决策点：[如有]
-
-```
-```
-
----
-
-## Skill 与 Rule 的关系
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        执行流程                              │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  用户指令: "生成技术规格书"                                   │
-│       ↓                                                     │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │ 主 Agent                                            │   │
-│  │  1. 读取 Rule: tech-spec-generation-standards.md（规范）    │   │
-│  │  2. 读取 Skill: 03-tech-spec-generation/SKILL.md（执行流程）   │   │
-│  │  3. 按 Skill 流程执行，遵循 Rule 规范                 │   │
-│  └─────────────────────────────────────────────────────┘   │
-│       ↓                                                     │
-│  输出: tech-spec.md（符合规范）                              │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 与 Agent 的区别
-
-| 特性    | Agent    | Skill     |
-|-------|----------|-----------|
-| 复杂度   | 高（完整工作流） | 低（单一能力）   |
-| 决策能力  | 有        | 无（按规范执行）  |
-| 上下文管理 | 需要维护上下文  | 输入即上下文    |
-| 使用方式  | 独立运行或被委托 | 被调用执行     |
-| 规范依赖  | 自主判断     | 必须读取 Rule |
-
----
-
-## 新增 Skill
-
-如需新增 Skill：
-
-1. 创建 `{skill-name}/SKILL.md` 文件（注意：使用目录结构，不是单个文件）
-2. 遵循上述文件格式（只保留 `name` 和 `description` 在 Frontmatter）
-3. 更新本 README 的 Skill 列表
-4. 如有对应规范，在 `.qoder/rules/` 创建 Rule 文件
+1. 创建 `{skill-name}/SKILL.md` 文件（使用目录结构）
+2. 遵循上述文件格式（Frontmatter 只保留 `name` 和 `description`）
+3. **生成类 Skill 必须包含 Checklist 作为最后步骤**
+4. **涉及代码生成的必须引用规范检测**
+5. 更新本 README 的 Skill 列表
+6. 如有对应规范，在 `.qoder/rules/` 创建 Rule 文件

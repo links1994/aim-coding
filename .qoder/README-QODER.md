@@ -14,10 +14,12 @@
 │   ├── prd-decomposition-standards.md       # 需求拆分规范
 │   ├── requirement-clarification-standards.md # 需求澄清规范
 │   ├── tech-spec-generation-standards.md    # 技术规格书规范
-│   ├── coding-standards.md            # 编码规范
-│   ├── architecture-standards.md      # 架构规范
-│   ├── common-result-standards.md     # 响应格式规范
-│   └── operator-id-standards.md       # 操作人ID传递规范
+│   ├── common-coding-standards.md     # Java 编码通用规范
+│   ├── common-architecture-standards.md # 架构通用规范
+│   ├── project-naming-standards.md    # 项目命名规范
+│   ├── project-error-code-standards.md # 错误码规范
+│   ├── project-common-result-standards.md # 响应格式规范
+│   └── project-operator-id-standards.md # 操作人ID传递规范
 ├── repowiki/                          # 知识库归档
 │   ├── features/                      # 功能归档
 │   ├── schemas/                       # 数据库表结构归档
@@ -31,7 +33,7 @@
     ├── 04-java-code-generation/SKILL.md # Java 代码生成 (Phase 4)
     ├── 05-http-test-generation/SKILL.md # HTTP 测试生成 (Phase 5)
     ├── 06-code-quality-analysis/SKILL.md # 代码质量分析 (Phase 6)
-    ├── 07-unit-test-generation/SKILL.md  # 生成单元测试 (Phase 7)
+    ├── 07-unit-test-generation/SKILL.md  # 生成单元测试 (Phase 6.5)
     ├── 08-feature-archiving/SKILL.md  # 功能归档 (Phase 8)
     ├── api-archiving/SKILL.md         # API 归档
     ├── database-schema-archiving/SKILL.md # 数据库归档
@@ -57,15 +59,17 @@
 
 | 文件                           | 说明                      |
 |------------------------------|-------------------------|
-| `coding-standards.md`        | Java 编码规范、命名规范、注释规范等    |
-| `architecture-standards.md`  | 分层架构、服务职责、接口风格、数据库设计规范等 |
+| `common-coding-standards.md`        | Java 编码通用规范、命名规范、注释规范等    |
+| `common-architecture-standards.md`  | 分层架构、DDD领域设计、服务职责、接口风格、数据库设计规范等 |
 
-### 通用规范
+### 项目规范
 
 | 文件                        | 说明                      |
 |---------------------------|-------------------------|
-| `common-result-standards.md` | 统一响应格式 CommonResult 规范 |
-| `operator-id-standards.md`   | 操作人 ID 传递规范 |
+| `project-naming-standards.md` | 项目命名规范（AimXxxDO/AimXxxService等） |
+| `project-error-code-standards.md` | 错误码规范（SSMMTNNN格式） |
+| `project-common-result-standards.md` | 统一响应格式 CommonResult 规范 |
+| `project-operator-id-standards.md`   | 操作人 ID 传递规范 |
 
 ---
 
@@ -120,7 +124,9 @@ Phase 5: HTTP 测试生成 (05-http-test-generation/SKILL.md)
   ↓
 Phase 6: 代码质量优化 (06-code-quality-analysis/SKILL.md)
   ↓
-Phase 7: 功能归档 (07-feature-archiving/SKILL.md)
+Phase 6.5: 单元测试生成 (07-unit-test-generation/SKILL.md) [可选]
+  ↓
+Phase 8: 功能归档 (08-feature-archiving/SKILL.md)
 ```
 
 ---

@@ -1,4 +1,4 @@
-# P-YYYY-NNN: 任务标题
+# {program-id}: {任务标题}
 
 ## 目标
 
@@ -18,8 +18,8 @@
 ## 涉及文件
 
 列出需要修改的主要文件：
-- `src/xxx.ts` — 描述改动
-- `src/yyy.ts` — 描述改动
+- `repos/{service}/src/...` — 描述改动
+- `repos/{service}/src/...` — 描述改动
 
 ## 验收标准
 

@@ -1,99 +1,122 @@
-# Agent 定义说明
-
-本目录用于存放 Agent 定义文件。
-
-## 何时使用 Agent 定义
-
-当需要定义一个完整的、独立的工作单元时使用 Agent：
-
-1. **复杂的多步骤任务**：需要完整的输入处理、执行流程、输出生成
-2. **独立的决策逻辑**：需要根据上下文做出复杂决策
-3. **特定的业务领域**：如"数据库设计 Agent"、"安全审计 Agent"
-
+---
+trigger: manual
+alwaysApply: false
 ---
 
-## Agent vs Skill 的区别
+# Agent 索引
 
-| 特性   | Agent    | Skill        |
-|------|----------|--------------|
-| 复杂度  | 高（完整工作流） | 低（单一能力）      |
-| 独立性  | 可独立执行    | 需被调用         |
-| 输入输出 | 完整的上下文处理 | 明确的参数和返回值    |
-| 使用场景 | 复杂任务     | 代码生成、分析等具体能力 |
+本目录包含 Sub-Agent 定义文件，用于并行执行复杂任务。
 
----
-
-## 本项目的选择
-
-本项目使用 **Skill + Sub-Agent 混合模式**：
-
-### Skill 模式（标准化任务）
-
-- 代码生成 → `skills/04-java-code-generation/SKILL.md`
-- HTTP 测试生成 → `skills/05-http-test-generation/SKILL.md`
-- 代码质量分析 → `skills/06-code-quality-analysis/SKILL.md`
-
-这些能力由主 Agent 在适当时机调用，按规范执行。
-
-### Sub-Agent 模式（复杂并行任务）
-
-- 代码生成专家 → `agents/code-generator.md`
-- 代码审查专家 → `agents/code-reviewer.md`
-- 技术调研专家 → `agents/tech-researcher.md`
-- 文档生成专家 → `agents/doc-generator.md`
-
-这些 Agent 用于并行处理复杂任务，具有独立决策能力。
-
----
-
-## Sub-Agent 说明
-
-本项目使用 Sub-Agent 进行任务委托，但**不引入代理模式**。
-
-Sub-Agent 是简单的任务并行执行机制：
-
-- 由主 Agent 直接委托
-- 通过文件通信
-- 返回简洁的执行结果
-
-详见：`orchestrator/ALWAYS/SUB-AGENT.md`
+> **职责边界**：Agent 用于复杂并行任务，具有独立决策能力。标准化任务使用 Skill 执行。
 
 ---
 
 ## Agent 列表
 
-| Agent | 文件 | 职责 | 使用场景 | 降级 Skill |
+| Agent | 文件 | 职责 | 使用阶段 | 降级 Skill |
 |-------|------|------|----------|-----------|
-| code-generator | `code-generator.md` | Java 微服务代码生成 | Phase 4 并行生成多服务代码 | `java-code-generation` |
-| code-reviewer | `code-reviewer.md` | 代码质量审查 | Phase 6 代码质量检查 | `code-quality-analysis` |
-| tech-researcher | `tech-researcher.md` | 技术方案调研 | Phase 2/3 技术选型调研 | - |
-| doc-generator | `doc-generator.md` | 技术文档生成 | Phase 3/7 文档生成 | `tech-spec-generation` / `feature-archiving` |
-
-**执行机制**：系统优先尝试使用 Agent 执行；如果 Sub-Agent 不可用，自动降级为对应的 Skill 执行
+| code-generator | `code-generator.md` | Java 微服务代码生成 | Phase 4 | `java-code-generation` |
+| code-reviewer | `code-reviewer.md` | 代码质量审查 | Phase 6 | `code-quality-analysis` |
+| tech-researcher | `tech-researcher.md` | 技术方案调研 | Phase 2/3 | - |
+| doc-generator | `doc-generator.md` | 技术文档生成 | Phase 3/8 | `tech-spec-generation` / `feature-archiving` |
 
 ---
 
-## 与 Skill 的关系
+## 执行机制
 
-### Agent 与 Skill 的选择
+```
+任务到达
+    ↓
+检测 Sub-Agent 可用性
+    ↓
+├─ 可用 ──→ 委托 Agent 执行（并行、独立决策）
+│
+└─ 不可用 ──→ 调用 Skill 执行（标准化流程）
+    ↓
+产出格式保持一致
+```
 
-| 特性 | Skill | Agent |
+---
+
+## Agent vs Skill 对比
+
+| 特性 | Agent | Skill |
 |------|-------|-------|
-| 复杂度 | 低（单一能力） | 高（完整工作流） |
-| 决策能力 | 无（按规范执行） | 有（自主判断） |
-| 上下文管理 | 输入即上下文 | 需要维护上下文 |
-| 使用方式 | 被调用执行 | 独立运行或被委托 |
-| 适用场景 | 标准化任务 | 复杂并行任务 |
+| 复杂度 | 高（完整工作流） | 低（单一能力） |
+| 决策能力 | 有（自主判断） | 无（按规范执行） |
+| 上下文管理 | 需要维护上下文 | 输入即上下文 |
+| 使用方式 | 独立运行或被委托 | 被调用执行 |
+| 规范依赖 | 自主判断读取 | 必须读取 Rule |
 
-### 各阶段执行者
+---
 
-| 阶段                | 执行者 | 类型 |
-|-------------------|--------|------|
-| Phase 1: PRD 分解   | `prd-decomposition` | Skill |
-| Phase 2: 需求澄清     | `requirement-clarification` + `tech-researcher` | Skill + Agent |
-| Phase 3: 技术规格     | `doc-generator` | Agent |
-| Phase 4: 代码生成     | `code-generator` | Agent |
-| Phase 5: 测试验证     | `http-test-generation` | Skill |
-| Phase 6: 代码质量     | `code-reviewer` | Agent |
-| Phase 7: 单元测试（可选） | `unit-test-generation` | Skill |
-| Phase 8: 功能归档     | `doc-generator` | Agent |
+## Agent 文件格式
+
+```yaml
+---
+name: agent-name
+description: Agent 描述，包含触发关键词
+tools: [Read, Edit, Write, ...]  # 可用工具列表
+---
+
+# Agent 标题
+
+## 核心职责
+
+1. 职责 1
+2. 职责 2
+
+## 工作流程
+
+1. 步骤 1
+2. 步骤 2
+
+## 返回格式
+
+```
+状态：已完成/失败/需要决策
+报告：workspace/{X.Y}-report.md
+产出：N 个文件
+决策点：[如有]
+```
+
+## 注意事项
+
+- 必须先读取规范文件
+- 使用 knowledge-base-query Skill 查询知识库
+```
+
+---
+
+## 使用方式
+
+### 自动委托（推荐）
+
+主 Agent 根据任务特点自动决定：
+
+| 场景 | 执行方式 | 理由 |
+|------|----------|------|
+| 单一规范任务 | Skill 直接执行 | 流程标准化，无需决策 |
+| 复杂并行任务 | Agent 委托 | 需要独立决策和并行处理 |
+| 调研查询任务 | Agent 委托 | 需要独立查询和分析 |
+
+### 用户显式委托
+
+用户明确说"委托"时：
+
+```
+用户: "委托：生成代码"
+→ 创建 Agent 执行
+
+用户: "生成代码"
+→ 主 Agent 判断（可能使用 Skill 或委托 Agent）
+```
+
+---
+
+## 新增 Agent 步骤
+
+1. 创建 `{agent-name}.md` 文件
+2. 遵循上述文件格式
+3. 明确降级 Skill（如有）
+4. 更新本 README 的 Agent 列表

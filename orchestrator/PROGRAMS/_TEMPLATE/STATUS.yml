@@ -1,31 +1,15 @@
-program: P-YYYY-NNN
-name: 任务标题
+program: {program-id}
+name: {任务标题}
 status: not-started      # not-started / active / blocked / deployed
 
 # 当前阶段（整个 Program 的执行状态）
 phase: planning          # planning / in-progress / review / done
 
 # 任务列表（由流程控制根据 Program 类型动态生成）
-# 
-# Implementation Program 典型任务流（Agent + Skill 混合模式）：
-#   - Phase 2: 需求澄清 (Skill: requirement-clarification)
-#   - Phase 2: 技术调研 (Agent: tech-researcher) - 可并行
-#   - Phase 3: 技术规格 (Agent: doc-generator)
-#   - Phase 4: 代码生成 (Agent: code-generator)
-#   - Phase 5: 测试验证 (Skill: http-test-generation)
-#   - Phase 6: 代码质量 (Agent: code-reviewer)
-#   - Phase 7: 单元测试 (Skill: unit-test-generation) - 可选
-#   - Phase 8: 功能归档 (Agent: doc-generator)
-#
-# Decomposition Program 典型任务流：
-#   - 需求拆分 (Skill: prd-decomposition)
-#
-# 实际任务根据需求动态填充
 tasks:
   - id: t1
     name: 任务描述
     status: pending      # pending / in-progress / done / blocked
-    # executor: skill|agent  # 执行者类型
   - id: t2
     name: 任务描述
     status: pending
