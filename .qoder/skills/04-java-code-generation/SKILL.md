@@ -399,9 +399,9 @@ public class AimOrderService extends ServiceImpl<AimOrderMapper, AimOrderDO> {
 
 ## 下一步
 
-1. 代码审查
-2. 单元测试
-3. 集成测试
+1. 代码审查 (Phase 6)
+2. [可选] 单元测试生成 (Phase 7) - 如需补充单元测试覆盖
+3. 功能归档 (Phase 8)
 ```
 
 ---

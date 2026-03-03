@@ -31,7 +31,8 @@
     ├── 04-java-code-generation/SKILL.md # Java 代码生成 (Phase 4)
     ├── 05-http-test-generation/SKILL.md # HTTP 测试生成 (Phase 5)
     ├── 06-code-quality-analysis/SKILL.md # 代码质量分析 (Phase 6)
-    ├── 07-feature-archiving/SKILL.md  # 功能归档 (Phase 7)
+    ├── 07-unit-test-generation/SKILL.md  # 生成单元测试 (Phase 7)
+    ├── 08-feature-archiving/SKILL.md  # 功能归档 (Phase 8)
     ├── api-archiving/SKILL.md         # API 归档
     ├── database-schema-archiving/SKILL.md # 数据库归档
     ├── pitfalls-archiving/SKILL.md    # 陷阱归档

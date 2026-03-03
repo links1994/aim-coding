@@ -10,15 +10,16 @@
 
 ### 核心开发 Skills（Spec 模式）
 
-| Skill     | 目录                              | 说明                   | 使用时机    | 依赖 Rule                                            |
-|-----------|---------------------------------|----------------------|---------|----------------------------------------------------|
-| 需求分解      | `01-prd-decomposition/`         | 根据 PRD 进行需求拆解        | Phase 1 | `prd-decomposition-standards.md`                   |
-| 需求澄清      | `02-requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2 | `requirement-clarification-standards.md`           |
-| 技术规格生成    | `03-tech-spec-generation/`      | 生成技术规格书              | Phase 3 | `tech-spec-generation-standards.md`                |
-| Java 代码生成 | `04-java-code-generation/`      | 生成 Java 微服务代码        | Phase 4 | `coding-standards.md`, `architecture-standards.md` |
-| HTTP 测试生成 | `05-http-test-generation/`      | 生成 HTTP 测试文件         | Phase 5 | -                                                  |
-| 代码质量分析    | `06-code-quality-analysis/`     | 代码质量分析和优化            | Phase 6 | -                                                  |
-| 功能归档      | `07-feature-archiving/`         | 功能归档到 repowiki 知识库   | Phase 7 | -                                                  |
+| Skill     | 目录                              | 说明                   | 使用时机     | 依赖 Rule                                            |
+|-----------|---------------------------------|----------------------|----------|----------------------------------------------------|
+| 需求分解      | `01-prd-decomposition/`         | 根据 PRD 进行需求拆解        | Phase 1  | `prd-decomposition-standards.md`                   |
+| 需求澄清      | `02-requirement-clarification/` | 使用 ReAct 模式进行交互式需求澄清 | Phase 2  | `requirement-clarification-standards.md`           |
+| 技术规格生成    | `03-tech-spec-generation/`      | 生成技术规格书              | Phase 3  | `tech-spec-generation-standards.md`                |
+| Java 代码生成 | `04-java-code-generation/`      | 生成 Java 微服务代码        | Phase 4  | `coding-standards.md`, `architecture-standards.md` |
+| HTTP 测试生成 | `05-http-test-generation/`      | 生成 HTTP 测试文件         | Phase 5  | -                                                  |
+| 代码质量分析    | `06-code-quality-analysis/`     | 代码质量分析和优化            | Phase 6  | -                                                  |
+| 单元测试生成    | `07-unit-test-generation/`      | 生成 Java 单元测试（可选）    | Phase 7  | `common-coding-standards.md`                       |
+| 功能归档      | `08-feature-archiving/`         | 功能归档到 repowiki 知识库   | Phase 8  | -                                                  |
 
 ### 归档类 Skills（按需加载）
 
@@ -60,6 +61,7 @@
 | Phase 4 | `code-generator` (Agent) | `java-code-generation` | 代码生成 |
 | Phase 5 | `http-test-generation` (Skill) | - | 标准化生成 |
 | Phase 6 | `code-reviewer` (Agent) | `code-quality-analysis` | 代码审查 |
+| Phase 6.5 | `unit-test-generation` (Skill) | - | 单元测试生成（可选） |
 | Phase 7 | `doc-generator` (Agent) | `feature-archiving` | 功能归档 |
 
 详见：`.qoder/agents/README-AGENTS.md`

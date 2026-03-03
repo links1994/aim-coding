@@ -14,7 +14,8 @@ phase: planning          # planning / in-progress / review / done
 #   - Phase 4: 代码生成 (Agent: code-generator)
 #   - Phase 5: 测试验证 (Skill: http-test-generation)
 #   - Phase 6: 代码质量 (Agent: code-reviewer)
-#   - Phase 7: 功能归档 (Agent: doc-generator)
+#   - Phase 7: 单元测试 (Skill: unit-test-generation) - 可选
+#   - Phase 8: 功能归档 (Agent: doc-generator)
 #
 # Decomposition Program 典型任务流：
 #   - 需求拆分 (Skill: prd-decomposition)

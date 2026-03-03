@@ -53,7 +53,11 @@
 │  └─ Agent: code-reviewer                                                     │
 │     → 产出: quality-report.md                                               │
 │                                                                             │
-│  Phase 7: 功能归档                                                           │
+│  Phase 7: 单元测试生成（可选）                                               │
+│  └─ Skill: unit-test-generation                                              │
+│     → 产出: 单元测试类, unit-test-report.md                                  │
+│                                                                             │
+│  Phase 8: 功能归档                                                           │
 │  └─ Agent: doc-generator                                                     │
 │     → 产出: repowiki/features/F-xxx/, repowiki/schemas/                     │
 │                                                                             │

@@ -87,12 +87,13 @@ Sub-Agent 是简单的任务并行执行机制：
 
 ### 各阶段执行者
 
-| 阶段 | 执行者 | 类型 |
-|------|--------|------|
-| Phase 1: PRD 分解 | `prd-decomposition` | Skill |
-| Phase 2: 需求澄清 | `requirement-clarification` + `tech-researcher` | Skill + Agent |
-| Phase 3: 技术规格 | `doc-generator` | Agent |
-| Phase 4: 代码生成 | `code-generator` | Agent |
-| Phase 5: 测试验证 | `http-test-generation` | Skill |
-| Phase 6: 代码质量 | `code-reviewer` | Agent |
-| Phase 7: 功能归档 | `doc-generator` | Agent |
+| 阶段                | 执行者 | 类型 |
+|-------------------|--------|------|
+| Phase 1: PRD 分解   | `prd-decomposition` | Skill |
+| Phase 2: 需求澄清     | `requirement-clarification` + `tech-researcher` | Skill + Agent |
+| Phase 3: 技术规格     | `doc-generator` | Agent |
+| Phase 4: 代码生成     | `code-generator` | Agent |
+| Phase 5: 测试验证     | `http-test-generation` | Skill |
+| Phase 6: 代码质量     | `code-reviewer` | Agent |
+| Phase 7: 单元测试（可选） | `unit-test-generation` | Skill |
+| Phase 8: 功能归档     | `doc-generator` | Agent |
