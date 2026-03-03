@@ -14,6 +14,7 @@ description: CommonResult 响应格式规范 - 定义项目统一响应对象的
 ### 背景
 
 在微服务架构中，各服务模块需要统一的响应格式来：
+
 - 简化前端错误处理逻辑
 - 规范分页数据返回格式
 - 提供标准化的成功/失败响应
@@ -43,11 +44,11 @@ description: CommonResult 响应格式规范 - 定义项目统一响应对象的
 
 `CommonResult<T>` 是泛型类，包含以下字段：
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| code | long | 响应状态码，参考 ResultCode 枚举 |
-| message | String | 响应消息 |
-| data | T | 响应数据，泛型类型 |
+| 字段      | 类型     | 说明                     |
+|---------|--------|------------------------|
+| code    | long   | 响应状态码，参考 ResultCode 枚举 |
+| message | String | 响应消息                   |
+| data    | T      | 响应数据，泛型类型              |
 
 **正确示例**:
 
@@ -79,7 +80,7 @@ public class CommonResult<T> {
         this.message = message;
         this.data = data;
     }
-    
+
     // ... 工厂方法
 }
 ```
@@ -90,14 +91,15 @@ public class CommonResult<T> {
 
 分页查询使用 `CommonResult.PageData<T>` 作为 data 类型：
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| totalCount | Long | 总记录数 |
-| items | List<T> | 分页数据列表 |
+| 字段         | 类型      | 说明     |
+|------------|---------|--------|
+| totalCount | Long    | 总记录数   |
+| items      | List<T> | 分页数据列表 |
 
 **正确示例**:
 
 ```java
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -119,12 +121,12 @@ public static class PageData<T> {
 
 **规则描述**:
 
-| 方法 | 使用场景 | 返回类型 |
-|------|----------|----------|
-| `success(T data)` | 返回成功数据 | `CommonResult<T>` |
-| `success()` | 返回成功无数据 | `CommonResult<T>` |
-| `success(T data, String message)` | 返回成功数据和自定义消息 | `CommonResult<T>` |
-| `pageSuccess(List<T> data, Long totalCount)` | 分页成功响应 | `CommonResult<PageData<T>>` |
+| 方法                                           | 使用场景         | 返回类型                        |
+|----------------------------------------------|--------------|-----------------------------|
+| `success(T data)`                            | 返回成功数据       | `CommonResult<T>`           |
+| `success()`                                  | 返回成功无数据      | `CommonResult<T>`           |
+| `success(T data, String message)`            | 返回成功数据和自定义消息 | `CommonResult<T>`           |
+| `pageSuccess(List<T> data, Long totalCount)` | 分页成功响应       | `CommonResult<PageData<T>>` |
 
 **正确示例**:
 
@@ -164,17 +166,12 @@ public CommonResult<CommonResult.PageData<AgentResponse>> pageAgent(
 
 **规则描述**:
 
-| 方法 | 使用场景 | 返回类型 |
-|------|----------|----------|
-| `failed(IErrorCode errorCode)` | 使用错误码枚举返回失败 | `CommonResult<T>` |
-| `failed(IErrorCode errorCode, String message)` | 错误码 + 自定义消息 | `CommonResult<T>` |
-| `failed(String message)` | 仅使用错误消息 | `CommonResult<T>` |
-| `failed()` | 默认失败 | `CommonResult<T>` |
-| `validateFailed()` | 参数验证失败 | `CommonResult<T>` |
-| `validateFailed(String message)` | 参数验证失败 + 自定义消息 | `CommonResult<T>` |
-| `unauthorized(T data)` | 未登录 | `CommonResult<T>` |
-| `forbidden(T data)` | 未授权 | `CommonResult<T>` |
-| `inputIllegal()` | 输入非法 | `CommonResult<T>` |
+| 方法                                             | 使用场景            | 返回类型              |
+|------------------------------------------------|-----------------|-------------------|
+| `failed(IErrorCode errorCode)`                 | 使用错误码枚举返回失败     | `CommonResult<T>` |
+| `failed(IErrorCode errorCode, String message)` | 错误码 + 自定义消息     | `CommonResult<T>` |
+| `failed(String message)`                       | 仅使用错误消息, 错误码500 | `CommonResult<T>` |
+| `failed()`                                     | 默认失败, 错误码500    | `CommonResult<T>` |
 
 **正确示例**:
 
@@ -207,6 +204,7 @@ public CommonResult<Void> handleValidationException(MethodArgumentNotValidExcept
 **正确示例**:
 
 ```java
+
 @RestController
 @RequestMapping("/admin/api/v1/agent")
 @Tag(name = "智能员工接口")
@@ -218,7 +216,7 @@ public class AgentController {
             @RequestBody @Valid AgentListRequest request) {
         // Controller 层只做参数转换
         AgentPageQuery query = convertToQuery(request);
-        
+
         // Service 层完成 DO 到 Response 的转换
         return agentService.pageAgent(query);
     }
@@ -275,19 +273,19 @@ public interface JobTypeRemoteService {
 
 错误码遵循 `SSMMTNNN` 格式：
 
-| 段 | 含义 | 说明 |
-|----|------|------|
-| SS | 系统 | 20=Common, 30=Admin, 40=Agent |
-| MM | 模块 | 01=User, 02=Order, 03=Employee |
-| T | 类型 | 0=Success, 1=Client Error, 2=Server Error, 3=Business Error |
-| NNN | 序号 | 顺序号 (001-999) |
+| 段   | 含义 | 说明                                                          |
+|-----|----|-------------------------------------------------------------|
+| SS  | 系统 | 20=Common, 30=Admin, 40=Agent                               |
+| MM  | 模块 | 01=User, 02=Order, 03=Employee                              |
+| T   | 类型 | 0=Success, 1=Client Error, 2=Server Error, 3=Business Error |
+| NNN | 序号 | 顺序号 (001-999)                                               |
 
 **示例**:
 
-| Code | 含义 |
-|------|------|
-| 2000000 | Success |
-| 2001001 | User not found |
+| Code    | 含义                      |
+|---------|-------------------------|
+| 2000000 | Success                 |
+| 2001001 | User not found          |
 | 4003001 | Employee already exists |
 
 ---
@@ -304,6 +302,7 @@ public interface JobTypeRemoteService {
 **实现代码**:
 
 ```java
+
 @RestController
 @RequestMapping("/admin/api/v1/agent")
 @Tag(name = "智能员工接口", description = "智能员工管理相关接口")
@@ -363,6 +362,7 @@ public class AgentController {
 ```
 
 **关键要点**:
+
 1. 所有方法返回 `CommonResult<T>`
 2. 分页查询使用 `CommonResult.PageData<T>`
 3. 无数据返回使用 `CommonResult<Void>`
@@ -402,6 +402,7 @@ public class AgentController {
 ### 冲突处理
 
 如与本规范冲突，按以下优先级处理：
+
 1. 项目整体架构规范
 2. 本规范
 3. 各模块自定义规范
@@ -410,9 +411,9 @@ public class AgentController {
 
 ## 版本历史
 
-| 版本 | 日期 | 修改人 | 修改内容 | 审核人 |
-|------|------|--------|----------|--------|
-| v1.0 | 2026-03-02 | AI Agent | 初始版本 | - |
+| 版本   | 日期         | 修改人      | 修改内容 | 审核人 |
+|------|------------|----------|------|-----|
+| v1.0 | 2026-03-02 | AI Agent | 初始版本 | -   |
 
 ---
 
@@ -420,11 +421,11 @@ public class AgentController {
 
 ### 术语表
 
-| 术语 | 定义 |
-|------|------|
-| CommonResult | 通用响应对象，统一 API 返回格式 |
-| PageData | 分页数据结构，包含总记录数和数据列表 |
-| MDC | Mapped Diagnostic Context，日志上下文 |
+| 术语           | 定义                              |
+|--------------|---------------------------------|
+| CommonResult | 通用响应对象，统一 API 返回格式              |
+| PageData     | 分页数据结构，包含总记录数和数据列表              |
+| MDC          | Mapped Diagnostic Context，日志上下文 |
 
 ### 参考资料
 
