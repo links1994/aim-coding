@@ -98,23 +98,31 @@ API 网关
 | 类型                 | 命名模式                       | 示例                          | 说明                                                   |
 |--------------------|----------------------------|-----------------------------|------------------------------------------------------|
 | **实体类 (DO)**       | **`Aim{Name}DO`**          | `AimAgentDO`、`AimJobTypeDO` | **必须**以 `Aim` 开头，以 `DO` 结尾                           |
-| **MP Service**     | **`Aim{Name}Service`**     | `AimAgentService`           | **必须**继承 `ServiceImpl<Aim{Name}Mapper, Aim{Name}DO>` |
+| **MP Service 接口** | **`Aim{Name}Service`**     | `AimAgentService`           | 位于 `service/mp/`，继承 `IService<Aim{Name}DO>` |
+| **MP Service 实现** | **`Aim{Name}ServiceImpl`** | `AimAgentServiceImpl`       | 位于 `service/impl/mp/`，继承 `ServiceImpl<Aim{Name}Mapper, Aim{Name}DO>` |
 | **Mapper**         | **`Aim{Name}Mapper`**      | `AimAgentMapper`            | **必须**以 `Aim` 开头                                     |
-| QueryService       | `{Name}QueryService`       | `AgentQueryService`         | 只读查询服务                                               |
-| ManageService      | `{Name}ManageService`      | `AgentManageService`        | 增删改服务                                                |
-| ApplicationService | `{Name}ApplicationService` | `AgentApplicationService`   | 业务编排层                                                |
+| QueryService 接口   | `{Name}QueryService`       | `AgentQueryService`         | 位于 `service/`，定义查询方法                              |
+| QueryService 实现   | `{Name}QueryServiceImpl`   | `AgentQueryServiceImpl`     | 位于 `service/impl/`，注入 `AimXxxService` 接口            |
+| ManageService 接口  | `{Name}ManageService`      | `AgentManageService`        | 位于 `service/`，定义增删改方法                             |
+| ManageService 实现  | `{Name}ManageServiceImpl`  | `AgentManageServiceImpl`    | 位于 `service/impl/`，注入 `AimXxxService` 接口            |
+| ApplicationService 接口 | `{Name}ApplicationService` | `AgentApplicationService`   | 位于 `service/`，业务编排层                                |
+| ApplicationService 实现 | `{Name}ApplicationServiceImpl` | `AgentApplicationServiceImpl` | 位于 `service/impl/`                                    |
 
 **重要规范**：
 
 1. **DO 类命名**：必须严格遵循 `AimXxxDO` 格式，即 **以 `Aim` 开头，以 `DO` 结尾**
 2. **Mapper 命名**：必须严格遵循 `AimXxxMapper` 格式，即 **以 `Aim` 开头**
-3. **MyBatis-Plus 仅用于增删改，禁止用于查询**：
-    - 必须创建 `AimXxxService` 继承 `ServiceImpl<AimXxxMapper, AimXxxDO>`
-    - Query/ManageService **只引用 `AimXxxService`**
-    - **增删改**使用 `AimXxxService` 的 MP 方法（`save()`, `updateById()`, `removeById()`）
-    - **查询**必须使用 `AimXxxMapper` 原生 SQL，**禁止**使用 MP 的 `getById()`, `list()`, `page()`, `lambdaQuery()` 等方法
-4. **不使用 MyBatis-Plus 时**：不创建 `AimXxxService`，Query/ManageService 直接引用 `AimXxxMapper`
-5. **禁止混用**：同一业务域不能同时存在两种模式
+3. **Service 层面向接口编程**：
+    - 上层（Controller/ApplicationService）**只引用接口**，不直接依赖实现类
+    - 实现类统一放在 `service/impl/` 目录下，以 `Impl` 结尾
+4. **MyBatis-Plus 接口+实现分离**：
+    - 接口 `AimXxxService` 位于 `service/mp/`，继承 `IService<AimXxxDO>`
+    - 实现 `AimXxxServiceImpl` 位于 `service/impl/mp/`，继承 `ServiceImpl<AimXxxMapper, AimXxxDO>`
+5. **MyBatis-Plus 仅用于增删改，禁止用于查询**：
+    - **增删改**使用 `AimXxxService` 接口的 MP 方法（`save()`, `updateById()`, `removeById()`）
+    - **查询**在 `AimXxxServiceImpl` 中通过 `baseMapper` 调用原生 SQL
+6. **不使用 MyBatis-Plus 时**：不创建 `AimXxxService`/`AimXxxServiceImpl`，Query/ManageService 直接引用 `AimXxxMapper`
+7. **禁止混用**：同一业务域不能同时存在两种模式
 
 ### 4.2 DTO/Request/Response 命名
 
@@ -146,12 +154,18 @@ API 网关
 │   ├── {业务域}/        # 业务域（如：employee, order）
 │   │   ├── controller/  # 接口层
 │   │   │   └── inner/   # 内部接口（用于 Feign 调用）
-│   │   ├── service/     # 应用层
-│   │   │   ├── mp/                      # MyBatis-Plus 数据服务
+│   │   ├── service/     # 应用层 - 接口定义
+│   │   │   ├── mp/                      # MyBatis-Plus 数据服务接口
 │   │   │   │   └── AimXxxService.java   # 继承 IService<AimXxxDO>
-│   │   │   ├── XxxApplicationService.java # 应用服务（业务编排）
-│   │   │   ├── XxxQueryService.java     # 查询服务（只读）
-│   │   │   └── XxxManageService.java    # 管理服务（增删改）
+│   │   │   ├── XxxApplicationService.java # 应用服务接口（业务编排）
+│   │   │   ├── XxxQueryService.java     # 查询服务接口（只读）
+│   │   │   └── XxxManageService.java    # 管理服务接口（增删改）
+│   │   ├── service/impl/ # 应用层 - 接口实现
+│   │   │   ├── mp/                      # MyBatis-Plus 数据服务实现
+│   │   │   │   └── AimXxxServiceImpl.java # 继承 ServiceImpl
+│   │   │   ├── XxxApplicationServiceImpl.java # 应用服务实现
+│   │   │   ├── XxxQueryServiceImpl.java   # 查询服务实现
+│   │   │   └── XxxManageServiceImpl.java  # 管理服务实现
 │   │   ├── mapper/      # 基础设施层
 │   │   │   └── AimXxxMapper.java        # 原生 MyBatis
 │   │   └── domain/      # 领域层
@@ -231,4 +245,5 @@ mall-admin/src/main/java/com/aim/mall/
 |------|------------|----------|----------------------------------------------|
 | v1.0 | 2026-03-02 | AI Agent | 初始版本，整合项目特定命名规范                              |
 | v1.1 | 2026-03-03 | AI Agent | 更新 4.1 节，明确 MyBatis-Plus 仅用于增删改，禁止用于查询；统一命名为 AimXxxDO/AimXxxService/AimXxxMapper |
+| v1.2 | 2026-03-03 | AI Agent | 更新 Service 层规范：接口+实现分离，面向接口编程；AimXxxService 接口位于 service/mp/，实现位于 service/impl/mp/ |
 

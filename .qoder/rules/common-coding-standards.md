@@ -129,16 +129,18 @@ private LocalDateTime createTime;
 
 | 场景       | 调用方                | 实现方                              | 说明                                                        |
 |----------|--------------------|----------------------------------|-----------------------------------------------------------|
-| **增删改**  | `XxxManageService` | `AimXxxService` (MP)             | 使用 MP IService 提供的 `save()`/`updateById()`/`removeById()` |
-| **所有查询** | `XxxQueryService`  | `AimXxxService` → `AimXxxMapper` | **所有查询必须使用原生 MyBatis XML**，禁止用 MP 查询方法                    |
+| **增删改**  | `XxxManageServiceImpl` | `AimXxxService` 接口 → `AimXxxServiceImpl` | 使用 MP IService 提供的 `save()`/`updateById()`/`removeById()` |
+| **所有查询** | `XxxQueryServiceImpl`  | `AimXxxService` 接口 → `AimXxxServiceImpl` → `AimXxxMapper` | **所有查询必须使用原生 MyBatis XML**，禁止用 MP 查询方法 |
 
-**分层调用原则**：
+**分层调用原则（面向接口编程）**：
 
-- **XxxQueryService / XxxManageService** 只能调用 `AimXxxService`
-- **AimXxxService** 封装数据访问：
+- **XxxQueryService / XxxManageService** 只定义接口方法
+- **XxxQueryServiceImpl / XxxManageServiceImpl** 注入 `AimXxxService` 接口调用
+- **AimXxxService** 接口位于 `service/mp/`，继承 `IService<AimXxxDO>`
+- **AimXxxServiceImpl** 位于 `service/impl/mp/`，封装数据访问：
     - 增删改用 MP 方法（`save()`, `updateById()`, `removeById()`）
     - 查询用 `baseMapper.xxx()` 调用原生 SQL（XML 中定义）
-- **AimXxxMapper** 只对 `AimXxxService` 暴露，其他层禁止直接调用
+- **AimXxxMapper** 只对 `AimXxxServiceImpl` 暴露，其他层禁止直接调用
 
 **禁止使用的特性**：
 
@@ -264,11 +266,17 @@ private boolean active;     // 布尔值无前缀
 │   │   │   ├── app/     # 客户端接口（门面服务）
 │   │   │   └── inner/   # 内部接口（应用/支撑服务，供Feign调用）
 │   │   ├── service/     # 应用层
-│   │   │   ├── mp/                      # MyBatis-Plus 数据服务
-│   │   │   │   └── AimXxxService.java   # 继承 ServiceImpl<AimXxxMapper, AimXxxDO>
-│   │   │   ├── XxxApplicationService.java # 应用服务（业务编排）
-│   │   │   ├── XxxQueryService.java     # 查询服务（只读）
-│   │   │   └── XxxManageService.java    # 管理服务（增删改）
+│   │   │   ├── mp/                      # MyBatis-Plus 数据服务接口
+│   │   │   │   └── AimXxxService.java   # 继承 IService<AimXxxDO>
+│   │   ├── service/impl/                # 应用层 - 接口实现
+│   │   │   ├── mp/                      # MyBatis-Plus 数据服务实现
+│   │   │   │   └── AimXxxServiceImpl.java # 继承 ServiceImpl<AimXxxMapper, AimXxxDO>
+│   │   │   ├── XxxApplicationService.java   # 应用服务接口（业务编排）
+│   │   │   ├── XxxQueryService.java         # 查询服务接口（只读）
+│   │   │   ├── XxxManageService.java        # 管理服务接口（增删改）
+│   │   │   ├── XxxApplicationServiceImpl.java # 应用服务实现
+│   │   │   ├── XxxQueryServiceImpl.java       # 查询服务实现
+│   │   │   └── XxxManageServiceImpl.java      # 管理服务实现
 │   │   ├── mapper/      # 基础设施层
 │   │   │   └── AimXxxMapper.java        # 原生 MyBatis
 │   │   └── domain/      # 领域层
@@ -811,3 +819,4 @@ public CommonResult<Void> handleException(Exception e) {
 |------|------------|----------|------------------------------------------------------------------------------------------------------------|
 | v1.0 | 2026-03-02 | AI Agent | 初始版本，从原 coding-standards.md 提取通用内容                                                                         |
 | v1.1 | 2026-03-03 | AI Agent | 更新 MyBatis-Plus 规范：MP 仅用于增删改，所有查询必须用原生 Mapper；统一 DO/Service/Mapper 命名为 AimXxxDO/AimXxxService/AimXxxMapper |
+| v1.2 | 2026-03-03 | AI Agent | 更新 Service 层规范：接口+实现分离，面向接口编程；更新目录结构和调用链说明 |

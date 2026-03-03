@@ -40,22 +40,26 @@ globs: [ "**/*.java", "**/*.xml", "**/*.yaml", "**/*.yml" ]
 |-----------------|------|-------------------------|-------------------------------------|------------------------------------------|
 | **Controller**  | 控制器  | `XxxController`         | 接收请求，参数校验，调用应用服务                    | 只能调用 XxxApplicationService               |
 | **Application** | 应用服务 | `XxxApplicationService` | 业务编排，协调查询和管理服务                      | 可调用 QueryService、ManageService           |
-| **Query**       | 查询服务 | `XxxQueryService`       | 只读查询，封装查询逻辑                         | 只引用 `AimXxxService`，查询走原生 Mapper         |
-| **Manage**      | 管理服务 | `XxxManageService`      | 增删改操作，封装写逻辑                         | 只引用 `AimXxxService`，增删改用 MP，查询走原生 Mapper |
-| **Data**        | 数据服务 | `AimXxxService`         | 继承 MyBatis-Plus IService，**仅用于增删改** | 提供增删改方法，查询在内部走 `baseMapper`              |
+| **Query**       | 查询服务 | `XxxQueryService`       | 只读查询，封装查询逻辑                         | 只引用 `AimXxxService` 接口                      |
+| **Manage**      | 管理服务 | `XxxManageService`      | 增删改操作，封装写逻辑                         | 只引用 `AimXxxService` 接口                      |
+| **Data**        | 数据服务接口 | `AimXxxService`         | 继承 MyBatis-Plus IService，**仅用于增删改** | 位于 `service/mp/` 目录                          |
+| **Data**        | 数据服务实现 | `AimXxxServiceImpl`     | 继承 `ServiceImpl<AimXxxMapper, AimXxxDO>` | 位于 `service/impl/mp/` 目录                     |
 | **Data**        | 数据映射 | `AimXxxMapper`          | 原生 MyBatis Mapper，**所有查询必须走这里**     | 所有查询 SQL 在 XML 中定义                       |
 
-**MyBatis-Plus 模式调用链**（MP 仅用于增删改，查询走原生 Mapper）：
+**MyBatis-Plus 模式调用链**（面向接口编程）：
 
 ```
 Controller
     ↓
-XxxApplicationService
+XxxApplicationService(接口) ──→ impl/XxxApplicationServiceImpl
     ↓
-    ├── XxxQueryService ──→ AimXxxService ──┬──→ baseMapper.xxx() (查询)
-    ↓                                       └──→ save/update/remove (增删改)
-    └── XxxManageService ──→ AimXxxService ──┬──→ baseMapper.xxx() (查询)
-                                             └──→ save/update/remove (增删改)
+    ├── XxxQueryService(接口) ──→ impl/XxxQueryServiceImpl ──→ AimXxxService(接口)
+    ↓                                                          ↓
+    └── XxxManageService(接口) ──→ impl/XxxManageServiceImpl ──→ impl/mp/AimXxxServiceImpl
+                                                                  ↓
+                                                              AimXxxMapper (查询)
+                                                                  ↓
+                                                              save/update/remove (增删改)
 ```
 
 **原生 MyBatis 模式调用链**（不使用 MyBatis-Plus）：
@@ -73,9 +77,11 @@ XxxApplicationService
 **核心原则**：
 
 - **DO 类命名**：必须严格遵循 `AimXxxDO` 格式，**以 `Aim` 开头，以 `DO` 结尾**
-- **AimXxxService 命名规范**：使用 MyBatis-Plus 时必须命名为 `AimXxxService`，继承 `ServiceImpl<AimXxxMapper, AimXxxDO>`
+- **Service 层面向接口编程**：上层只引用接口，不直接依赖实现类
+- **AimXxxService 接口+实现分离**：
+  - 接口 `AimXxxService` 位于 `service/mp/` 目录，继承 `IService<AimXxxDO>`
+  - 实现 `AimXxxServiceImpl` 位于 `service/impl/mp/` 目录，继承 `ServiceImpl<AimXxxMapper, AimXxxDO>`
 - **MyBatis-Plus 仅用于增删改**：查询操作**必须**使用原生 `AimXxxMapper`，禁止用 MP 的查询方法
-- **二选一原则**：Query/ManageService **只能引用其一**：`AimXxxService` **或** `AimXxxMapper`，**禁止同时引用两者**
 - **模式一致性**：一旦选择使用或不使用 MyBatis-Plus，整个调用链必须遵循对应模式，**禁止混用**
 
 #### 1.2.1 MyBatis-Plus 使用限制
@@ -92,35 +98,57 @@ XxxApplicationService
 ```
 是否需要使用 MyBatis-Plus 的 IService 功能？
     ├─ 是 → MyBatis-Plus 模式
-    │       - AimXxxService 继承 ServiceImpl<AimXxxMapper, AimXxxDO>
+    │       - 创建 AimXxxService 接口（service/mp/）继承 IService<AimXxxDO>
+    │       - 创建 AimXxxServiceImpl（service/impl/mp/）继承 ServiceImpl<AimXxxMapper, AimXxxDO>
     │       - **增删改**使用 MP 方法（save/update/remove）
-    │       - **查询**在 AimXxxService 内部通过 baseMapper 调用原生 SQL
-    │       - Query/ManageService 只引用 AimXxxService
-    │       - AimXxxMapper 只对 AimXxxService 暴露
+    │       - **查询**在 AimXxxServiceImpl 中通过 baseMapper 调用原生 SQL
+    │       - Query/ManageService 只引用 AimXxxService 接口
+    │       - AimXxxMapper 只对 AimXxxServiceImpl 暴露
     │
     └─ 否 → 原生 MyBatis 模式
-            - 不创建 AimXxxService
+            - 不创建 AimXxxService/AimXxxServiceImpl
             - Query/ManageService 直接引用 AimXxxMapper
             - 所有 SQL 在 XML 中编写
 ```
 
 #### 1.2.2 Service 层调用规范（MyBatis-Plus 模式）
 
-**核心规范**：使用 MyBatis-Plus 模式时，上层服务（QueryService/ManageService）**只能依赖 AimXxxService**。
+**核心规范**：使用 MyBatis-Plus 模式时，上层服务**面向接口编程**，只引用接口不依赖实现。
+
+**目录结构**：
+
+```
+service/
+├── mp/                              # MP Service 接口目录
+│   └── AimXxxService.java           # 接口，继承 IService<AimXxxDO>
+├── impl/                            # 所有 Service 实现目录
+│   ├── mp/                          # MP Service 实现目录
+│   │   └── AimXxxServiceImpl.java   # 实现，继承 ServiceImpl
+│   ├── XxxQueryServiceImpl.java     # 查询服务实现
+│   ├── XxxManageServiceImpl.java    # 管理服务实现
+│   └── XxxApplicationServiceImpl.java # 应用服务实现
+├── XxxQueryService.java             # 查询服务接口
+├── XxxManageService.java            # 管理服务接口
+└── XxxApplicationService.java       # 应用服务接口
+```
 
 **规范说明**：
 
-| 层级                   | 增删改操作                                 | 查询操作                          | 禁止事项                      |
-|----------------------|---------------------------------------|-------------------------------|---------------------------|
-| **AimXxxService**    | 使用 MP `save/update/remove`            | 使用 `baseMapper.xxx()` 原生 SQL  | -                         |
-| **XxxQueryService**  | -                                     | 调用 `aimXxxService.xxx()` 封装方法 | **禁止**直接引用 `AimXxxMapper` |
-| **XxxManageService** | 调用 `aimXxxService.save/update/remove` | 调用 `aimXxxService.xxx()` 封装方法 | **禁止**直接引用 `AimXxxMapper` |
+| 层级                   | 类型   | 增删改操作                                 | 查询操作                          | 禁止事项                      |
+|----------------------|--------|---------------------------------------|-------------------------------|---------------------------|
+| **AimXxxService**    | 接口   | 定义 MP 方法                              | 定义查询方法                      | -                         |
+| **AimXxxServiceImpl**| 实现   | 使用 MP `save/update/remove`              | 使用 `baseMapper.xxx()` 原生 SQL  | -                         |
+| **XxxQueryService**  | 接口   | -                                     | 定义查询方法                      | **禁止**直接引用 `AimXxxMapper` |
+| **XxxQueryServiceImpl**| 实现 | -                                     | 注入 `AimXxxService` 接口调用     | **禁止**直接引用 `AimXxxMapper` |
+| **XxxManageService** | 接口   | 定义增删改方法                             | 定义查询方法                      | **禁止**直接引用 `AimXxxMapper` |
+| **XxxManageServiceImpl**| 实现 | 注入 `AimXxxService` 接口调用 MP 方法      | 注入 `AimXxxService` 接口调用     | **禁止**直接引用 `AimXxxMapper` |
 
 **重要禁止事项**：
 
 - ❌ **禁止**在 Query/ManageService 中直接引用 `AimXxxMapper`
+- ❌ **禁止**在 Query/ManageService 中直接引用 `AimXxxServiceImpl`
 - ❌ **禁止**使用 MP 的查询方法：`getById()`, `list()`, `page()`, `lambdaQuery()`, `query()` 等
-- ✅ **必须**在 `AimXxxService` 中通过 `baseMapper` 调用原生 SQL 进行查询
+- ✅ **必须**在 `AimXxxServiceImpl` 中通过 `baseMapper` 调用原生 SQL 进行查询
 
 **正确示例**：
 
@@ -1342,3 +1370,4 @@ public class JobTypeAdminController {
 | v1.1 | 2026-03-03 | AI Agent | 新增门面服务分层规范（第9章），明确 XxxApplicationService 作为业务编排层                  |
 | v1.2 | 2026-03-03 | AI Agent | 新增 MyBatis-Plus 使用规范：MP 仅用于增删改，查询必须用原生 Mapper；DO 类必须是 AimXxxDO 格式 |
 | v1.3 | 2026-03-03 | AI Agent | 新增远程调用接口参数校验规范：应用服务（服务端）禁止使用 jakarta.validation，必须手动校验 |
+| v1.4 | 2026-03-03 | AI Agent | 更新 Service 层架构规范：接口+实现分离，面向接口编程；定义 service/mp/ 和 service/impl/mp/ 目录结构 |
